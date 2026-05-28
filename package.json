@@ -1,6 +1,6 @@
 {
 	"name": "n8n-nodes-alze",
-	"version": "0.1.0",
+	"version": "1.0.0",
 	"description": "n8n community nodes for Alze CRM",
 	"license": "MIT",
 	"homepage": "https://github.com/synapsolab/alze-n8n-community-nodes",
