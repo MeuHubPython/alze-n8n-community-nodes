@@ -1,0 +1,114 @@
+import {
+	IExecuteFunctions,
+	IHookFunctions,
+	ILoadOptionsFunctions,
+	IHttpRequestOptions,
+	IHttpRequestMethods,
+	IDataObject,
+	INode,
+	NodeOperationError,
+} from 'n8n-workflow';
+
+/**
+ * Make an API request to the Alze CRM.
+ */
+export async function alzeApiRequest(
+	this: IExecuteFunctions | IHookFunctions | ILoadOptionsFunctions,
+	method: IHttpRequestMethods,
+	resource: string,
+	body: IDataObject = {},
+	qs: IDataObject = {},
+	uri?: string,
+	headers: IDataObject = {},
+): Promise<any> { // eslint-disable-line @typescript-eslint/no-explicit-any
+	const credentials = await this.getCredentials('alzeApi');
+	const apiKey = credentials.apiKey as string;
+
+	const options: IHttpRequestOptions = {
+		headers: {
+			'Authorization': `Bearer ${apiKey}`,
+			'Content-Type': 'application/json',
+			...headers,
+		},
+		method,
+		body,
+		qs,
+		url: uri || `https://hjjqtkdmxpqzjjlsebfv.supabase.co/functions/v1/public-api${resource}`,
+		json: true,
+	};
+
+	if (Object.keys(body).length === 0) {
+		delete options.body;
+	}
+
+	// eslint-disable-next-line @n8n/community-nodes/no-http-request-with-manual-auth
+	return this.helpers.httpRequest(options);
+}
+
+/**
+ * Handle Alze CRM API request with automatic page pagination if "Return All" is selected.
+ */
+export async function alzeApiRequestAllItems(
+	this: IExecuteFunctions,
+	method: IHttpRequestMethods,
+	endpoint: string,
+	body: IDataObject = {},
+	qs: IDataObject = {},
+): Promise<any[]> { // eslint-disable-line @typescript-eslint/no-explicit-any
+	const returnData: any[] = []; // eslint-disable-line @typescript-eslint/no-explicit-any
+	let responseData;
+	qs.page = qs.page || 1;
+	qs.page_size = qs.page_size || 100; // Fetch max page size for efficiency
+
+	const returnAll = this.getNodeParameter('returnAll', 0) as boolean;
+
+	if (returnAll) {
+		let hasMore = true;
+		do {
+			responseData = await alzeApiRequest.call(this, method, endpoint, body, qs);
+			const items = responseData.data;
+			if (items && Array.isArray(items)) {
+				returnData.push(...items);
+			}
+			if (responseData.meta && responseData.meta.next) {
+				qs.page = (qs.page as number) + 1;
+			} else {
+				hasMore = false;
+			}
+		} while (hasMore);
+
+		return returnData;
+	} else {
+		qs.page_size = this.getNodeParameter('limit', 0) as number || 20;
+		responseData = await alzeApiRequest.call(this, method, endpoint, body, qs);
+		const items = responseData.data;
+		if (items && Array.isArray(items)) {
+			return items.slice(0, qs.page_size);
+		}
+		return [];
+	}
+}
+
+/**
+ * Helper to process custom fields input into Alze body format
+ */
+export function handleCustomFields(node: INode, body: IDataObject, properties: IDataObject) {
+	if (properties.customFieldsUi) {
+		const customFields = (properties.customFieldsUi as any).customFieldsValues || []; // eslint-disable-line @typescript-eslint/no-explicit-any
+		const customFieldsObj: IDataObject = {};
+		for (const field of customFields) {
+			customFieldsObj[field.key] = field.value;
+		}
+		body.custom_fields = customFieldsObj;
+	} else if (properties.customFieldsJson) {
+		try {
+			if (typeof properties.customFieldsJson === 'string') {
+				body.custom_fields = JSON.parse(properties.customFieldsJson);
+			} else {
+				body.custom_fields = properties.customFieldsJson;
+			}
+		} catch {
+			throw new NodeOperationError(node, 'Custom Fields JSON is invalid. Please provide a valid JSON object.');
+		}
+	}
+}
