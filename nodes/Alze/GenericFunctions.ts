@@ -33,7 +33,7 @@ export async function alzeApiRequest(
 		method,
 		body,
 		qs,
-		url: uri || `https://hjjqtkdmxpqzjjlsebfv.supabase.co/functions/v1/public-api${resource}`,
+		url: uri || `https://hjjqtkdmxpqzjjlsebfv.supabase.co/functions/v1/public-api/api/v1${resource}`,
 		json: true,
 	};
 

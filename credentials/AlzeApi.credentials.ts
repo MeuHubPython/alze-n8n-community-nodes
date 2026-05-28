@@ -13,7 +13,7 @@ export class AlzeApi implements ICredentialType {
 	test = {
 		request: {
 			method: 'GET' as IHttpRequestMethods,
-			url: 'https://hjjqtkdmxpqzjjlsebfv.supabase.co/functions/v1/public-api/users/me',
+			url: 'https://hjjqtkdmxpqzjjlsebfv.supabase.co/functions/v1/public-api/api/v1/users/me',
 			headers: {
 				'Authorization': '={{ "Bearer " + $credentials.apiKey }}',
 			},
