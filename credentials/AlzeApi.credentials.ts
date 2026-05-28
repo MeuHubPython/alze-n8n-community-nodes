@@ -14,6 +14,9 @@ export class AlzeApi implements ICredentialType {
 		request: {
 			method: 'GET' as IHttpRequestMethods,
 			url: 'https://hjjqtkdmxpqzjjlsebfv.supabase.co/functions/v1/public-api/users/me',
+			headers: {
+				'Authorization': '={{ "Bearer " + $credentials.apiKey }}',
+			},
 		},
 	};
 	properties: INodeProperties[] = [
