@@ -229,6 +229,13 @@ export const pipelineFields: INodeProperties[] = [
 		},
 		options: [
 			{
+				displayName: 'External Sync Code',
+				name: 'external_sync_code',
+				type: 'string',
+				default: '',
+				description: 'External synchronization code for integration',
+			},
+			{
 				displayName: 'Is Default',
 				name: 'is_default',
 				type: 'boolean',

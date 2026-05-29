@@ -562,6 +562,13 @@ export const dealFields: INodeProperties[] = [
 				description: 'Planned or expected close date of the deal',
 			},
 			{
+				displayName: 'External Sync Code',
+				name: 'external_sync_code',
+				type: 'string',
+				default: '',
+				description: 'External synchronization code for integration',
+			},
+			{
 				displayName: 'Lead Origin ID',
 				name: 'lead_origin_id',
 				type: 'string',

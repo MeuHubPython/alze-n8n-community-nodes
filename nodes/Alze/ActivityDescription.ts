@@ -409,6 +409,13 @@ export const activityFields: INodeProperties[] = [
 				description: 'Duration of the activity in minutes',
 			},
 			{
+				displayName: 'External Sync Code',
+				name: 'external_sync_code',
+				type: 'string',
+				default: '',
+				description: 'External synchronization code for integration',
+			},
+			{
 				displayName: 'Notes / Comments',
 				name: 'notes',
 				type: 'string',

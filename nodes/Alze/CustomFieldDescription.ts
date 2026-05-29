@@ -60,9 +60,9 @@ export const customFieldFields: INodeProperties[] = [
 	{
 		displayName: 'Custom Field ID',
 		name: 'customFieldId',
-		type: 'number',
+		type: 'string',
 		required: true,
-		default: 0,
+		default: '',
 		displayOptions: {
 			show: {
 				resource: ['customField'],
@@ -233,6 +233,13 @@ export const customFieldFields: INodeProperties[] = [
 			},
 		},
 		options: [
+			{
+				displayName: 'External Sync Code',
+				name: 'external_sync_code',
+				type: 'string',
+				default: '',
+				description: 'External synchronization code for integration',
+			},
 			{
 				displayName: 'Is Default',
 				name: 'is_default',

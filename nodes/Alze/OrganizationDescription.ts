@@ -293,6 +293,13 @@ export const organizationFields: INodeProperties[] = [
 				],
 			},
 			{
+				displayName: 'External Sync Code',
+				name: 'external_sync_code',
+				type: 'string',
+				default: '',
+				description: 'External synchronization code for integration',
+			},
+			{
 				displayName: 'Name',
 				name: 'namePatch',
 				type: 'string',

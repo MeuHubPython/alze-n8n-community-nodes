@@ -215,6 +215,13 @@ export const leadOriginFields: INodeProperties[] = [
 		},
 		options: [
 			{
+				displayName: 'External Sync Code',
+				name: 'external_sync_code',
+				type: 'string',
+				default: '',
+				description: 'External synchronization code for integration',
+			},
+			{
 				displayName: 'Is Default',
 				name: 'is_default',
 				type: 'boolean',
@@ -232,6 +239,13 @@ export const leadOriginFields: INodeProperties[] = [
 					},
 				},
 				description: 'Name of the lead origin',
+			},
+			{
+				displayName: 'Origin Group ID',
+				name: 'group_id',
+				type: 'string',
+				default: '',
+				description: 'ID of the origin group this lead origin belongs to',
 			},
 		],
 	},

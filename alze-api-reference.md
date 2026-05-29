@@ -223,6 +223,7 @@ Cria um(a) novo(a) contato no workspace autenticado.
 | status | string (active|inactive) | Não | Status do contato. |
 | observation | string | Não | Observações livres em texto. |
 | custom_fields | object | Não | Pares chave/valor para campos customizados do workspace. |
+| external_sync_code | string | Não | Código externo de sincronização. Use o identificador do registro no sistema de origem (ex.: ID no RD Station, código no ERP) para evitar duplicidade em integrações. |
 
 **Exemplo de Request Body:**
 
@@ -278,6 +279,7 @@ Atualiza todos os campos editáveis de um(a) contato. Campos omitidos serão lim
 | status | string (active|inactive) | Não | Status do contato. |
 | observation | string | Não | Observações livres em texto. |
 | custom_fields | object | Não | Pares chave/valor para campos customizados do workspace. |
+| external_sync_code | string | Não | Código externo de sincronização. Use o identificador do registro no sistema de origem (ex.: ID no RD Station, código no ERP) para evitar duplicidade em integrações. |
 
 **Exemplo de Request Body:**
 
@@ -333,6 +335,7 @@ Atualiza apenas os campos enviados no body. Use para edições incrementais.
 | status | string (active|inactive) | Não | Status do contato. |
 | observation | string | Não | Observações livres em texto. |
 | custom_fields | object | Não | Pares chave/valor para campos customizados do workspace. |
+| external_sync_code | string | Não | Código externo de sincronização. Use o identificador do registro no sistema de origem (ex.: ID no RD Station, código no ERP) para evitar duplicidade em integrações. |
 
 **Exemplo de Request Body:**
 
@@ -530,6 +533,7 @@ Cria um(a) novo(a) empresa no workspace autenticado.
 | linkedin | string | Não | URL do LinkedIn. |
 | status | string (active|inactive) | Não | Status da empresa. |
 | custom_fields | object | Não | Campos customizados. |
+| external_sync_code | string | Não | Código externo de sincronização. Use o identificador do registro no sistema de origem (ex.: ID no RD Station, código no ERP) para evitar duplicidade em integrações. |
 
 **Exemplo de Request Body:**
 
@@ -582,6 +586,7 @@ Atualiza todos os campos editáveis de um(a) empresa. Campos omitidos serão lim
 | linkedin | string | Não | URL do LinkedIn. |
 | status | string (active|inactive) | Não | Status da empresa. |
 | custom_fields | object | Não | Campos customizados. |
+| external_sync_code | string | Não | Código externo de sincronização. Use o identificador do registro no sistema de origem (ex.: ID no RD Station, código no ERP) para evitar duplicidade em integrações. |
 
 **Exemplo de Request Body:**
 
@@ -634,6 +639,7 @@ Atualiza apenas os campos enviados no body. Use para edições incrementais.
 | linkedin | string | Não | URL do LinkedIn. |
 | status | string (active|inactive) | Não | Status da empresa. |
 | custom_fields | object | Não | Campos customizados. |
+| external_sync_code | string | Não | Código externo de sincronização. Use o identificador do registro no sistema de origem (ex.: ID no RD Station, código no ERP) para evitar duplicidade em integrações. |
 
 **Exemplo de Request Body:**
 
@@ -868,6 +874,7 @@ Cria um(a) novo(a) negociação no workspace autenticado.
 | lead_origin_id | uuid | Não | Origem (fonte) do lead. |
 | origin_group_id | uuid | Não | Grupo de origem. |
 | channel_id | uuid | Não | Canal / campanha associada. |
+| external_sync_code | string | Não | Código externo de sincronização. Use o identificador do registro no sistema de origem (ex.: ID no RD Station, código no ERP) para evitar duplicidade em integrações. |
 
 **Exemplo de Request Body:**
 
@@ -934,6 +941,7 @@ Atualiza todos os campos editáveis de um(a) negociação. Campos omitidos serã
 | lead_origin_id | uuid | Não | Origem (fonte) do lead. |
 | origin_group_id | uuid | Não | Grupo de origem. |
 | channel_id | uuid | Não | Canal / campanha associada. |
+| external_sync_code | string | Não | Código externo de sincronização. Use o identificador do registro no sistema de origem (ex.: ID no RD Station, código no ERP) para evitar duplicidade em integrações. |
 
 **Exemplo de Request Body:**
 
@@ -1000,6 +1008,7 @@ Atualiza apenas os campos enviados no body. Use para edições incrementais.
 | lead_origin_id | uuid | Não | Origem (fonte) do lead. |
 | origin_group_id | uuid | Não | Grupo de origem. |
 | channel_id | uuid | Não | Canal / campanha associada. |
+| external_sync_code | string | Não | Código externo de sincronização. Use o identificador do registro no sistema de origem (ex.: ID no RD Station, código no ERP) para evitar duplicidade em integrações. |
 
 **Exemplo de Request Body:**
 
@@ -1366,6 +1375,7 @@ Cria uma nova nota vinculada à negociação.
 |------|------|-------------|-----------|
 | content | string | Sim | Conteúdo da nota (texto livre). |
 | pinned | boolean | Não | Marca a nota como fixada no topo. |
+| external_sync_code | string | Não | Código externo de sincronização. Use o identificador do registro no sistema de origem (ex.: ID no RD Station, código no ERP) para evitar duplicidade em integrações. |
 
 **Exemplo de Request Body:**
 
@@ -1437,6 +1447,7 @@ Atualiza o conteúdo e/ou o estado de fixação da nota.
 |------|------|-------------|-----------|
 | content | string | Não | Novo conteúdo. |
 | pinned | boolean | Não | Fixar/desafixar a nota. |
+| external_sync_code | string | Não | Código externo de sincronização. Use o identificador do registro no sistema de origem (ex.: ID no RD Station, código no ERP) para evitar duplicidade em integrações. |
 
 **Exemplo de Request Body:**
 
@@ -1582,6 +1593,7 @@ Cria uma nova atividade de CRM. O tipo de tarefa (`task_type_id`) padrão do wor
 | person_id | uuid | Não | Contato vinculado. |
 | organization_id | uuid | Não | Empresa vinculada. |
 | status | string (open|done|canceled) | Não | Status atual (default: open). |
+| external_sync_code | string | Não | Código externo de sincronização. Use o identificador do registro no sistema de origem (ex.: ID no RD Station, código no ERP) para evitar duplicidade em integrações. |
 
 **Exemplo de Request Body:**
 
@@ -1634,6 +1646,7 @@ Atualiza os campos editáveis de uma atividade.
 | person_id | uuid | Não | Contato vinculado. |
 | organization_id | uuid | Não | Empresa vinculada. |
 | status | string (open|done|canceled) | Não | Status atual (default: open). |
+| external_sync_code | string | Não | Código externo de sincronização. Use o identificador do registro no sistema de origem (ex.: ID no RD Station, código no ERP) para evitar duplicidade em integrações. |
 
 **Exemplo de Request Body:**
 
@@ -1809,6 +1822,7 @@ Cria um(a) novo(a) produto no workspace autenticado.
 | price | decimal | Não | Preço unitário. |
 | currency | string (ISO 4217) | Não | Moeda. Ex.: BRL, USD. |
 | category_id | integer | Não | ID da categoria (ver `/item-categories`). |
+| external_sync_code | string | Não | Código externo de sincronização. Use o identificador do registro no sistema de origem (ex.: ID no RD Station, código no ERP) para evitar duplicidade em integrações. |
 
 **Exemplo de Request Body:**
 
@@ -1850,6 +1864,7 @@ Atualiza todos os campos editáveis de um(a) produto. Campos omitidos serão lim
 | price | decimal | Não | Preço unitário. |
 | currency | string (ISO 4217) | Não | Moeda. Ex.: BRL, USD. |
 | category_id | integer | Não | ID da categoria (ver `/item-categories`). |
+| external_sync_code | string | Não | Código externo de sincronização. Use o identificador do registro no sistema de origem (ex.: ID no RD Station, código no ERP) para evitar duplicidade em integrações. |
 
 **Exemplo de Request Body:**
 
@@ -1891,6 +1906,7 @@ Atualiza apenas os campos enviados no body. Use para edições incrementais.
 | price | decimal | Não | Preço unitário. |
 | currency | string (ISO 4217) | Não | Moeda. Ex.: BRL, USD. |
 | category_id | integer | Não | ID da categoria (ver `/item-categories`). |
+| external_sync_code | string | Não | Código externo de sincronização. Use o identificador do registro no sistema de origem (ex.: ID no RD Station, código no ERP) para evitar duplicidade em integrações. |
 
 **Exemplo de Request Body:**
 
@@ -2210,6 +2226,7 @@ Cria um(a) novo(a) funil no workspace autenticado.
 | name | string | Sim | Nome do funil. |
 | position | integer | Não | Ordem de exibição. |
 | is_default | boolean | Não | Define se é o funil padrão do workspace. |
+| external_sync_code | string | Não | Código externo de sincronização. Use o identificador do registro no sistema de origem (ex.: ID no RD Station, código no ERP) para evitar duplicidade em integrações. |
 
 **Exemplo de Request Body:**
 
@@ -2246,6 +2263,7 @@ Atualiza todos os campos editáveis de um(a) funil. Campos omitidos serão limpo
 | name | string | Sim | Nome do funil. |
 | position | integer | Não | Ordem de exibição. |
 | is_default | boolean | Não | Define se é o funil padrão do workspace. |
+| external_sync_code | string | Não | Código externo de sincronização. Use o identificador do registro no sistema de origem (ex.: ID no RD Station, código no ERP) para evitar duplicidade em integrações. |
 
 **Exemplo de Request Body:**
 
@@ -2282,6 +2300,7 @@ Atualiza apenas os campos enviados no body. Use para edições incrementais.
 | name | string | Não | Nome do funil. |
 | position | integer | Não | Ordem de exibição. |
 | is_default | boolean | Não | Define se é o funil padrão do workspace. |
+| external_sync_code | string | Não | Código externo de sincronização. Use o identificador do registro no sistema de origem (ex.: ID no RD Station, código no ERP) para evitar duplicidade em integrações. |
 
 **Exemplo de Request Body:**
 
@@ -2484,6 +2503,7 @@ Cria um(a) novo(a) motivo de perda no workspace autenticado.
 |------|------|-------------|-----------|
 | name | string | Sim | Descrição do motivo. |
 | is_default | boolean | Não | Marca como motivo padrão do workspace. |
+| external_sync_code | string | Não | Código externo de sincronização. Use o identificador do registro no sistema de origem (ex.: ID no RD Station, código no ERP) para evitar duplicidade em integrações. |
 
 **Exemplo de Request Body:**
 
@@ -2517,6 +2537,7 @@ Atualiza todos os campos editáveis de um(a) motivo de perda. Campos omitidos se
 |------|------|-------------|-----------|
 | name | string | Sim | Descrição do motivo. |
 | is_default | boolean | Não | Marca como motivo padrão do workspace. |
+| external_sync_code | string | Não | Código externo de sincronização. Use o identificador do registro no sistema de origem (ex.: ID no RD Station, código no ERP) para evitar duplicidade em integrações. |
 
 **Exemplo de Request Body:**
 
@@ -2550,6 +2571,7 @@ Atualiza apenas os campos enviados no body. Use para edições incrementais.
 |------|------|-------------|-----------|
 | name | string | Não | Descrição do motivo. |
 | is_default | boolean | Não | Marca como motivo padrão do workspace. |
+| external_sync_code | string | Não | Código externo de sincronização. Use o identificador do registro no sistema de origem (ex.: ID no RD Station, código no ERP) para evitar duplicidade em integrações. |
 
 **Exemplo de Request Body:**
 
@@ -2674,6 +2696,7 @@ Cria um(a) novo(a) motivo de ganho no workspace autenticado.
 |------|------|-------------|-----------|
 | name | string | Sim | Descrição do motivo de ganho. |
 | is_default | boolean | Não | Marca como motivo padrão do workspace. |
+| external_sync_code | string | Não | Código externo de sincronização. Use o identificador do registro no sistema de origem (ex.: ID no RD Station, código no ERP) para evitar duplicidade em integrações. |
 
 **Exemplo de Request Body:**
 
@@ -2707,6 +2730,7 @@ Atualiza todos os campos editáveis de um(a) motivo de ganho. Campos omitidos se
 |------|------|-------------|-----------|
 | name | string | Sim | Descrição do motivo de ganho. |
 | is_default | boolean | Não | Marca como motivo padrão do workspace. |
+| external_sync_code | string | Não | Código externo de sincronização. Use o identificador do registro no sistema de origem (ex.: ID no RD Station, código no ERP) para evitar duplicidade em integrações. |
 
 **Exemplo de Request Body:**
 
@@ -2740,6 +2764,7 @@ Atualiza apenas os campos enviados no body. Use para edições incrementais.
 |------|------|-------------|-----------|
 | name | string | Não | Descrição do motivo de ganho. |
 | is_default | boolean | Não | Marca como motivo padrão do workspace. |
+| external_sync_code | string | Não | Código externo de sincronização. Use o identificador do registro no sistema de origem (ex.: ID no RD Station, código no ERP) para evitar duplicidade em integrações. |
 
 **Exemplo de Request Body:**
 
@@ -3061,6 +3086,7 @@ Cria um(a) novo(a) origem no workspace autenticado.
 |------|------|-------------|-----------|
 | name | string | Sim | Nome da origem (fonte). |
 | group_id | uuid | Não | Grupo de origem ao qual a fonte pertence. |
+| external_sync_code | string | Não | Código externo de sincronização. Use o identificador do registro no sistema de origem (ex.: ID no RD Station, código no ERP) para evitar duplicidade em integrações. |
 
 **Exemplo de Request Body:**
 
@@ -3095,6 +3121,7 @@ Atualiza todos os campos editáveis de um(a) origem. Campos omitidos serão limp
 |------|------|-------------|-----------|
 | name | string | Sim | Nome da origem (fonte). |
 | group_id | uuid | Não | Grupo de origem ao qual a fonte pertence. |
+| external_sync_code | string | Não | Código externo de sincronização. Use o identificador do registro no sistema de origem (ex.: ID no RD Station, código no ERP) para evitar duplicidade em integrações. |
 
 **Exemplo de Request Body:**
 
@@ -3129,6 +3156,7 @@ Atualiza apenas os campos enviados no body. Use para edições incrementais.
 |------|------|-------------|-----------|
 | name | string | Não | Nome da origem (fonte). |
 | group_id | uuid | Não | Grupo de origem ao qual a fonte pertence. |
+| external_sync_code | string | Não | Código externo de sincronização. Use o identificador do registro no sistema de origem (ex.: ID no RD Station, código no ERP) para evitar duplicidade em integrações. |
 
 **Exemplo de Request Body:**
 
@@ -3253,6 +3281,7 @@ Cria um(a) novo(a) grupo de origem no workspace autenticado.
 | Nome | Tipo | Obrigatório | Descrição |
 |------|------|-------------|-----------|
 | name | string | Sim | Nome do grupo de origem. |
+| external_sync_code | string | Não | Código externo de sincronização. Use o identificador do registro no sistema de origem (ex.: ID no RD Station, código no ERP) para evitar duplicidade em integrações. |
 
 **Exemplo de Request Body:**
 
@@ -3285,6 +3314,7 @@ Atualiza todos os campos editáveis de um(a) grupo de origem. Campos omitidos se
 | Nome | Tipo | Obrigatório | Descrição |
 |------|------|-------------|-----------|
 | name | string | Sim | Nome do grupo de origem. |
+| external_sync_code | string | Não | Código externo de sincronização. Use o identificador do registro no sistema de origem (ex.: ID no RD Station, código no ERP) para evitar duplicidade em integrações. |
 
 **Exemplo de Request Body:**
 
@@ -3317,6 +3347,7 @@ Atualiza apenas os campos enviados no body. Use para edições incrementais.
 | Nome | Tipo | Obrigatório | Descrição |
 |------|------|-------------|-----------|
 | name | string | Não | Nome do grupo de origem. |
+| external_sync_code | string | Não | Código externo de sincronização. Use o identificador do registro no sistema de origem (ex.: ID no RD Station, código no ERP) para evitar duplicidade em integrações. |
 
 **Exemplo de Request Body:**
 
@@ -3440,6 +3471,7 @@ Cria um(a) novo(a) canal no workspace autenticado.
 | Nome | Tipo | Obrigatório | Descrição |
 |------|------|-------------|-----------|
 | name | string | Sim | Nome do canal / campanha. |
+| external_sync_code | string | Não | Código externo de sincronização. Use o identificador do registro no sistema de origem (ex.: ID no RD Station, código no ERP) para evitar duplicidade em integrações. |
 
 **Exemplo de Request Body:**
 
@@ -3472,6 +3504,7 @@ Atualiza todos os campos editáveis de um(a) canal. Campos omitidos serão limpo
 | Nome | Tipo | Obrigatório | Descrição |
 |------|------|-------------|-----------|
 | name | string | Sim | Nome do canal / campanha. |
+| external_sync_code | string | Não | Código externo de sincronização. Use o identificador do registro no sistema de origem (ex.: ID no RD Station, código no ERP) para evitar duplicidade em integrações. |
 
 **Exemplo de Request Body:**
 
@@ -3504,6 +3537,7 @@ Atualiza apenas os campos enviados no body. Use para edições incrementais.
 | Nome | Tipo | Obrigatório | Descrição |
 |------|------|-------------|-----------|
 | name | string | Não | Nome do canal / campanha. |
+| external_sync_code | string | Não | Código externo de sincronização. Use o identificador do registro no sistema de origem (ex.: ID no RD Station, código no ERP) para evitar duplicidade em integrações. |
 
 **Exemplo de Request Body:**
 
@@ -3639,6 +3673,7 @@ Cria um(a) novo(a) tipo de atividade no workspace autenticado.
 | color | string | Não | Cor em hex (ex.: #3B82F6). |
 | is_default | boolean | Não | Marca como tipo padrão. |
 | position | integer | Não | Ordem de exibição. |
+| external_sync_code | string | Não | Código externo de sincronização. Use o identificador do registro no sistema de origem (ex.: ID no RD Station, código no ERP) para evitar duplicidade em integrações. |
 
 **Exemplo de Request Body:**
 
@@ -3679,6 +3714,7 @@ Atualiza todos os campos editáveis de um(a) tipo de atividade. Campos omitidos 
 | color | string | Não | Cor em hex (ex.: #3B82F6). |
 | is_default | boolean | Não | Marca como tipo padrão. |
 | position | integer | Não | Ordem de exibição. |
+| external_sync_code | string | Não | Código externo de sincronização. Use o identificador do registro no sistema de origem (ex.: ID no RD Station, código no ERP) para evitar duplicidade em integrações. |
 
 **Exemplo de Request Body:**
 
@@ -3719,6 +3755,7 @@ Atualiza apenas os campos enviados no body. Use para edições incrementais.
 | color | string | Não | Cor em hex (ex.: #3B82F6). |
 | is_default | boolean | Não | Marca como tipo padrão. |
 | position | integer | Não | Ordem de exibição. |
+| external_sync_code | string | Não | Código externo de sincronização. Use o identificador do registro no sistema de origem (ex.: ID no RD Station, código no ERP) para evitar duplicidade em integrações. |
 
 **Exemplo de Request Body:**
 
@@ -3877,6 +3914,7 @@ Cria um(a) novo(a) campo personalizado no workspace autenticado.
 | show_on_create | boolean | Não | Exibe o campo no formulário de criação. |
 | is_required | boolean | Não | Torna o campo obrigatório. |
 | pipeline_ids | uuid[] | Não | Restringe a aparecer somente nestes funis (apenas entity=deals). |
+| external_sync_code | string | Não | Código externo de sincronização. Use o identificador do registro no sistema de origem (ex.: ID no RD Station, código no ERP) para evitar duplicidade em integrações. |
 
 **Exemplo de Request Body:**
 
@@ -3929,6 +3967,7 @@ Atualiza todos os campos editáveis de um(a) campo personalizado. Campos omitido
 | show_on_create | boolean | Não | Exibe o campo no formulário de criação. |
 | is_required | boolean | Não | Torna o campo obrigatório. |
 | pipeline_ids | uuid[] | Não | Restringe a aparecer somente nestes funis (apenas entity=deals). |
+| external_sync_code | string | Não | Código externo de sincronização. Use o identificador do registro no sistema de origem (ex.: ID no RD Station, código no ERP) para evitar duplicidade em integrações. |
 
 **Exemplo de Request Body:**
 
@@ -3981,6 +4020,7 @@ Atualiza apenas os campos enviados no body. Use para edições incrementais.
 | show_on_create | boolean | Não | Exibe o campo no formulário de criação. |
 | is_required | boolean | Não | Torna o campo obrigatório. |
 | pipeline_ids | uuid[] | Não | Restringe a aparecer somente nestes funis (apenas entity=deals). |
+| external_sync_code | string | Não | Código externo de sincronização. Use o identificador do registro no sistema de origem (ex.: ID no RD Station, código no ERP) para evitar duplicidade em integrações. |
 
 **Exemplo de Request Body:**
 
