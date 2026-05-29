@@ -8,7 +8,7 @@ import {
 export class AlzeApi implements ICredentialType {
 	name = 'alzeApi';
 	displayName = 'Alze API';
-	documentationUrl = 'https://github.com/synapsolab/alze-n8n-community-nodes';
+	documentationUrl = 'https://github.com/MeuHubPython/alze-n8n-community-nodes';
 	icon: Icon = 'file:alze.svg';
 	test = {
 		request: {

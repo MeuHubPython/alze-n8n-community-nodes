@@ -3,17 +3,17 @@
 	"version": "1.0.5",
 	"description": "n8n community nodes for Alze CRM",
 	"license": "MIT",
-	"homepage": "https://github.com/synapsolab/alze-n8n-community-nodes",
+	"homepage": "https://github.com/MeuHubPython/alze-n8n-community-nodes",
 	"keywords": [
 		"n8n-community-node-package"
 	],
 	"author": {
-		"name": "Synapso Lab",
-		"email": "contato@synapsolab.com.br"
+		"name": "MeuHubPython",
+		"email": "contato@meuhubpython.com"
 	},
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/synapsolab/alze-n8n-community-nodes.git"
+		"url": "https://github.com/MeuHubPython/alze-n8n-community-nodes.git"
 	},
 	"scripts": {
 		"build": "n8n-node build",

@@ -4,7 +4,7 @@ This is an n8n community node package that integrates seamlessly with the **Alze
 
 [![npm version](https://img.shields.io/npm/v/n8n-nodes-alze.svg?style=flat-square&color=A12CFF)](https://www.npmjs.com/package/n8n-nodes-alze)
 [![n8n community node](https://img.shields.io/badge/n8n-community%20node-orange.svg?style=flat-square)](https://n8n.io)
-[![license](https://img.shields.io/npm/l/n8n-nodes-alze.svg?style=flat-square)](https://github.com/synapsolab/alze-n8n-community-nodes/blob/main/LICENSE)
+[![license](https://img.shields.io/npm/l/n8n-nodes-alze.svg?style=flat-square)](https://github.com/MeuHubPython/alze-n8n-community-nodes/blob/main/LICENSE)
 
 ---
 
@@ -82,4 +82,4 @@ For complex dynamic bindings or passing JSON variables directly:
 
 ## License
 
-This project is licensed under the [MIT License](LICENSE). Developed with ❤️ by **Synapso Lab**.
+This project is licensed under the [MIT License](LICENSE). Developed with ❤️ by **Petize**.
