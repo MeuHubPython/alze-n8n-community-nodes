@@ -220,6 +220,13 @@ export const organizationFields: INodeProperties[] = [
 				description: 'Filter by exact website domain (e.g. acme.com)',
 			},
 			{
+				displayName: 'External Sync Code',
+				name: 'external_sync_code',
+				type: 'string',
+				default: '',
+				description: 'Filter by external synchronization code',
+			},
+			{
 				displayName: 'Owner ID',
 				name: 'owner_id',
 				type: 'string',

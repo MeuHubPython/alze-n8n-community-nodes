@@ -124,6 +124,7 @@ Retorna a lista paginada de contatos do workspace autenticado, com suporte a bus
 | phone | string | Não | Filtra por telefone (ignora formatação). |
 | mobile | string | Não | Filtra por celular (ignora formatação). |
 | organization_id | uuid | Não | Filtra contatos de uma empresa específica. |
+| external_sync_code | string | Não | Filtra pelo código externo de sincronização. É o identificador único do registro no sistema de origem (ex.: ID no RD Station, código no ERP), usado por integrações para evitar duplicidade. |
 
 **Exemplo de Resposta:**
 
@@ -434,6 +435,7 @@ Retorna a lista paginada de empresas do workspace autenticado, com suporte a bus
 | order_direction | string | Não | Direção da ordenação: `asc` ou `desc` (default: desc). |
 | q | string | Não | Busca textual no campo principal do recurso (geralmente `name` ou `title`). |
 | status | string | Não | Filtra por status (active|inactive). |
+| external_sync_code | string | Não | Filtra pelo código externo de sincronização. É o identificador único do registro no sistema de origem (ex.: ID no RD Station, código no ERP), usado por integrações para evitar duplicidade. |
 
 **Exemplo de Resposta:**
 
@@ -753,6 +755,7 @@ Retorna a lista paginada de negociações do workspace autenticado, com suporte 
 | person_id | uuid | Não | Filtra por contato associado. |
 | organization_id | uuid | Não | Filtra por empresa associada. |
 | temperature | string | Não | Filtra por temperatura (hot|warm|cold). |
+| external_sync_code | string | Não | Filtra pelo código externo de sincronização. É o identificador único do registro no sistema de origem (ex.: ID no RD Station, código no ERP), usado por integrações para evitar duplicidade. |
 
 **Exemplo de Resposta:**
 
@@ -1320,6 +1323,12 @@ Notas livres associadas a uma negociação. Listagem e criação são feitas via
 
 Retorna todas as notas da negociação, com as fixadas (pinned=true) no topo.
 
+**Query Parameters**
+
+| Nome | Tipo | Obrigatório | Descrição |
+|------|------|-------------|-----------|
+| external_sync_code | string | Não | Filtra pelo código externo de sincronização. É o identificador único do registro no sistema de origem (ex.: ID no RD Station, código no ERP), usado por integrações para evitar duplicidade. |
+
 **Exemplo de Resposta:**
 
 ```json
@@ -1482,6 +1491,7 @@ Lista paginada de atividades de CRM do workspace, com filtros por negociação, 
 | person_id | uuid | Não | Filtra por contato vinculado. |
 | organization_id | uuid | Não | Filtra por empresa vinculada. |
 | status | string | Não | Filtra por status (open|done|canceled). |
+| external_sync_code | string | Não | Filtra pelo código externo de sincronização. É o identificador único do registro no sistema de origem (ex.: ID no RD Station, código no ERP), usado por integrações para evitar duplicidade. |
 
 **Exemplo de Resposta:**
 
@@ -1724,6 +1734,7 @@ Retorna a lista paginada de produtos do workspace autenticado, com suporte a bus
 | q | string | Não | Busca textual no campo principal do recurso (geralmente `name` ou `title`). |
 | category_id | integer | Não | Filtra por categoria. |
 | type | string | Não | Filtra por tipo (product|service). |
+| external_sync_code | string | Não | Filtra pelo código externo de sincronização. É o identificador único do registro no sistema de origem (ex.: ID no RD Station, código no ERP), usado por integrações para evitar duplicidade. |
 
 **Exemplo de Resposta:**
 
@@ -2130,6 +2141,7 @@ Retorna a lista paginada de funis do workspace autenticado, com suporte a busca,
 | order_by | string | Não | Campo de ordenação. Ex.: `created_at`. |
 | order_direction | string | Não | Direção da ordenação: `asc` ou `desc` (default: desc). |
 | q | string | Não | Busca textual no campo principal do recurso (geralmente `name` ou `title`). |
+| external_sync_code | string | Não | Filtra pelo código externo de sincronização. É o identificador único do registro no sistema de origem (ex.: ID no RD Station, código no ERP), usado por integrações para evitar duplicidade. |
 
 **Exemplo de Resposta:**
 
@@ -2328,6 +2340,7 @@ Retorna todas as etapas de um funil, ordenadas por `position`.
 | Nome | Tipo | Obrigatório | Descrição |
 |------|------|-------------|-----------|
 | pipeline_id | uuid | Sim | ID do funil. |
+| external_sync_code | string | Não | Filtra pelo código externo de sincronização. É o identificador único do registro no sistema de origem (ex.: ID no RD Station, código no ERP), usado por integrações para evitar duplicidade. |
 
 **Exemplo de Resposta:**
 
@@ -2407,6 +2420,7 @@ Retorna a lista paginada de motivos de perda do workspace autenticado, com supor
 | order_by | string | Não | Campo de ordenação. Ex.: `created_at`. |
 | order_direction | string | Não | Direção da ordenação: `asc` ou `desc` (default: desc). |
 | q | string | Não | Busca textual no campo principal do recurso (geralmente `name` ou `title`). |
+| external_sync_code | string | Não | Filtra pelo código externo de sincronização. É o identificador único do registro no sistema de origem (ex.: ID no RD Station, código no ERP), usado por integrações para evitar duplicidade. |
 
 **Exemplo de Resposta:**
 
@@ -2596,6 +2610,7 @@ Retorna a lista paginada de motivos de ganho do workspace autenticado, com supor
 | order_by | string | Não | Campo de ordenação. Ex.: `created_at`. |
 | order_direction | string | Não | Direção da ordenação: `asc` ou `desc` (default: desc). |
 | q | string | Não | Busca textual no campo principal do recurso (geralmente `name` ou `title`). |
+| external_sync_code | string | Não | Filtra pelo código externo de sincronização. É o identificador único do registro no sistema de origem (ex.: ID no RD Station, código no ERP), usado por integrações para evitar duplicidade. |
 
 **Exemplo de Resposta:**
 
@@ -2980,6 +2995,7 @@ Retorna a lista paginada de origens do workspace autenticado, com suporte a busc
 | order_direction | string | Não | Direção da ordenação: `asc` ou `desc` (default: desc). |
 | q | string | Não | Busca textual no campo principal do recurso (geralmente `name` ou `title`). |
 | group_id | uuid | Não | Filtra por grupo de origem. |
+| external_sync_code | string | Não | Filtra pelo código externo de sincronização. É o identificador único do registro no sistema de origem (ex.: ID no RD Station, código no ERP), usado por integrações para evitar duplicidade. |
 
 **Exemplo de Resposta:**
 
@@ -3174,6 +3190,7 @@ Retorna a lista paginada de grupos de origem do workspace autenticado, com supor
 | order_by | string | Não | Campo de ordenação. Ex.: `created_at`. |
 | order_direction | string | Não | Direção da ordenação: `asc` ou `desc` (default: desc). |
 | q | string | Não | Busca textual no campo principal do recurso (geralmente `name` ou `title`). |
+| external_sync_code | string | Não | Filtra pelo código externo de sincronização. É o identificador único do registro no sistema de origem (ex.: ID no RD Station, código no ERP), usado por integrações para evitar duplicidade. |
 
 **Exemplo de Resposta:**
 
@@ -3360,6 +3377,7 @@ Retorna a lista paginada de canais do workspace autenticado, com suporte a busca
 | order_by | string | Não | Campo de ordenação. Ex.: `created_at`. |
 | order_direction | string | Não | Direção da ordenação: `asc` ou `desc` (default: desc). |
 | q | string | Não | Busca textual no campo principal do recurso (geralmente `name` ou `title`). |
+| external_sync_code | string | Não | Filtra pelo código externo de sincronização. É o identificador único do registro no sistema de origem (ex.: ID no RD Station, código no ERP), usado por integrações para evitar duplicidade. |
 
 **Exemplo de Resposta:**
 
@@ -3546,6 +3564,7 @@ Retorna a lista paginada de tipos de atividade do workspace autenticado, com sup
 | order_by | string | Não | Campo de ordenação. Ex.: `created_at`. |
 | order_direction | string | Não | Direção da ordenação: `asc` ou `desc` (default: desc). |
 | q | string | Não | Busca textual no campo principal do recurso (geralmente `name` ou `title`). |
+| external_sync_code | string | Não | Filtra pelo código externo de sincronização. É o identificador único do registro no sistema de origem (ex.: ID no RD Station, código no ERP), usado por integrações para evitar duplicidade. |
 
 **Exemplo de Resposta:**
 
@@ -3766,6 +3785,7 @@ Retorna a lista paginada de campos personalizados do workspace autenticado, com 
 | q | string | Não | Busca textual no campo principal do recurso (geralmente `name` ou `title`). |
 | entity | string | Não | Filtra por entidade alvo. |
 | type | string | Não | Filtra por tipo. |
+| external_sync_code | string | Não | Filtra pelo código externo de sincronização. É o identificador único do registro no sistema de origem (ex.: ID no RD Station, código no ERP), usado por integrações para evitar duplicidade. |
 
 **Exemplo de Resposta:**
 

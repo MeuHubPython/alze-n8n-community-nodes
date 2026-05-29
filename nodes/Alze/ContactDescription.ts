@@ -215,6 +215,13 @@ export const contactFields: INodeProperties[] = [
 				description: 'Filter by exact email',
 			},
 			{
+				displayName: 'External Sync Code',
+				name: 'external_sync_code',
+				type: 'string',
+				default: '',
+				description: 'Filter by external synchronization code',
+			},
+			{
 				displayName: 'Mobile Phone',
 				name: 'mobile',
 				type: 'string',

@@ -180,7 +180,15 @@ export const channelFields: INodeProperties[] = [
 				operation: ['list'],
 			},
 		},
-		options: [],
+		options: [
+			{
+				displayName: 'External Sync Code',
+				name: 'external_sync_code',
+				type: 'string',
+				default: '',
+				description: 'Filter by external synchronization code',
+			},
+		],
 	},
 
 	// ----------------------------------

@@ -76,15 +76,15 @@ import { webhookOperations, webhookFields } from './WebhookDescription';
 
 export class Alze implements INodeType {
 	description: INodeTypeDescription = {
-		displayName: 'Alze CRM',
+		displayName: 'Alze',
 		name: 'alze',
 		icon: 'file:alze.svg',
 		group: ['transform'],
 		version: 1,
 		subtitle: '={{$parameter["resource"] + ": " + $parameter["operation"]}}',
-		description: 'Consume Alze CRM API resources and perform actions',
+		description: 'Consume Alze API resources and perform actions',
 		defaults: {
-			name: 'Alze CRM',
+			name: 'Alze',
 		},
 		inputs: [NodeConnectionTypes.Main],
 		outputs: [NodeConnectionTypes.Main],
@@ -402,7 +402,9 @@ export class Alze implements INodeType {
 						responseData = responseData.data;
 					} else if (operation === 'listNotes') {
 						const dealId = this.getNodeParameter('dealId', i) as string;
-						responseData = await alzeApiRequestAllItems.call(this, 'GET', `/deals/${dealId}/notes`);
+						const additionalFields = this.getNodeParameter('additionalFields', i, {}) as IDataObject;
+						const qs: IDataObject = { ...additionalFields };
+						responseData = await alzeApiRequestAllItems.call(this, 'GET', `/deals/${dealId}/notes`, {}, qs);
 					} else if (operation === 'addNote') {
 						const dealId = this.getNodeParameter('dealId', i) as string;
 						const content = this.getNodeParameter('content', i) as string;

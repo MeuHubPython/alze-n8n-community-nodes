@@ -306,6 +306,13 @@ export const activityFields: INodeProperties[] = [
 				description: 'Filter activities with due date <= value',
 			},
 			{
+				displayName: 'External Sync Code',
+				name: 'external_sync_code',
+				type: 'string',
+				default: '',
+				description: 'Filter by external synchronization code',
+			},
+			{
 				displayName: 'Organization ID',
 				name: 'organization_id',
 				type: 'string',

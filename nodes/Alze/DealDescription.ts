@@ -138,7 +138,22 @@ export const dealFields: INodeProperties[] = [
 		displayOptions: {
 			show: {
 				resource: ['deal'],
-				operation: ['get', 'delete', 'update', 'patch', 'win', 'lose', 'stage'],
+				operation: [
+					'get',
+					'delete',
+					'update',
+					'patch',
+					'win',
+					'lose',
+					'stage',
+					'listContacts',
+					'addContact',
+					'removeContact',
+					'listItems',
+					'addItem',
+					'listNotes',
+					'addNote',
+				],
 			},
 		},
 		description: 'The ID of the deal',
@@ -411,6 +426,13 @@ export const dealFields: INodeProperties[] = [
 				type: 'dateTime',
 				default: '',
 				description: 'Filter by expectation close date <= value',
+			},
+			{
+				displayName: 'External Sync Code',
+				name: 'external_sync_code',
+				type: 'string',
+				default: '',
+				description: 'Filter by external synchronization code',
 			},
 			{
 				displayName: 'Organization ID',
@@ -745,5 +767,27 @@ export const dealFields: INodeProperties[] = [
 			},
 		},
 		description: 'Whether to pin the note to the top',
+	},
+	{
+		displayName: 'Additional Fields',
+		name: 'additionalFields',
+		type: 'collection',
+		placeholder: 'Add Field',
+		default: {},
+		displayOptions: {
+			show: {
+				resource: ['deal'],
+				operation: ['listNotes'],
+			},
+		},
+		options: [
+			{
+				displayName: 'External Sync Code',
+				name: 'external_sync_code',
+				type: 'string',
+				default: '',
+				description: 'Filter by external synchronization code',
+			},
+		],
 	},
 ];

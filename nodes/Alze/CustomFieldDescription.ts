@@ -180,7 +180,41 @@ export const customFieldFields: INodeProperties[] = [
 				operation: ['list'],
 			},
 		},
-		options: [],
+		options: [
+			{
+				displayName: 'Entity',
+				name: 'entity',
+				type: 'options',
+				options: [
+					{ name: 'Contacts', value: 'contacts' },
+					{ name: 'Organizations', value: 'organizations' },
+					{ name: 'Deals', value: 'deals' },
+				],
+				default: 'contacts',
+				description: 'Filter by entity target',
+			},
+			{
+				displayName: 'External Sync Code',
+				name: 'external_sync_code',
+				type: 'string',
+				default: '',
+				description: 'Filter by external synchronization code',
+			},
+			{
+				displayName: 'Type',
+				name: 'type',
+				type: 'options',
+				options: [
+					{ name: 'Boolean', value: 'boolean' },
+					{ name: 'Date', value: 'date' },
+					{ name: 'Number', value: 'number' },
+					{ name: 'Select', value: 'select' },
+					{ name: 'Text', value: 'text' },
+				],
+				default: 'text',
+				description: 'Filter by field type',
+			},
+		],
 	},
 
 	// ----------------------------------

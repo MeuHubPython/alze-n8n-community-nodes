@@ -202,6 +202,13 @@ export const pipelineFields: INodeProperties[] = [
 				default: '',
 				description: 'Filter pipelines created before this date',
 			},
+			{
+				displayName: 'External Sync Code',
+				name: 'external_sync_code',
+				type: 'string',
+				default: '',
+				description: 'Filter by external synchronization code',
+			},
 		],
 	},
 

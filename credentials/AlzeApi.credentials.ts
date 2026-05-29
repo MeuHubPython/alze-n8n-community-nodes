@@ -29,7 +29,7 @@ export class AlzeApi implements ICredentialType {
 			},
 			default: '',
 			required: true,
-			description: 'The API Key issued for your Alze CRM workspace',
+			description: 'The API Key issued for your Alze workspace',
 		},
 	];
 }

@@ -124,6 +124,13 @@ export const stageFields: INodeProperties[] = [
 				description: 'Filter stages created before this date',
 			},
 			{
+				displayName: 'External Sync Code',
+				name: 'external_sync_code',
+				type: 'string',
+				default: '',
+				description: 'Filter by external synchronization code',
+			},
+			{
 				displayName: 'Pipeline ID',
 				name: 'pipeline_id',
 				type: 'string',

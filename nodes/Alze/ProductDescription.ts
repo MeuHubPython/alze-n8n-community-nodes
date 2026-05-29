@@ -272,6 +272,13 @@ export const productFields: INodeProperties[] = [
 				description: 'Filter products created before this date',
 			},
 			{
+				displayName: 'External Sync Code',
+				name: 'external_sync_code',
+				type: 'string',
+				default: '',
+				description: 'Filter by external synchronization code',
+			},
+			{
 				displayName: 'SKU',
 				name: 'sku',
 				type: 'string',

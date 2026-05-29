@@ -1,6 +1,6 @@
 # n8n-nodes-alze
 
-This is an n8n community node package that integrates seamlessly with the **Alze CRM** REST API. It allows you to build powerful automated workflows, synchronize contacts, deals, activities, and manage sales funnels with absolute control.
+This is an n8n community node package that integrates seamlessly with the **Alze** REST API. It allows you to build powerful automated workflows, synchronize contacts, deals, activities, and manage sales funnels with absolute control.
 
 [![npm version](https://img.shields.io/npm/v/n8n-nodes-alze.svg?style=flat-square&color=A12CFF)](https://www.npmjs.com/package/n8n-nodes-alze)
 [![n8n community node](https://img.shields.io/badge/n8n-community%20node-orange.svg?style=flat-square)](https://n8n.io)
@@ -10,7 +10,7 @@ This is an n8n community node package that integrates seamlessly with the **Alze
 
 ## Key Features
 
-* **Complete API Coverage**: Supports all 10 resources and over ~50 endpoints inside Alze CRM.
+* **Complete API Coverage**: Supports all 10 resources and over ~50 endpoints inside Alze.
 * **Auto-Pagination**: Seamlessly loops through paginated GET requests automatically when `Return All` is checked.
 * **Flexible Custom Fields Mapping**: Fully supports custom properties using an interactive UI Key-Value table or raw custom JSON objects.
 * **Optimized & Type-Safe**: Written in 100% strict TypeScript and compiled against official n8n workflow types.
@@ -52,16 +52,16 @@ npm install n8n-nodes-alze
 
 ## Authentication Setup
 
-1. Add the **Alze CRM** node to your workflow.
+1. Add the **Alze** node to your workflow.
 2. Under **Credentials**, select **Create New Credential**.
-3. Provide your Alze CRM **API Key** (issued from your workspace settings page).
+3. Provide your Alze **API Key** (issued from your workspace settings page).
 4. Save and start building!
 
 ---
 
 ## Custom Fields Setup Guide
 
-Alze CRM supports highly customizable properties for `Contacts`, `Organizations`, and `Deals`. This node provides two convenient methods to map these fields:
+Alze supports highly customizable properties for `Contacts`, `Organizations`, and `Deals`. This node provides two convenient methods to map these fields:
 
 ### Method A: Custom Fields (UI)
 A clean, interactive table allowing you to add dynamic key-value properties:
