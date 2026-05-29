@@ -60,7 +60,7 @@ export const wonReasonFields: INodeProperties[] = [
 	{
 		displayName: 'Won Reason ID',
 		name: 'wonReasonId',
-		type: 'string',
+		type: 'number',
 		required: true,
 		default: '',
 		displayOptions: {
@@ -214,11 +214,11 @@ export const wonReasonFields: INodeProperties[] = [
 		},
 		options: [
 			{
-				displayName: 'Active',
-				name: 'active',
+				displayName: 'Is Default',
+				name: 'is_default',
 				type: 'boolean',
-				default: true,
-				description: 'Whether this reason is active and selectable in the CRM',
+				default: false,
+				description: 'Whether this reason is the default reason',
 			},
 			{
 				displayName: 'Name',
@@ -232,16 +232,7 @@ export const wonReasonFields: INodeProperties[] = [
 				},
 				description: 'Name/description of the won reason',
 			},
-			{
-				displayName: 'Position',
-				name: 'position',
-				type: 'number',
-				typeOptions: {
-					minValue: 0,
-				},
-				default: 1,
-				description: 'Display order of the reason',
-			},
+	// Removed position field
 		],
 	},
 ];

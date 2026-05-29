@@ -1,6 +1,6 @@
 import { INodeProperties } from 'n8n-workflow';
 
-export const lostReasonOperations: INodeProperties[] = [
+export const leadOriginOperations: INodeProperties[] = [
 	{
 		displayName: 'Operation',
 		name: 'operation',
@@ -8,72 +8,72 @@ export const lostReasonOperations: INodeProperties[] = [
 		noDataExpression: true,
 		displayOptions: {
 			show: {
-				resource: ['lostReason'],
+				resource: ['leadOrigin'],
 			},
 		},
 		options: [
 			{
 				name: 'Create',
 				value: 'create',
-				description: 'Create a new lost reason',
-				action: 'Create a lost reason',
+				description: 'Create a new lead origin',
+				action: 'Create a lead origin',
 			},
 			{
 				name: 'Delete',
 				value: 'delete',
-				description: 'Delete a lost reason',
-				action: 'Delete a lost reason',
+				description: 'Delete a lead origin',
+				action: 'Delete a lead origin',
 			},
 			{
 				name: 'Get',
 				value: 'get',
-				description: 'Get details of a lost reason',
-				action: 'Get a lost reason',
+				description: 'Get details of a lead origin',
+				action: 'Get a lead origin',
 			},
 			{
 				name: 'Get Many',
 				value: 'list',
-				description: 'List lost reasons',
-				action: 'Get many lost reasons',
+				description: 'List lead origins',
+				action: 'Get many lead origins',
 			},
 			{
 				name: 'Update',
 				value: 'update',
-				description: 'Update a lost reason (clears omitted fields)',
-				action: 'Update a lost reason',
+				description: 'Update a lead origin (clears omitted fields)',
+				action: 'Update a lead origin',
 			},
 			{
 				name: 'Update Partial',
 				value: 'patch',
-				description: 'Update a lost reason partially (incremental edit)',
-				action: 'Update partial lost reason',
+				description: 'Update a lead origin partially (incremental edit)',
+				action: 'Update partial lead origin',
 			},
 		],
 		default: 'list',
 	},
 ];
 
-export const lostReasonFields: INodeProperties[] = [
+export const leadOriginFields: INodeProperties[] = [
 	// ----------------------------------
-	//         lostReason: get / delete / update / patch
+	//         leadOrigin: get / delete / update / patch
 	// ----------------------------------
 	{
-		displayName: 'Lost Reason ID',
-		name: 'lostReasonId',
+		displayName: 'Lead Origin ID',
+		name: 'leadOriginId',
 		type: 'number',
 		required: true,
-		default: '',
+		default: 0,
 		displayOptions: {
 			show: {
-				resource: ['lostReason'],
+				resource: ['leadOrigin'],
 				operation: ['get', 'delete', 'update', 'patch'],
 			},
 		},
-		description: 'The ID of the lost reason',
+		description: 'The ID of the lead origin',
 	},
 
 	// ----------------------------------
-	//         lostReason: create
+	//         leadOrigin: create
 	// ----------------------------------
 	{
 		displayName: 'Name',
@@ -83,15 +83,15 @@ export const lostReasonFields: INodeProperties[] = [
 		default: '',
 		displayOptions: {
 			show: {
-				resource: ['lostReason'],
+				resource: ['leadOrigin'],
 				operation: ['create'],
 			},
 		},
-		description: 'Name/description of the lost reason',
+		description: 'Name/title of the lead origin',
 	},
 
 	// ----------------------------------
-	//         lostReason: update
+	//         leadOrigin: update
 	// ----------------------------------
 	{
 		displayName: 'Name',
@@ -101,71 +101,72 @@ export const lostReasonFields: INodeProperties[] = [
 		default: '',
 		displayOptions: {
 			show: {
-				resource: ['lostReason'],
+				resource: ['leadOrigin'],
 				operation: ['update'],
 			},
 		},
-		description: 'Name/description of the lost reason',
+		description: 'Name/title of the lead origin',
 	},
 
 	// ----------------------------------
-	//         lostReason: list
+	//         leadOrigin: list
 	// ----------------------------------
 	{
 		displayName: 'Return All',
 		name: 'returnAll',
 		type: 'boolean',
-		default: false,
-		description: 'Whether to return all results or only up to a given limit',
 		displayOptions: {
 			show: {
-				resource: ['lostReason'],
 				operation: ['list'],
+				resource: ['leadOrigin'],
 			},
 		},
+		default: false,
+		description: 'Whether to return all results or only up to a given limit',
 	},
 	{
 		displayName: 'Limit',
 		name: 'limit',
 		type: 'number',
-		typeOptions: {
-			minValue: 1,
-		},
-		default: 50,
-		description: 'Max number of results to return',
 		displayOptions: {
 			show: {
-				resource: ['lostReason'],
 				operation: ['list'],
+				resource: ['leadOrigin'],
 				returnAll: [false],
 			},
 		},
+		typeOptions: {
+			minValue: 1,
+			maxValue: 500,
+		},
+		default: 50,
+		description: 'Max number of results to return',
 	},
 	{
 		displayName: 'Search Query',
 		name: 'q',
 		type: 'string',
-		default: '',
 		displayOptions: {
 			show: {
-				resource: ['lostReason'],
 				operation: ['list'],
+				resource: ['leadOrigin'],
 			},
 		},
-		description: 'Text search in lost reason names',
+		default: '',
+		description: 'Search string',
 	},
 	{
 		displayName: 'Sort',
 		name: 'sort',
 		type: 'string',
-		default: '',
 		displayOptions: {
 			show: {
-				resource: ['lostReason'],
 				operation: ['list'],
+				resource: ['leadOrigin'],
 			},
 		},
-		description: 'Field to sort by. Prefix with - for descending. E.g. -created_at',
+		default: '',
+		description: 'Sort logic (e.g. name:asc)',
 	},
 	{
 		displayName: 'Additional Fields',
@@ -175,30 +176,15 @@ export const lostReasonFields: INodeProperties[] = [
 		default: {},
 		displayOptions: {
 			show: {
-				resource: ['lostReason'],
+				resource: ['leadOrigin'],
 				operation: ['list'],
 			},
 		},
-		options: [
-			{
-				displayName: 'Created After',
-				name: 'created_after',
-				type: 'dateTime',
-				default: '',
-				description: 'Filter reasons created after this date',
-			},
-			{
-				displayName: 'Created Before',
-				name: 'created_before',
-				type: 'dateTime',
-				default: '',
-				description: 'Filter reasons created before this date',
-			},
-		],
+		options: [],
 	},
 
 	// ----------------------------------
-	//         lostReason: create / update / patch options
+	//         leadOrigin: create / update / patch options
 	// ----------------------------------
 	{
 		displayName: 'Fields to Set',
@@ -208,7 +194,7 @@ export const lostReasonFields: INodeProperties[] = [
 		default: {},
 		displayOptions: {
 			show: {
-				resource: ['lostReason'],
+				resource: ['leadOrigin'],
 				operation: ['create', 'update', 'patch'],
 			},
 		},
@@ -218,7 +204,7 @@ export const lostReasonFields: INodeProperties[] = [
 				name: 'is_default',
 				type: 'boolean',
 				default: false,
-				description: 'Whether this reason is the default reason',
+				description: 'Whether this is the default option',
 			},
 			{
 				displayName: 'Name',
@@ -230,9 +216,8 @@ export const lostReasonFields: INodeProperties[] = [
 						'/operation': ['patch'],
 					},
 				},
-				description: 'Name/description of the lost reason',
+				description: 'Name of the lead origin',
 			},
-	// Removed position field
 		],
 	},
 ];

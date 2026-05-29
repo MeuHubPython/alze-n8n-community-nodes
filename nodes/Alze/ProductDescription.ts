@@ -60,7 +60,7 @@ export const productFields: INodeProperties[] = [
 	{
 		displayName: 'Product ID',
 		name: 'productId',
-		type: 'string',
+		type: 'number',
 		required: true,
 		default: '',
 		displayOptions: {
@@ -88,6 +88,24 @@ export const productFields: INodeProperties[] = [
 			},
 		},
 		description: 'Name of the product',
+	},
+	{
+		displayName: 'Type',
+		name: 'type',
+		type: 'options',
+		options: [
+			{ name: 'Product', value: 'product' },
+			{ name: 'Service', value: 'service' },
+		],
+		required: true,
+		default: 'product',
+		displayOptions: {
+			show: {
+				resource: ['product'],
+				operation: ['create'],
+			},
+		},
+		description: 'Type of the item (product or service)',
 	},
 	{
 		displayName: 'Price',
@@ -123,6 +141,24 @@ export const productFields: INodeProperties[] = [
 			},
 		},
 		description: 'Name of the product',
+	},
+	{
+		displayName: 'Type',
+		name: 'typeUpdate',
+		type: 'options',
+		options: [
+			{ name: 'Product', value: 'product' },
+			{ name: 'Service', value: 'service' },
+		],
+		required: true,
+		default: 'product',
+		displayOptions: {
+			show: {
+				resource: ['product'],
+				operation: ['update'],
+			},
+		},
+		description: 'Type of the item (product or service)',
 	},
 	{
 		displayName: 'Price',
@@ -262,13 +298,6 @@ export const productFields: INodeProperties[] = [
 		},
 		options: [
 			{
-				displayName: 'Active',
-				name: 'active',
-				type: 'boolean',
-				default: true,
-				description: 'Whether the item is available for sale',
-			},
-			{
 				displayName: 'Currency',
 				name: 'currency',
 				type: 'string',
@@ -315,6 +344,22 @@ export const productFields: INodeProperties[] = [
 				type: 'string',
 				default: '',
 				description: 'Stock Keeping Unit (unique code)',
+			},
+			{
+				displayName: 'Type',
+				name: 'typePatch',
+				type: 'options',
+				options: [
+					{ name: 'Product', value: 'product' },
+					{ name: 'Service', value: 'service' },
+				],
+				default: 'product',
+				displayOptions: {
+					show: {
+						'/operation': ['patch'],
+					},
+				},
+				description: 'Type of the item',
 			},
 		],
 	},

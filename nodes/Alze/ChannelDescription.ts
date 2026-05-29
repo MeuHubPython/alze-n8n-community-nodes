@@ -1,6 +1,6 @@
 import { INodeProperties } from 'n8n-workflow';
 
-export const lostReasonOperations: INodeProperties[] = [
+export const channelOperations: INodeProperties[] = [
 	{
 		displayName: 'Operation',
 		name: 'operation',
@@ -8,72 +8,72 @@ export const lostReasonOperations: INodeProperties[] = [
 		noDataExpression: true,
 		displayOptions: {
 			show: {
-				resource: ['lostReason'],
+				resource: ['channel'],
 			},
 		},
 		options: [
 			{
 				name: 'Create',
 				value: 'create',
-				description: 'Create a new lost reason',
-				action: 'Create a lost reason',
+				description: 'Create a new channel',
+				action: 'Create a channel',
 			},
 			{
 				name: 'Delete',
 				value: 'delete',
-				description: 'Delete a lost reason',
-				action: 'Delete a lost reason',
+				description: 'Delete a channel',
+				action: 'Delete a channel',
 			},
 			{
 				name: 'Get',
 				value: 'get',
-				description: 'Get details of a lost reason',
-				action: 'Get a lost reason',
+				description: 'Get details of a channel',
+				action: 'Get a channel',
 			},
 			{
 				name: 'Get Many',
 				value: 'list',
-				description: 'List lost reasons',
-				action: 'Get many lost reasons',
+				description: 'List channels',
+				action: 'Get many channels',
 			},
 			{
 				name: 'Update',
 				value: 'update',
-				description: 'Update a lost reason (clears omitted fields)',
-				action: 'Update a lost reason',
+				description: 'Update a channel (clears omitted fields)',
+				action: 'Update a channel',
 			},
 			{
 				name: 'Update Partial',
 				value: 'patch',
-				description: 'Update a lost reason partially (incremental edit)',
-				action: 'Update partial lost reason',
+				description: 'Update a channel partially (incremental edit)',
+				action: 'Update partial channel',
 			},
 		],
 		default: 'list',
 	},
 ];
 
-export const lostReasonFields: INodeProperties[] = [
+export const channelFields: INodeProperties[] = [
 	// ----------------------------------
-	//         lostReason: get / delete / update / patch
+	//         channel: get / delete / update / patch
 	// ----------------------------------
 	{
-		displayName: 'Lost Reason ID',
-		name: 'lostReasonId',
+		displayName: 'Channel ID',
+		name: 'channelId',
 		type: 'number',
 		required: true,
-		default: '',
+		default: 0,
 		displayOptions: {
 			show: {
-				resource: ['lostReason'],
+				resource: ['channel'],
 				operation: ['get', 'delete', 'update', 'patch'],
 			},
 		},
-		description: 'The ID of the lost reason',
+		description: 'The ID of the channel',
 	},
 
 	// ----------------------------------
-	//         lostReason: create
+	//         channel: create
 	// ----------------------------------
 	{
 		displayName: 'Name',
@@ -83,15 +83,15 @@ export const lostReasonFields: INodeProperties[] = [
 		default: '',
 		displayOptions: {
 			show: {
-				resource: ['lostReason'],
+				resource: ['channel'],
 				operation: ['create'],
 			},
 		},
-		description: 'Name/description of the lost reason',
+		description: 'Name/title of the channel',
 	},
 
 	// ----------------------------------
-	//         lostReason: update
+	//         channel: update
 	// ----------------------------------
 	{
 		displayName: 'Name',
@@ -101,71 +101,72 @@ export const lostReasonFields: INodeProperties[] = [
 		default: '',
 		displayOptions: {
 			show: {
-				resource: ['lostReason'],
+				resource: ['channel'],
 				operation: ['update'],
 			},
 		},
-		description: 'Name/description of the lost reason',
+		description: 'Name/title of the channel',
 	},
 
 	// ----------------------------------
-	//         lostReason: list
+	//         channel: list
 	// ----------------------------------
 	{
 		displayName: 'Return All',
 		name: 'returnAll',
 		type: 'boolean',
-		default: false,
-		description: 'Whether to return all results or only up to a given limit',
 		displayOptions: {
 			show: {
-				resource: ['lostReason'],
 				operation: ['list'],
+				resource: ['channel'],
 			},
 		},
+		default: false,
+		description: 'Whether to return all results or only up to a given limit',
 	},
 	{
 		displayName: 'Limit',
 		name: 'limit',
 		type: 'number',
-		typeOptions: {
-			minValue: 1,
-		},
-		default: 50,
-		description: 'Max number of results to return',
 		displayOptions: {
 			show: {
-				resource: ['lostReason'],
 				operation: ['list'],
+				resource: ['channel'],
 				returnAll: [false],
 			},
 		},
+		typeOptions: {
+			minValue: 1,
+			maxValue: 500,
+		},
+		default: 50,
+		description: 'Max number of results to return',
 	},
 	{
 		displayName: 'Search Query',
 		name: 'q',
 		type: 'string',
-		default: '',
 		displayOptions: {
 			show: {
-				resource: ['lostReason'],
 				operation: ['list'],
+				resource: ['channel'],
 			},
 		},
-		description: 'Text search in lost reason names',
+		default: '',
+		description: 'Search string',
 	},
 	{
 		displayName: 'Sort',
 		name: 'sort',
 		type: 'string',
-		default: '',
 		displayOptions: {
 			show: {
-				resource: ['lostReason'],
 				operation: ['list'],
+				resource: ['channel'],
 			},
 		},
-		description: 'Field to sort by. Prefix with - for descending. E.g. -created_at',
+		default: '',
+		description: 'Sort logic (e.g. name:asc)',
 	},
 	{
 		displayName: 'Additional Fields',
@@ -175,30 +176,15 @@ export const lostReasonFields: INodeProperties[] = [
 		default: {},
 		displayOptions: {
 			show: {
-				resource: ['lostReason'],
+				resource: ['channel'],
 				operation: ['list'],
 			},
 		},
-		options: [
-			{
-				displayName: 'Created After',
-				name: 'created_after',
-				type: 'dateTime',
-				default: '',
-				description: 'Filter reasons created after this date',
-			},
-			{
-				displayName: 'Created Before',
-				name: 'created_before',
-				type: 'dateTime',
-				default: '',
-				description: 'Filter reasons created before this date',
-			},
-		],
+		options: [],
 	},
 
 	// ----------------------------------
-	//         lostReason: create / update / patch options
+	//         channel: create / update / patch options
 	// ----------------------------------
 	{
 		displayName: 'Fields to Set',
@@ -208,7 +194,7 @@ export const lostReasonFields: INodeProperties[] = [
 		default: {},
 		displayOptions: {
 			show: {
-				resource: ['lostReason'],
+				resource: ['channel'],
 				operation: ['create', 'update', 'patch'],
 			},
 		},
@@ -218,7 +204,7 @@ export const lostReasonFields: INodeProperties[] = [
 				name: 'is_default',
 				type: 'boolean',
 				default: false,
-				description: 'Whether this reason is the default reason',
+				description: 'Whether this is the default option',
 			},
 			{
 				displayName: 'Name',
@@ -230,9 +216,8 @@ export const lostReasonFields: INodeProperties[] = [
 						'/operation': ['patch'],
 					},
 				},
-				description: 'Name/description of the lost reason',
+				description: 'Name of the channel',
 			},
-	// Removed position field
 		],
 	},
 ];

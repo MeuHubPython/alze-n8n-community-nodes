@@ -12,42 +12,7 @@ export const stageOperations: INodeProperties[] = [
 			},
 		},
 		options: [
-			{
-				name: 'Create',
-				value: 'create',
-				description: 'Create a new stage',
-				action: 'Create a stage',
-			},
-			{
-				name: 'Delete',
-				value: 'delete',
-				description: 'Delete a stage',
-				action: 'Delete a stage',
-			},
-			{
-				name: 'Get',
-				value: 'get',
-				description: 'Get details of a stage',
-				action: 'Get a stage',
-			},
-			{
-				name: 'Get Many',
-				value: 'list',
-				description: 'List stages',
-				action: 'Get many stages',
-			},
-			{
-				name: 'Update',
-				value: 'update',
-				description: 'Update a stage (clears omitted fields)',
-				action: 'Update a stage',
-			},
-			{
-				name: 'Update Partial',
-				value: 'patch',
-				description: 'Update a stage partially (incremental edit)',
-				action: 'Update partial stage',
-			},
+	// Removed mutating operations
 		],
 		default: 'list',
 	},
@@ -66,77 +31,13 @@ export const stageFields: INodeProperties[] = [
 		displayOptions: {
 			show: {
 				resource: ['stage'],
-				operation: ['get', 'delete', 'update', 'patch'],
+				operation: ['get'],
 			},
 		},
 		description: 'The ID of the stage',
 	},
 
-	// ----------------------------------
-	//         stage: create
-	// ----------------------------------
-	{
-		displayName: 'Name',
-		name: 'name',
-		type: 'string',
-		required: true,
-		default: '',
-		displayOptions: {
-			show: {
-				resource: ['stage'],
-				operation: ['create'],
-			},
-		},
-		description: 'Name of the stage',
-	},
-	{
-		displayName: 'Pipeline ID',
-		name: 'pipelineId',
-		type: 'string',
-		required: true,
-		default: '',
-		displayOptions: {
-			show: {
-				resource: ['stage'],
-				operation: ['create'],
-			},
-		},
-		description: 'The funnel/pipeline where this stage resides',
-	},
-
-	// ----------------------------------
-	//         stage: update
-	// ----------------------------------
-	{
-		displayName: 'Name',
-		name: 'nameUpdate',
-		type: 'string',
-		required: true,
-		default: '',
-		displayOptions: {
-			show: {
-				resource: ['stage'],
-				operation: ['update'],
-			},
-		},
-		description: 'Name of the stage',
-	},
-	{
-		displayName: 'Pipeline ID',
-		name: 'pipelineIdUpdate',
-		type: 'string',
-		required: true,
-		default: '',
-		displayOptions: {
-			show: {
-				resource: ['stage'],
-				operation: ['update'],
-			},
-		},
-		description: 'The funnel/pipeline where this stage resides',
-	},
-
-	// ----------------------------------
+	// Removed create/update fields
 	//         stage: list
 	// ----------------------------------
 	{
@@ -232,67 +133,5 @@ export const stageFields: INodeProperties[] = [
 		],
 	},
 
-	// ----------------------------------
-	//         stage: create / update / patch options
-	// ----------------------------------
-	{
-		displayName: 'Fields to Set',
-		name: 'fieldsToSet',
-		type: 'collection',
-		placeholder: 'Add Field',
-		default: {},
-		displayOptions: {
-			show: {
-				resource: ['stage'],
-				operation: ['create', 'update', 'patch'],
-			},
-		},
-		options: [
-			{
-				displayName: 'Name',
-				name: 'namePatch',
-				type: 'string',
-				default: '',
-				displayOptions: {
-					show: {
-						'/operation': ['patch'],
-					},
-				},
-				description: 'Name of the stage',
-			},
-			{
-				displayName: 'Pipeline ID',
-				name: 'pipelineIdPatch',
-				type: 'string',
-				default: '',
-				displayOptions: {
-					show: {
-						'/operation': ['patch'],
-					},
-				},
-				description: 'The funnel/pipeline where this stage resides',
-			},
-			{
-				displayName: 'Position',
-				name: 'position',
-				type: 'number',
-				typeOptions: {
-					minValue: 0,
-				},
-				default: 1,
-				description: 'Display position/order of the stage',
-			},
-			{
-				displayName: 'Win Probability (%)',
-				name: 'win_probability',
-				type: 'number',
-				typeOptions: {
-					minValue: 0,
-					maxValue: 100,
-				},
-				default: 100,
-				description: 'Probability of winning deals in this stage',
-			},
-		],
-	},
+	// Removed fieldsToSet
 ];

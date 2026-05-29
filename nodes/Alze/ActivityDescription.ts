@@ -81,33 +81,7 @@ export const activityFields: INodeProperties[] = [
 	// ----------------------------------
 	//         activity: complete
 	// ----------------------------------
-	{
-		displayName: 'Completed At',
-		name: 'completedAt',
-		type: 'dateTime',
-		required: true,
-		default: '',
-		displayOptions: {
-			show: {
-				resource: ['activity'],
-				operation: ['complete'],
-			},
-		},
-		description: 'Date and time when the activity was completed',
-	},
-	{
-		displayName: 'Notes / Comments',
-		name: 'notesComplete',
-		type: 'string',
-		default: '',
-		displayOptions: {
-			show: {
-				resource: ['activity'],
-				operation: ['complete'],
-			},
-		},
-		description: 'Additional notes or summary recorded upon completion',
-	},
+	// (Empty payload for complete operation)
 
 	// ----------------------------------
 	//         activity: create
@@ -350,10 +324,11 @@ export const activityFields: INodeProperties[] = [
 				name: 'status',
 				type: 'options',
 				options: [
-					{ name: 'Pending', value: 'pending' },
-					{ name: 'Completed', value: 'completed' },
+					{ name: 'Open', value: 'open' },
+					{ name: 'Done', value: 'done' },
+					{ name: 'Canceled', value: 'canceled' },
 				],
-				default: 'pending',
+				default: 'open',
 				description: 'Filter by activity status',
 			},
 			{
@@ -452,10 +427,11 @@ export const activityFields: INodeProperties[] = [
 				name: 'status',
 				type: 'options',
 				options: [
-					{ name: 'Pending', value: 'pending' },
-					{ name: 'Completed', value: 'completed' },
+					{ name: 'Open', value: 'open' },
+					{ name: 'Done', value: 'done' },
+					{ name: 'Canceled', value: 'canceled' },
 				],
-				default: 'pending',
+				default: 'open',
 				description: 'Status of the activity',
 			},
 			{

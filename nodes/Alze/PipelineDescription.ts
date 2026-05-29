@@ -36,12 +36,7 @@ export const pipelineOperations: INodeProperties[] = [
 				description: 'List pipelines',
 				action: 'Get many pipelines',
 			},
-			{
-				name: 'Get Stages',
-				value: 'listStages',
-				description: 'List stages of a specific pipeline',
-				action: 'Get stages of a pipeline',
-			},
+	// Removed listStages
 			{
 				name: 'Update',
 				value: 'update',
@@ -72,7 +67,7 @@ export const pipelineFields: INodeProperties[] = [
 		displayOptions: {
 			show: {
 				resource: ['pipeline'],
-				operation: ['get', 'delete', 'update', 'patch', 'listStages'],
+				operation: ['get', 'delete', 'update', 'patch'],
 			},
 		},
 		description: 'The ID of the pipeline',
@@ -227,11 +222,11 @@ export const pipelineFields: INodeProperties[] = [
 		},
 		options: [
 			{
-				displayName: 'Active',
-				name: 'active',
+				displayName: 'Is Default',
+				name: 'is_default',
 				type: 'boolean',
-				default: true,
-				description: 'Whether the pipeline is active',
+				default: false,
+				description: 'Whether this is the default pipeline',
 			},
 			{
 				displayName: 'Name',

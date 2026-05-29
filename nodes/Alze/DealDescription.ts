@@ -13,6 +13,24 @@ export const dealOperations: INodeProperties[] = [
 		},
 		options: [
 			{
+				name: 'Add Contact',
+				value: 'addContact',
+				description: 'Add a contact to a deal',
+				action: 'Add a contact to a deal',
+			},
+			{
+				name: 'Add Item',
+				value: 'addItem',
+				description: 'Add an item to a deal',
+				action: 'Add an item to a deal',
+			},
+			{
+				name: 'Add Note',
+				value: 'addNote',
+				description: 'Add a note to a deal',
+				action: 'Add a note to a deal',
+			},
+			{
 				name: 'Create',
 				value: 'create',
 				description: 'Create a new deal',
@@ -23,6 +41,12 @@ export const dealOperations: INodeProperties[] = [
 				value: 'delete',
 				description: 'Delete a deal',
 				action: 'Delete a deal',
+			},
+			{
+				name: 'Delete Note',
+				value: 'deleteNote',
+				description: 'Delete a note of a deal',
+				action: 'Delete a deal note',
 			},
 			{
 				name: 'Get',
@@ -37,6 +61,24 @@ export const dealOperations: INodeProperties[] = [
 				action: 'Get many deals',
 			},
 			{
+				name: 'List Contacts',
+				value: 'listContacts',
+				description: 'List contacts of a deal',
+				action: 'List deal contacts',
+			},
+			{
+				name: 'List Items',
+				value: 'listItems',
+				description: 'List items (products/services) of a deal',
+				action: 'List deal items',
+			},
+			{
+				name: 'List Notes',
+				value: 'listNotes',
+				description: 'List notes of a deal',
+				action: 'List deal notes',
+			},
+			{
 				name: 'Lose',
 				value: 'lose',
 				description: 'Mark a deal as lost',
@@ -44,15 +86,27 @@ export const dealOperations: INodeProperties[] = [
 			},
 			{
 				name: 'Move Stage',
-				value: 'move',
+				value: 'stage',
 				description: 'Move a deal to another stage',
 				action: 'Move a deal stage',
+			},
+			{
+				name: 'Remove Contact',
+				value: 'removeContact',
+				description: 'Remove a contact from a deal',
+				action: 'Remove a contact from a deal',
 			},
 			{
 				name: 'Update',
 				value: 'update',
 				description: 'Update a deal (clears omitted fields)',
 				action: 'Update a deal',
+			},
+			{
+				name: 'Update Note',
+				value: 'updateNote',
+				description: 'Update a note of a deal',
+				action: 'Update a deal note',
 			},
 			{
 				name: 'Update Partial',
@@ -84,7 +138,7 @@ export const dealFields: INodeProperties[] = [
 		displayOptions: {
 			show: {
 				resource: ['deal'],
-				operation: ['get', 'delete', 'update', 'patch', 'win', 'lose', 'move'],
+				operation: ['get', 'delete', 'update', 'patch', 'win', 'lose', 'stage'],
 			},
 		},
 		description: 'The ID of the deal',
@@ -107,30 +161,20 @@ export const dealFields: INodeProperties[] = [
 		description: 'ID of the won reason from the won reasons catalogue',
 	},
 	{
-		displayName: 'Won At',
-		name: 'wonAt',
-		type: 'dateTime',
-		default: '',
+		displayName: 'Value',
+		name: 'value',
+		type: 'number',
+		typeOptions: {
+			numberPrecision: 2,
+		},
+		default: 0,
 		displayOptions: {
 			show: {
 				resource: ['deal'],
 				operation: ['win'],
 			},
 		},
-		description: 'Date and time when the deal was won',
-	},
-	{
-		displayName: 'Feedback',
-		name: 'feedbackWin',
-		type: 'string',
-		default: '',
-		displayOptions: {
-			show: {
-				resource: ['deal'],
-				operation: ['win'],
-			},
-		},
-		description: 'Feedback comments when winning the deal',
+		description: 'The final value of the won deal',
 	},
 
 	// ----------------------------------
@@ -149,35 +193,10 @@ export const dealFields: INodeProperties[] = [
 		},
 		description: 'ID of the lost reason from the lost reasons catalogue',
 	},
-	{
-		displayName: 'Lost At',
-		name: 'lostAt',
-		type: 'dateTime',
-		default: '',
-		displayOptions: {
-			show: {
-				resource: ['deal'],
-				operation: ['lose'],
-			},
-		},
-		description: 'Date and time when the deal was lost',
-	},
-	{
-		displayName: 'Feedback',
-		name: 'feedbackLose',
-		type: 'string',
-		default: '',
-		displayOptions: {
-			show: {
-				resource: ['deal'],
-				operation: ['lose'],
-			},
-		},
-		description: 'Feedback comments when losing the deal',
-	},
+	// Empty replacement for lostAt and feedbackLose
 
 	// ----------------------------------
-	//         deal: move
+	//         deal: move (stage)
 	// ----------------------------------
 	{
 		displayName: 'Stage ID',
@@ -188,23 +207,10 @@ export const dealFields: INodeProperties[] = [
 		displayOptions: {
 			show: {
 				resource: ['deal'],
-				operation: ['move'],
+				operation: ['stage'],
 			},
 		},
 		description: 'The target stage ID to move the deal to',
-	},
-	{
-		displayName: 'Moved At',
-		name: 'movedAt',
-		type: 'dateTime',
-		default: '',
-		displayOptions: {
-			show: {
-				resource: ['deal'],
-				operation: ['move'],
-			},
-		},
-		description: 'Date and time when the deal was moved',
 	},
 
 	// ----------------------------------
@@ -466,6 +472,13 @@ export const dealFields: INodeProperties[] = [
 		},
 		options: [
 			{
+				displayName: 'Channel ID',
+				name: 'channel_id',
+				type: 'string',
+				default: '',
+				description: 'ID of the channel/campaign associated with the deal',
+			},
+			{
 				displayName: 'Contact (Person) ID',
 				name: 'person_id',
 				type: 'string',
@@ -527,11 +540,25 @@ export const dealFields: INodeProperties[] = [
 				description: 'Planned or expected close date of the deal',
 			},
 			{
+				displayName: 'Lead Origin ID',
+				name: 'lead_origin_id',
+				type: 'string',
+				default: '',
+				description: 'ID of the lead origin (source)',
+			},
+			{
 				displayName: 'Organization ID',
 				name: 'organization_id',
 				type: 'string',
 				default: '',
 				description: 'ID of the associated organization',
+			},
+			{
+				displayName: 'Origin Group ID',
+				name: 'origin_group_id',
+				type: 'string',
+				default: '',
+				description: 'ID of the origin group',
 			},
 			{
 				displayName: 'Owner ID',
@@ -599,5 +626,124 @@ export const dealFields: INodeProperties[] = [
 				description: 'Monetary value of the deal',
 			},
 		],
+	},
+
+	// ----------------------------------
+	//         deal sub-resources
+	// ----------------------------------
+	{
+		displayName: 'Contact (Person) ID',
+		name: 'personIdAdd',
+		type: 'string',
+		required: true,
+		default: '',
+		displayOptions: {
+			show: {
+				resource: ['deal'],
+				operation: ['addContact'],
+			},
+		},
+		description: 'The ID of the contact to add',
+	},
+	{
+		displayName: 'Contact (Person) ID',
+		name: 'personIdRemove',
+		type: 'string',
+		required: true,
+		default: '',
+		displayOptions: {
+			show: {
+				resource: ['deal'],
+				operation: ['removeContact'],
+			},
+		},
+		description: 'The ID of the contact to remove',
+	},
+	{
+		displayName: 'Item (Product/Service) ID',
+		name: 'itemIdAdd',
+		type: 'number',
+		required: true,
+		default: 0,
+		displayOptions: {
+			show: {
+				resource: ['deal'],
+				operation: ['addItem'],
+			},
+		},
+		description: 'The ID of the item to add',
+	},
+	{
+		displayName: 'Quantity',
+		name: 'quantity',
+		type: 'number',
+		default: 1,
+		displayOptions: {
+			show: {
+				resource: ['deal'],
+				operation: ['addItem'],
+			},
+		},
+		description: 'The quantity of the item',
+	},
+	{
+		displayName: 'Price',
+		name: 'price',
+		type: 'number',
+		typeOptions: {
+			numberPrecision: 2,
+		},
+		default: 0,
+		displayOptions: {
+			show: {
+				resource: ['deal'],
+				operation: ['addItem'],
+			},
+		},
+		description: 'The price of the item (leave 0 to use the catalog price)',
+	},
+	{
+		displayName: 'Note ID',
+		name: 'noteId',
+		type: 'string',
+		required: true,
+		default: '',
+		displayOptions: {
+			show: {
+				resource: ['deal'],
+				operation: ['updateNote', 'deleteNote'],
+			},
+		},
+		description: 'The ID of the note',
+	},
+	{
+		displayName: 'Content',
+		name: 'content',
+		type: 'string',
+		typeOptions: {
+			rows: 4,
+		},
+		required: true,
+		default: '',
+		displayOptions: {
+			show: {
+				resource: ['deal'],
+				operation: ['addNote', 'updateNote'],
+			},
+		},
+		description: 'The text content of the note',
+	},
+	{
+		displayName: 'Pinned',
+		name: 'pinned',
+		type: 'boolean',
+		default: false,
+		displayOptions: {
+			show: {
+				resource: ['deal'],
+				operation: ['addNote', 'updateNote'],
+			},
+		},
+		description: 'Whether to pin the note to the top',
 	},
 ];

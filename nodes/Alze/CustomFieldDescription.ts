@@ -1,6 +1,6 @@
 import { INodeProperties } from 'n8n-workflow';
 
-export const lostReasonOperations: INodeProperties[] = [
+export const customFieldOperations: INodeProperties[] = [
 	{
 		displayName: 'Operation',
 		name: 'operation',
@@ -8,72 +8,72 @@ export const lostReasonOperations: INodeProperties[] = [
 		noDataExpression: true,
 		displayOptions: {
 			show: {
-				resource: ['lostReason'],
+				resource: ['customField'],
 			},
 		},
 		options: [
 			{
 				name: 'Create',
 				value: 'create',
-				description: 'Create a new lost reason',
-				action: 'Create a lost reason',
+				description: 'Create a new custom field',
+				action: 'Create a custom field',
 			},
 			{
 				name: 'Delete',
 				value: 'delete',
-				description: 'Delete a lost reason',
-				action: 'Delete a lost reason',
+				description: 'Delete a custom field',
+				action: 'Delete a custom field',
 			},
 			{
 				name: 'Get',
 				value: 'get',
-				description: 'Get details of a lost reason',
-				action: 'Get a lost reason',
+				description: 'Get details of a custom field',
+				action: 'Get a custom field',
 			},
 			{
 				name: 'Get Many',
 				value: 'list',
-				description: 'List lost reasons',
-				action: 'Get many lost reasons',
+				description: 'List custom fields',
+				action: 'Get many custom fields',
 			},
 			{
 				name: 'Update',
 				value: 'update',
-				description: 'Update a lost reason (clears omitted fields)',
-				action: 'Update a lost reason',
+				description: 'Update a custom field (clears omitted fields)',
+				action: 'Update a custom field',
 			},
 			{
 				name: 'Update Partial',
 				value: 'patch',
-				description: 'Update a lost reason partially (incremental edit)',
-				action: 'Update partial lost reason',
+				description: 'Update a custom field partially (incremental edit)',
+				action: 'Update partial custom field',
 			},
 		],
 		default: 'list',
 	},
 ];
 
-export const lostReasonFields: INodeProperties[] = [
+export const customFieldFields: INodeProperties[] = [
 	// ----------------------------------
-	//         lostReason: get / delete / update / patch
+	//         customField: get / delete / update / patch
 	// ----------------------------------
 	{
-		displayName: 'Lost Reason ID',
-		name: 'lostReasonId',
+		displayName: 'Custom Field ID',
+		name: 'customFieldId',
 		type: 'number',
 		required: true,
-		default: '',
+		default: 0,
 		displayOptions: {
 			show: {
-				resource: ['lostReason'],
+				resource: ['customField'],
 				operation: ['get', 'delete', 'update', 'patch'],
 			},
 		},
-		description: 'The ID of the lost reason',
+		description: 'The ID of the custom field',
 	},
 
 	// ----------------------------------
-	//         lostReason: create
+	//         customField: create
 	// ----------------------------------
 	{
 		displayName: 'Name',
@@ -83,15 +83,15 @@ export const lostReasonFields: INodeProperties[] = [
 		default: '',
 		displayOptions: {
 			show: {
-				resource: ['lostReason'],
+				resource: ['customField'],
 				operation: ['create'],
 			},
 		},
-		description: 'Name/description of the lost reason',
+		description: 'Name/title of the custom field',
 	},
 
 	// ----------------------------------
-	//         lostReason: update
+	//         customField: update
 	// ----------------------------------
 	{
 		displayName: 'Name',
@@ -101,71 +101,72 @@ export const lostReasonFields: INodeProperties[] = [
 		default: '',
 		displayOptions: {
 			show: {
-				resource: ['lostReason'],
+				resource: ['customField'],
 				operation: ['update'],
 			},
 		},
-		description: 'Name/description of the lost reason',
+		description: 'Name/title of the custom field',
 	},
 
 	// ----------------------------------
-	//         lostReason: list
+	//         customField: list
 	// ----------------------------------
 	{
 		displayName: 'Return All',
 		name: 'returnAll',
 		type: 'boolean',
-		default: false,
-		description: 'Whether to return all results or only up to a given limit',
 		displayOptions: {
 			show: {
-				resource: ['lostReason'],
 				operation: ['list'],
+				resource: ['customField'],
 			},
 		},
+		default: false,
+		description: 'Whether to return all results or only up to a given limit',
 	},
 	{
 		displayName: 'Limit',
 		name: 'limit',
 		type: 'number',
-		typeOptions: {
-			minValue: 1,
-		},
-		default: 50,
-		description: 'Max number of results to return',
 		displayOptions: {
 			show: {
-				resource: ['lostReason'],
 				operation: ['list'],
+				resource: ['customField'],
 				returnAll: [false],
 			},
 		},
+		typeOptions: {
+			minValue: 1,
+			maxValue: 500,
+		},
+		default: 50,
+		description: 'Max number of results to return',
 	},
 	{
 		displayName: 'Search Query',
 		name: 'q',
 		type: 'string',
-		default: '',
 		displayOptions: {
 			show: {
-				resource: ['lostReason'],
 				operation: ['list'],
+				resource: ['customField'],
 			},
 		},
-		description: 'Text search in lost reason names',
+		default: '',
+		description: 'Search string',
 	},
 	{
 		displayName: 'Sort',
 		name: 'sort',
 		type: 'string',
-		default: '',
 		displayOptions: {
 			show: {
-				resource: ['lostReason'],
 				operation: ['list'],
+				resource: ['customField'],
 			},
 		},
-		description: 'Field to sort by. Prefix with - for descending. E.g. -created_at',
+		default: '',
+		description: 'Sort logic (e.g. name:asc)',
 	},
 	{
 		displayName: 'Additional Fields',
@@ -175,30 +176,15 @@ export const lostReasonFields: INodeProperties[] = [
 		default: {},
 		displayOptions: {
 			show: {
-				resource: ['lostReason'],
+				resource: ['customField'],
 				operation: ['list'],
 			},
 		},
-		options: [
-			{
-				displayName: 'Created After',
-				name: 'created_after',
-				type: 'dateTime',
-				default: '',
-				description: 'Filter reasons created after this date',
-			},
-			{
-				displayName: 'Created Before',
-				name: 'created_before',
-				type: 'dateTime',
-				default: '',
-				description: 'Filter reasons created before this date',
-			},
-		],
+		options: [],
 	},
 
 	// ----------------------------------
-	//         lostReason: create / update / patch options
+	//         customField: create / update / patch options
 	// ----------------------------------
 	{
 		displayName: 'Fields to Set',
@@ -208,7 +194,7 @@ export const lostReasonFields: INodeProperties[] = [
 		default: {},
 		displayOptions: {
 			show: {
-				resource: ['lostReason'],
+				resource: ['customField'],
 				operation: ['create', 'update', 'patch'],
 			},
 		},
@@ -218,7 +204,7 @@ export const lostReasonFields: INodeProperties[] = [
 				name: 'is_default',
 				type: 'boolean',
 				default: false,
-				description: 'Whether this reason is the default reason',
+				description: 'Whether this is the default option',
 			},
 			{
 				displayName: 'Name',
@@ -230,9 +216,8 @@ export const lostReasonFields: INodeProperties[] = [
 						'/operation': ['patch'],
 					},
 				},
-				description: 'Name/description of the lost reason',
+				description: 'Name of the custom field',
 			},
-	// Removed position field
 		],
 	},
 ];

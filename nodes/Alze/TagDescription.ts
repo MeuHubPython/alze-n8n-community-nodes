@@ -1,6 +1,6 @@
 import { INodeProperties } from 'n8n-workflow';
 
-export const lostReasonOperations: INodeProperties[] = [
+export const tagOperations: INodeProperties[] = [
 	{
 		displayName: 'Operation',
 		name: 'operation',
@@ -8,72 +8,72 @@ export const lostReasonOperations: INodeProperties[] = [
 		noDataExpression: true,
 		displayOptions: {
 			show: {
-				resource: ['lostReason'],
+				resource: ['tag'],
 			},
 		},
 		options: [
 			{
 				name: 'Create',
 				value: 'create',
-				description: 'Create a new lost reason',
-				action: 'Create a lost reason',
+				description: 'Create a new tag',
+				action: 'Create a tag',
 			},
 			{
 				name: 'Delete',
 				value: 'delete',
-				description: 'Delete a lost reason',
-				action: 'Delete a lost reason',
+				description: 'Delete a tag',
+				action: 'Delete a tag',
 			},
 			{
 				name: 'Get',
 				value: 'get',
-				description: 'Get details of a lost reason',
-				action: 'Get a lost reason',
+				description: 'Get details of a tag',
+				action: 'Get a tag',
 			},
 			{
 				name: 'Get Many',
 				value: 'list',
-				description: 'List lost reasons',
-				action: 'Get many lost reasons',
+				description: 'List tags',
+				action: 'Get many tags',
 			},
 			{
 				name: 'Update',
 				value: 'update',
-				description: 'Update a lost reason (clears omitted fields)',
-				action: 'Update a lost reason',
+				description: 'Update a tag (clears omitted fields)',
+				action: 'Update a tag',
 			},
 			{
 				name: 'Update Partial',
 				value: 'patch',
-				description: 'Update a lost reason partially (incremental edit)',
-				action: 'Update partial lost reason',
+				description: 'Update a tag partially (incremental edit)',
+				action: 'Update partial tag',
 			},
 		],
 		default: 'list',
 	},
 ];
 
-export const lostReasonFields: INodeProperties[] = [
+export const tagFields: INodeProperties[] = [
 	// ----------------------------------
-	//         lostReason: get / delete / update / patch
+	//         tag: get / delete / update / patch
 	// ----------------------------------
 	{
-		displayName: 'Lost Reason ID',
-		name: 'lostReasonId',
+		displayName: 'Tag ID',
+		name: 'tagId',
 		type: 'number',
 		required: true,
-		default: '',
+		default: 0,
 		displayOptions: {
 			show: {
-				resource: ['lostReason'],
+				resource: ['tag'],
 				operation: ['get', 'delete', 'update', 'patch'],
 			},
 		},
-		description: 'The ID of the lost reason',
+		description: 'The ID of the tag',
 	},
 
 	// ----------------------------------
-	//         lostReason: create
+	//         tag: create
 	// ----------------------------------
 	{
 		displayName: 'Name',
@@ -83,15 +83,15 @@ export const lostReasonFields: INodeProperties[] = [
 		default: '',
 		displayOptions: {
 			show: {
-				resource: ['lostReason'],
+				resource: ['tag'],
 				operation: ['create'],
 			},
 		},
-		description: 'Name/description of the lost reason',
+		description: 'Name/title of the tag',
 	},
 
 	// ----------------------------------
-	//         lostReason: update
+	//         tag: update
 	// ----------------------------------
 	{
 		displayName: 'Name',
@@ -101,71 +101,72 @@ export const lostReasonFields: INodeProperties[] = [
 		default: '',
 		displayOptions: {
 			show: {
-				resource: ['lostReason'],
+				resource: ['tag'],
 				operation: ['update'],
 			},
 		},
-		description: 'Name/description of the lost reason',
+		description: 'Name/title of the tag',
 	},
 
 	// ----------------------------------
-	//         lostReason: list
+	//         tag: list
 	// ----------------------------------
 	{
 		displayName: 'Return All',
 		name: 'returnAll',
 		type: 'boolean',
-		default: false,
-		description: 'Whether to return all results or only up to a given limit',
 		displayOptions: {
 			show: {
-				resource: ['lostReason'],
 				operation: ['list'],
+				resource: ['tag'],
 			},
 		},
+		default: false,
+		description: 'Whether to return all results or only up to a given limit',
 	},
 	{
 		displayName: 'Limit',
 		name: 'limit',
 		type: 'number',
-		typeOptions: {
-			minValue: 1,
-		},
-		default: 50,
-		description: 'Max number of results to return',
 		displayOptions: {
 			show: {
-				resource: ['lostReason'],
 				operation: ['list'],
+				resource: ['tag'],
 				returnAll: [false],
 			},
 		},
+		typeOptions: {
+			minValue: 1,
+			maxValue: 500,
+		},
+		default: 50,
+		description: 'Max number of results to return',
 	},
 	{
 		displayName: 'Search Query',
 		name: 'q',
 		type: 'string',
-		default: '',
 		displayOptions: {
 			show: {
-				resource: ['lostReason'],
 				operation: ['list'],
+				resource: ['tag'],
 			},
 		},
-		description: 'Text search in lost reason names',
+		default: '',
+		description: 'Search string',
 	},
 	{
 		displayName: 'Sort',
 		name: 'sort',
 		type: 'string',
-		default: '',
 		displayOptions: {
 			show: {
-				resource: ['lostReason'],
 				operation: ['list'],
+				resource: ['tag'],
 			},
 		},
-		description: 'Field to sort by. Prefix with - for descending. E.g. -created_at',
+		default: '',
+		description: 'Sort logic (e.g. name:asc)',
 	},
 	{
 		displayName: 'Additional Fields',
@@ -175,30 +176,15 @@ export const lostReasonFields: INodeProperties[] = [
 		default: {},
 		displayOptions: {
 			show: {
-				resource: ['lostReason'],
+				resource: ['tag'],
 				operation: ['list'],
 			},
 		},
-		options: [
-			{
-				displayName: 'Created After',
-				name: 'created_after',
-				type: 'dateTime',
-				default: '',
-				description: 'Filter reasons created after this date',
-			},
-			{
-				displayName: 'Created Before',
-				name: 'created_before',
-				type: 'dateTime',
-				default: '',
-				description: 'Filter reasons created before this date',
-			},
-		],
+		options: [],
 	},
 
 	// ----------------------------------
-	//         lostReason: create / update / patch options
+	//         tag: create / update / patch options
 	// ----------------------------------
 	{
 		displayName: 'Fields to Set',
@@ -208,7 +194,7 @@ export const lostReasonFields: INodeProperties[] = [
 		default: {},
 		displayOptions: {
 			show: {
-				resource: ['lostReason'],
+				resource: ['tag'],
 				operation: ['create', 'update', 'patch'],
 			},
 		},
@@ -218,7 +204,7 @@ export const lostReasonFields: INodeProperties[] = [
 				name: 'is_default',
 				type: 'boolean',
 				default: false,
-				description: 'Whether this reason is the default reason',
+				description: 'Whether this is the default option',
 			},
 			{
 				displayName: 'Name',
@@ -230,9 +216,8 @@ export const lostReasonFields: INodeProperties[] = [
 						'/operation': ['patch'],
 					},
 				},
-				description: 'Name/description of the lost reason',
+				description: 'Name of the tag',
 			},
-	// Removed position field
 		],
 	},
 ];

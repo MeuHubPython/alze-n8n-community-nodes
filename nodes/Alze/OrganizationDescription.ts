@@ -37,6 +37,24 @@ export const organizationOperations: INodeProperties[] = [
 				action: 'Get many organizations',
 			},
 			{
+				name: 'List Activities',
+				value: 'listActivities',
+				description: 'List activities of an organization',
+				action: 'List organization activities',
+			},
+			{
+				name: 'List Contacts',
+				value: 'listContacts',
+				description: 'List contacts of an organization',
+				action: 'List organization contacts',
+			},
+			{
+				name: 'List Deals',
+				value: 'listDeals',
+				description: 'List deals of an organization',
+				action: 'List organization deals',
+			},
+			{
 				name: 'Update',
 				value: 'update',
 				description: 'Update an organization (clears omitted fields)',
@@ -66,7 +84,7 @@ export const organizationFields: INodeProperties[] = [
 		displayOptions: {
 			show: {
 				resource: ['organization'],
-				operation: ['get', 'delete', 'update', 'patch'],
+				operation: ['get', 'delete', 'update', 'patch', 'listContacts', 'listDeals', 'listActivities'],
 			},
 		},
 		description: 'The ID of the organization',
@@ -228,13 +246,6 @@ export const organizationFields: INodeProperties[] = [
 		},
 		options: [
 			{
-				displayName: 'Address',
-				name: 'address',
-				type: 'string',
-				default: '',
-				description: 'Street address in free text format',
-			},
-			{
 				displayName: 'Custom Fields (JSON)',
 				name: 'customFieldsJson',
 				type: 'json',
@@ -275,13 +286,6 @@ export const organizationFields: INodeProperties[] = [
 				],
 			},
 			{
-				displayName: 'Domain',
-				name: 'domain',
-				type: 'string',
-				default: '',
-				description: 'Main domain of the company (without http/https)',
-			},
-			{
 				displayName: 'Name',
 				name: 'namePatch',
 				type: 'string',
@@ -292,13 +296,6 @@ export const organizationFields: INodeProperties[] = [
 					},
 				},
 				description: 'Company name or trade name',
-			},
-			{
-				displayName: 'Owner ID',
-				name: 'owner_id',
-				type: 'string',
-				default: '',
-				description: 'ID of the owner of this organization',
 			},
 		],
 	},

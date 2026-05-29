@@ -37,10 +37,16 @@ export const contactOperations: INodeProperties[] = [
 				action: 'Get many contacts',
 			},
 			{
-				name: 'Merge',
-				value: 'merge',
-				description: 'Merge duplicate contacts',
-				action: 'Merge contacts',
+				name: 'List Activities',
+				value: 'listActivities',
+				description: 'List activities of a contact',
+				action: 'List contact activities',
+			},
+			{
+				name: 'List Deals',
+				value: 'listDeals',
+				description: 'List deals of a contact',
+				action: 'List contact deals',
 			},
 			{
 				name: 'Update',
@@ -72,28 +78,10 @@ export const contactFields: INodeProperties[] = [
 		displayOptions: {
 			show: {
 				resource: ['contact'],
-				operation: ['get', 'delete', 'update', 'patch', 'merge'],
+				operation: ['get', 'delete', 'update', 'patch', 'listDeals', 'listActivities'],
 			},
 		},
 		description: 'The ID of the contact',
-	},
-
-	// ----------------------------------
-	//         contact: merge
-	// ----------------------------------
-	{
-		displayName: 'Source Contact ID',
-		name: 'sourceId',
-		type: 'string',
-		required: true,
-		default: '',
-		displayOptions: {
-			show: {
-				resource: ['contact'],
-				operation: ['merge'],
-			},
-		},
-		description: 'The ID of the contact to be absorbed (will be deleted after operation)',
 	},
 
 	// ----------------------------------
@@ -355,13 +343,6 @@ export const contactFields: INodeProperties[] = [
 				description: 'ID of the associated organization',
 			},
 			{
-				displayName: 'Owner ID',
-				name: 'owner_id',
-				type: 'string',
-				default: '',
-				description: 'ID of the owner of this contact',
-			},
-			{
 				displayName: 'Phone',
 				name: 'phone',
 				type: 'string',
@@ -371,9 +352,13 @@ export const contactFields: INodeProperties[] = [
 			{
 				displayName: 'Status',
 				name: 'status',
-				type: 'string',
+				type: 'options',
+				options: [
+					{ name: 'Active', value: 'active' },
+					{ name: 'Inactive', value: 'inactive' },
+				],
 				default: 'active',
-				description: 'Status of the contact (e.g. active)',
+				description: 'Status of the contact',
 			},
 		],
 	},
