@@ -112,3 +112,23 @@ export function handleCustomFields(node: INode, body: IDataObject, properties: I
 		}
 	}
 }
+
+/**
+ * Helper to process batch stages input for pipeline creation
+ */
+export function handlePipelineStages(node: INode, body: IDataObject, properties: IDataObject) {
+	if (properties.stagesUi) {
+		const stages = (properties.stagesUi as any).stagesValues || []; // eslint-disable-line @typescript-eslint/no-explicit-any
+		body.stages = stages;
+	} else if (properties.stagesJson) {
+		try {
+			if (typeof properties.stagesJson === 'string') {
+				body.stages = JSON.parse(properties.stagesJson);
+			} else {
+				body.stages = properties.stagesJson;
+			}
+		} catch {
+			throw new NodeOperationError(node, 'Stages JSON is invalid. Please provide a valid JSON array of objects.');
+		}
+	}
+}

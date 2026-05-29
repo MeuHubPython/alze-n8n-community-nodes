@@ -11,6 +11,7 @@ import {
 	alzeApiRequest,
 	alzeApiRequestAllItems,
 	handleCustomFields,
+	handlePipelineStages,
 } from './GenericFunctions';
 
 import {
@@ -560,6 +561,9 @@ export class Alze implements INodeType {
 						const name = this.getNodeParameter('name', i) as string;
 						const fields = this.getNodeParameter('fieldsToSet', i) as IDataObject;
 						const body: IDataObject = { name, ...fields };
+						handlePipelineStages(this.getNode(), body, fields);
+						delete body.stagesUi;
+						delete body.stagesJson;
 						responseData = await alzeApiRequest.call(this, 'POST', '/pipelines', body);
 						responseData = responseData.data;
 					} else if (operation === 'update') {
@@ -598,11 +602,40 @@ export class Alze implements INodeType {
 						const stageId = this.getNodeParameter('stageId', i) as string;
 						responseData = await alzeApiRequest.call(this, 'GET', `/stages/${stageId}`);
 						responseData = responseData.data;
+					} else if (operation === 'delete') {
+						const stageId = this.getNodeParameter('stageId', i) as string;
+						responseData = await alzeApiRequest.call(this, 'DELETE', `/stages/${stageId}`);
+						responseData = responseData.data;
+					} else if (operation === 'create') {
+						const pipelineId = this.getNodeParameter('pipelineId', i) as string;
+						const name = this.getNodeParameter('name', i) as string;
+						const fields = this.getNodeParameter('fieldsToSet', i) as IDataObject;
+						const body: IDataObject = { pipeline_id: pipelineId, name, ...fields };
+						responseData = await alzeApiRequest.call(this, 'POST', '/stages', body);
+						responseData = responseData.data;
+					} else if (operation === 'update') {
+						const stageId = this.getNodeParameter('stageId', i) as string;
+						const name = this.getNodeParameter('nameUpdate', i) as string;
+						const fields = this.getNodeParameter('fieldsToSet', i) as IDataObject;
+						const body: IDataObject = { name, ...fields };
+						responseData = await alzeApiRequest.call(this, 'PUT', `/stages/${stageId}`, body);
+						responseData = responseData.data;
+					} else if (operation === 'patch') {
+						const stageId = this.getNodeParameter('stageId', i) as string;
+						const fields = this.getNodeParameter('fieldsToSet', i) as IDataObject;
+						const body: IDataObject = { ...fields };
+						if (fields.namePatch) {
+							body.name = fields.namePatch;
+							delete body.namePatch;
+						}
+						responseData = await alzeApiRequest.call(this, 'PATCH', `/stages/${stageId}`, body);
+						responseData = responseData.data;
 					} else if (operation === 'list') {
+						const pipelineId = this.getNodeParameter('pipelineId', i) as string;
 						const q = this.getNodeParameter('q', i) as string;
 						const sort = this.getNodeParameter('sort', i) as string;
 						const additionalFields = this.getNodeParameter('additionalFields', i) as IDataObject;
-						const qs: IDataObject = { ...additionalFields };
+						const qs: IDataObject = { pipeline_id: pipelineId, ...additionalFields };
 						if (q) qs.q = q;
 						if (sort) qs.sort = sort;
 						responseData = await alzeApiRequestAllItems.call(this, 'GET', '/stages', {}, qs);

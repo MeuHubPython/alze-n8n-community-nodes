@@ -264,6 +264,98 @@ export const pipelineFields: INodeProperties[] = [
 				default: 1,
 				description: 'Display position/order of the pipeline',
 			},
+			{
+				displayName: 'Stages (JSON)',
+				name: 'stagesJson',
+				type: 'json',
+				default: '',
+				displayOptions: {
+					show: {
+						'/operation': ['create'],
+					},
+				},
+				description: 'Stages as a JSON array of objects to create in batch with the pipeline',
+			},
+			{
+				displayName: 'Stages (UI)',
+				name: 'stagesUi',
+				placeholder: 'Add Stage',
+				type: 'fixedCollection',
+				typeOptions: {
+					multipleValues: true,
+				},
+				default: {},
+				displayOptions: {
+					show: {
+						'/operation': ['create'],
+					},
+				},
+				description: 'List of stages to create in batch with the pipeline',
+				options: [
+					{
+						name: 'stagesValues',
+						displayName: 'Stage',
+						values: [
+							{
+								displayName: 'Color',
+								name: 'color',
+								type: 'color',
+								default: '',
+								description: 'Hex color visual in kanban (e.g. #2563eb)',
+							},
+							{
+								displayName: 'External Sync Code',
+								name: 'external_sync_code',
+								type: 'string',
+								default: '',
+								description: 'External synchronization code unique to this stage',
+							},
+							{
+								displayName: 'Is Lost',
+								name: 'is_lost',
+								type: 'boolean',
+								default: false,
+								description: 'Whether this stage represents a terminal Lost stage (max one per pipeline)',
+							},
+							{
+								displayName: 'Is Won',
+								name: 'is_won',
+								type: 'boolean',
+								default: false,
+								description: 'Whether this stage represents a terminal Won stage (max one per pipeline)',
+							},
+							{
+								displayName: 'Name',
+								name: 'name',
+								type: 'string',
+								required: true,
+								default: '',
+								description: 'Name of the stage',
+							},
+							{
+								displayName: 'Position',
+								name: 'position',
+								type: 'number',
+								typeOptions: {
+									minValue: 0,
+								},
+								default: 0,
+								description: 'Display position/order of this stage (0 = first)',
+							},
+							{
+								displayName: 'SLA Days',
+								name: 'sla_days',
+								type: 'number',
+								typeOptions: {
+									minValue: 1,
+								},
+								default: 1,
+								description: 'Expected number of days for deal stay inside this stage',
+							},
+						],
+					},
+				],
+			},
 		],
 	},
 ];

@@ -12,7 +12,42 @@ export const stageOperations: INodeProperties[] = [
 			},
 		},
 		options: [
-	// Removed mutating operations
+			{
+				name: 'Create',
+				value: 'create',
+				description: 'Create a new stage in an existing pipeline',
+				action: 'Create a stage',
+			},
+			{
+				name: 'Delete',
+				value: 'delete',
+				description: 'Delete a stage by ID',
+				action: 'Delete a stage',
+			},
+			{
+				name: 'Get',
+				value: 'get',
+				description: 'Get a stage by ID',
+				action: 'Get a stage',
+			},
+			{
+				name: 'Get Many',
+				value: 'list',
+				description: 'Retrieve all stages for a pipeline',
+				action: 'List a stage',
+			},
+			{
+				name: 'Update',
+				value: 'update',
+				description: 'Update all fields of a stage',
+				action: 'Update a stage',
+			},
+			{
+				name: 'Update Partial',
+				value: 'patch',
+				description: 'Update only specified fields of a stage',
+				action: 'Patch a stage',
+			},
 		],
 		default: 'list',
 	},
@@ -31,13 +66,67 @@ export const stageFields: INodeProperties[] = [
 		displayOptions: {
 			show: {
 				resource: ['stage'],
-				operation: ['get'],
+				operation: ['get', 'delete', 'update', 'patch'],
 			},
 		},
 		description: 'The ID of the stage',
 	},
 
-	// Removed create/update fields
+	// ----------------------------------
+	//         stage: create / list
+	// ----------------------------------
+	{
+		displayName: 'Pipeline ID',
+		name: 'pipelineId',
+		type: 'string',
+		required: true,
+		default: '',
+		displayOptions: {
+			show: {
+				resource: ['stage'],
+				operation: ['create', 'list'],
+			},
+		},
+		description: 'ID of the pipeline the stage belongs to',
+	},
+
+	// ----------------------------------
+	//         stage: create
+	// ----------------------------------
+	{
+		displayName: 'Name',
+		name: 'name',
+		type: 'string',
+		required: true,
+		default: '',
+		displayOptions: {
+			show: {
+				resource: ['stage'],
+				operation: ['create'],
+			},
+		},
+		description: 'Name of the stage',
+	},
+
+	// ----------------------------------
+	//         stage: update
+	// ----------------------------------
+	{
+		displayName: 'Name',
+		name: 'nameUpdate',
+		type: 'string',
+		required: true,
+		default: '',
+		displayOptions: {
+			show: {
+				resource: ['stage'],
+				operation: ['update'],
+			},
+		},
+		description: 'Name of the stage',
+	},
+
+	// ----------------------------------
 	//         stage: list
 	// ----------------------------------
 	{
@@ -130,15 +219,85 @@ export const stageFields: INodeProperties[] = [
 				default: '',
 				description: 'Filter by external synchronization code',
 			},
-			{
-				displayName: 'Pipeline ID',
-				name: 'pipeline_id',
-				type: 'string',
-				default: '',
-				description: 'Filter stages by a specific pipeline ID',
-			},
 		],
 	},
 
-	// Removed fieldsToSet
+	// ----------------------------------
+	//         stage: fieldsToSet
+	// ----------------------------------
+	{
+		displayName: 'Fields to Set',
+		name: 'fieldsToSet',
+		type: 'collection',
+		placeholder: 'Add Field',
+		default: {},
+		displayOptions: {
+			show: {
+				resource: ['stage'],
+				operation: ['create', 'update', 'patch'],
+			},
+		},
+		options: [
+			{
+				displayName: 'Color',
+				name: 'color',
+				type: 'color',
+				default: '',
+				description: 'Hex color visual in kanban (e.g. #2563eb)',
+			},
+			{
+				displayName: 'External Sync Code',
+				name: 'external_sync_code',
+				type: 'string',
+				default: '',
+				description: 'External synchronization code unique to this stage',
+			},
+			{
+				displayName: 'Is Lost',
+				name: 'is_lost',
+				type: 'boolean',
+				default: false,
+				description: 'Whether this stage represents a terminal Lost stage (max one per pipeline)',
+			},
+			{
+				displayName: 'Is Won',
+				name: 'is_won',
+				type: 'boolean',
+				default: false,
+				description: 'Whether this stage represents a terminal Won stage (max one per pipeline)',
+			},
+			{
+				displayName: 'Name',
+				name: 'namePatch',
+				type: 'string',
+				default: '',
+				displayOptions: {
+					show: {
+						'/operation': ['patch'],
+					},
+				},
+				description: 'Name of the stage',
+			},
+			{
+				displayName: 'Position',
+				name: 'position',
+				type: 'number',
+				typeOptions: {
+					minValue: 0,
+				},
+				default: 0,
+				description: 'Display position/order of this stage (0 = first)',
+			},
+			{
+				displayName: 'SLA Days',
+				name: 'sla_days',
+				type: 'number',
+				typeOptions: {
+					minValue: 1,
+				},
+				default: 1,
+				description: 'Expected number of days for deal stay inside this stage',
+			},
+		],
+	},
 ];

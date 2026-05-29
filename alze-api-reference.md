@@ -124,7 +124,7 @@ Retorna a lista paginada de contatos do workspace autenticado, com suporte a bus
 | phone | string | Não | Filtra por telefone (ignora formatação). |
 | mobile | string | Não | Filtra por celular (ignora formatação). |
 | organization_id | uuid | Não | Filtra contatos de uma empresa específica. |
-| external_sync_code | string | Não | Filtra pelo código externo de sincronização. É o identificador único do registro no sistema de origem (ex.: ID no RD Station, código no ERP), usado por integrações para evitar duplicidade. |
+| external_sync_code | string | Não | Filtra pelo código externo de sincronização. É o identificador único do registro no sistema de origem (ex.: ID no RD Station, código no ERP), usado por integrações para evitar duplicidade. Único por workspace. |
 
 **Exemplo de Resposta:**
 
@@ -223,7 +223,7 @@ Cria um(a) novo(a) contato no workspace autenticado.
 | status | string (active|inactive) | Não | Status do contato. |
 | observation | string | Não | Observações livres em texto. |
 | custom_fields | object | Não | Pares chave/valor para campos customizados do workspace. |
-| external_sync_code | string | Não | Código externo de sincronização. Use o identificador do registro no sistema de origem (ex.: ID no RD Station, código no ERP) para evitar duplicidade em integrações. |
+| external_sync_code | string | Não | Código externo de sincronização. Use o identificador do registro no sistema de origem (ex.: ID no RD Station, código no ERP) para evitar duplicidade em integrações. **Único por workspace**: tentativas de criar ou atualizar um registro com um `external_sync_code` já existente retornam erro `409 conflict`. |
 
 **Exemplo de Request Body:**
 
@@ -279,7 +279,7 @@ Atualiza todos os campos editáveis de um(a) contato. Campos omitidos serão lim
 | status | string (active|inactive) | Não | Status do contato. |
 | observation | string | Não | Observações livres em texto. |
 | custom_fields | object | Não | Pares chave/valor para campos customizados do workspace. |
-| external_sync_code | string | Não | Código externo de sincronização. Use o identificador do registro no sistema de origem (ex.: ID no RD Station, código no ERP) para evitar duplicidade em integrações. |
+| external_sync_code | string | Não | Código externo de sincronização. Use o identificador do registro no sistema de origem (ex.: ID no RD Station, código no ERP) para evitar duplicidade em integrações. **Único por workspace**: tentativas de criar ou atualizar um registro com um `external_sync_code` já existente retornam erro `409 conflict`. |
 
 **Exemplo de Request Body:**
 
@@ -335,7 +335,7 @@ Atualiza apenas os campos enviados no body. Use para edições incrementais.
 | status | string (active|inactive) | Não | Status do contato. |
 | observation | string | Não | Observações livres em texto. |
 | custom_fields | object | Não | Pares chave/valor para campos customizados do workspace. |
-| external_sync_code | string | Não | Código externo de sincronização. Use o identificador do registro no sistema de origem (ex.: ID no RD Station, código no ERP) para evitar duplicidade em integrações. |
+| external_sync_code | string | Não | Código externo de sincronização. Use o identificador do registro no sistema de origem (ex.: ID no RD Station, código no ERP) para evitar duplicidade em integrações. **Único por workspace**: tentativas de criar ou atualizar um registro com um `external_sync_code` já existente retornam erro `409 conflict`. |
 
 **Exemplo de Request Body:**
 
@@ -438,7 +438,7 @@ Retorna a lista paginada de empresas do workspace autenticado, com suporte a bus
 | order_direction | string | Não | Direção da ordenação: `asc` ou `desc` (default: desc). |
 | q | string | Não | Busca textual no campo principal do recurso (geralmente `name` ou `title`). |
 | status | string | Não | Filtra por status (active|inactive). |
-| external_sync_code | string | Não | Filtra pelo código externo de sincronização. É o identificador único do registro no sistema de origem (ex.: ID no RD Station, código no ERP), usado por integrações para evitar duplicidade. |
+| external_sync_code | string | Não | Filtra pelo código externo de sincronização. É o identificador único do registro no sistema de origem (ex.: ID no RD Station, código no ERP), usado por integrações para evitar duplicidade. Único por workspace. |
 
 **Exemplo de Resposta:**
 
@@ -533,7 +533,7 @@ Cria um(a) novo(a) empresa no workspace autenticado.
 | linkedin | string | Não | URL do LinkedIn. |
 | status | string (active|inactive) | Não | Status da empresa. |
 | custom_fields | object | Não | Campos customizados. |
-| external_sync_code | string | Não | Código externo de sincronização. Use o identificador do registro no sistema de origem (ex.: ID no RD Station, código no ERP) para evitar duplicidade em integrações. |
+| external_sync_code | string | Não | Código externo de sincronização. Use o identificador do registro no sistema de origem (ex.: ID no RD Station, código no ERP) para evitar duplicidade em integrações. **Único por workspace**: tentativas de criar ou atualizar um registro com um `external_sync_code` já existente retornam erro `409 conflict`. |
 
 **Exemplo de Request Body:**
 
@@ -586,7 +586,7 @@ Atualiza todos os campos editáveis de um(a) empresa. Campos omitidos serão lim
 | linkedin | string | Não | URL do LinkedIn. |
 | status | string (active|inactive) | Não | Status da empresa. |
 | custom_fields | object | Não | Campos customizados. |
-| external_sync_code | string | Não | Código externo de sincronização. Use o identificador do registro no sistema de origem (ex.: ID no RD Station, código no ERP) para evitar duplicidade em integrações. |
+| external_sync_code | string | Não | Código externo de sincronização. Use o identificador do registro no sistema de origem (ex.: ID no RD Station, código no ERP) para evitar duplicidade em integrações. **Único por workspace**: tentativas de criar ou atualizar um registro com um `external_sync_code` já existente retornam erro `409 conflict`. |
 
 **Exemplo de Request Body:**
 
@@ -639,7 +639,7 @@ Atualiza apenas os campos enviados no body. Use para edições incrementais.
 | linkedin | string | Não | URL do LinkedIn. |
 | status | string (active|inactive) | Não | Status da empresa. |
 | custom_fields | object | Não | Campos customizados. |
-| external_sync_code | string | Não | Código externo de sincronização. Use o identificador do registro no sistema de origem (ex.: ID no RD Station, código no ERP) para evitar duplicidade em integrações. |
+| external_sync_code | string | Não | Código externo de sincronização. Use o identificador do registro no sistema de origem (ex.: ID no RD Station, código no ERP) para evitar duplicidade em integrações. **Único por workspace**: tentativas de criar ou atualizar um registro com um `external_sync_code` já existente retornam erro `409 conflict`. |
 
 **Exemplo de Request Body:**
 
@@ -761,7 +761,7 @@ Retorna a lista paginada de negociações do workspace autenticado, com suporte 
 | person_id | uuid | Não | Filtra por contato associado. |
 | organization_id | uuid | Não | Filtra por empresa associada. |
 | temperature | string | Não | Filtra por temperatura (hot|warm|cold). |
-| external_sync_code | string | Não | Filtra pelo código externo de sincronização. É o identificador único do registro no sistema de origem (ex.: ID no RD Station, código no ERP), usado por integrações para evitar duplicidade. |
+| external_sync_code | string | Não | Filtra pelo código externo de sincronização. É o identificador único do registro no sistema de origem (ex.: ID no RD Station, código no ERP), usado por integrações para evitar duplicidade. Único por workspace. |
 
 **Exemplo de Resposta:**
 
@@ -874,7 +874,7 @@ Cria um(a) novo(a) negociação no workspace autenticado.
 | lead_origin_id | uuid | Não | Origem (fonte) do lead. |
 | origin_group_id | uuid | Não | Grupo de origem. |
 | channel_id | uuid | Não | Canal / campanha associada. |
-| external_sync_code | string | Não | Código externo de sincronização. Use o identificador do registro no sistema de origem (ex.: ID no RD Station, código no ERP) para evitar duplicidade em integrações. |
+| external_sync_code | string | Não | Código externo de sincronização. Use o identificador do registro no sistema de origem (ex.: ID no RD Station, código no ERP) para evitar duplicidade em integrações. **Único por workspace**: tentativas de criar ou atualizar um registro com um `external_sync_code` já existente retornam erro `409 conflict`. |
 
 **Exemplo de Request Body:**
 
@@ -941,7 +941,7 @@ Atualiza todos os campos editáveis de um(a) negociação. Campos omitidos serã
 | lead_origin_id | uuid | Não | Origem (fonte) do lead. |
 | origin_group_id | uuid | Não | Grupo de origem. |
 | channel_id | uuid | Não | Canal / campanha associada. |
-| external_sync_code | string | Não | Código externo de sincronização. Use o identificador do registro no sistema de origem (ex.: ID no RD Station, código no ERP) para evitar duplicidade em integrações. |
+| external_sync_code | string | Não | Código externo de sincronização. Use o identificador do registro no sistema de origem (ex.: ID no RD Station, código no ERP) para evitar duplicidade em integrações. **Único por workspace**: tentativas de criar ou atualizar um registro com um `external_sync_code` já existente retornam erro `409 conflict`. |
 
 **Exemplo de Request Body:**
 
@@ -1008,7 +1008,7 @@ Atualiza apenas os campos enviados no body. Use para edições incrementais.
 | lead_origin_id | uuid | Não | Origem (fonte) do lead. |
 | origin_group_id | uuid | Não | Grupo de origem. |
 | channel_id | uuid | Não | Canal / campanha associada. |
-| external_sync_code | string | Não | Código externo de sincronização. Use o identificador do registro no sistema de origem (ex.: ID no RD Station, código no ERP) para evitar duplicidade em integrações. |
+| external_sync_code | string | Não | Código externo de sincronização. Use o identificador do registro no sistema de origem (ex.: ID no RD Station, código no ERP) para evitar duplicidade em integrações. **Único por workspace**: tentativas de criar ou atualizar um registro com um `external_sync_code` já existente retornam erro `409 conflict`. |
 
 **Exemplo de Request Body:**
 
@@ -1336,7 +1336,7 @@ Retorna todas as notas da negociação, com as fixadas (pinned=true) no topo.
 
 | Nome | Tipo | Obrigatório | Descrição |
 |------|------|-------------|-----------|
-| external_sync_code | string | Não | Filtra pelo código externo de sincronização. É o identificador único do registro no sistema de origem (ex.: ID no RD Station, código no ERP), usado por integrações para evitar duplicidade. |
+| external_sync_code | string | Não | Filtra pelo código externo de sincronização. É o identificador único do registro no sistema de origem (ex.: ID no RD Station, código no ERP), usado por integrações para evitar duplicidade. Único por workspace. |
 
 **Exemplo de Resposta:**
 
@@ -1375,7 +1375,7 @@ Cria uma nova nota vinculada à negociação.
 |------|------|-------------|-----------|
 | content | string | Sim | Conteúdo da nota (texto livre). |
 | pinned | boolean | Não | Marca a nota como fixada no topo. |
-| external_sync_code | string | Não | Código externo de sincronização. Use o identificador do registro no sistema de origem (ex.: ID no RD Station, código no ERP) para evitar duplicidade em integrações. |
+| external_sync_code | string | Não | Código externo de sincronização. Use o identificador do registro no sistema de origem (ex.: ID no RD Station, código no ERP) para evitar duplicidade em integrações. **Único por workspace**: tentativas de criar ou atualizar um registro com um `external_sync_code` já existente retornam erro `409 conflict`. |
 
 **Exemplo de Request Body:**
 
@@ -1447,7 +1447,7 @@ Atualiza o conteúdo e/ou o estado de fixação da nota.
 |------|------|-------------|-----------|
 | content | string | Não | Novo conteúdo. |
 | pinned | boolean | Não | Fixar/desafixar a nota. |
-| external_sync_code | string | Não | Código externo de sincronização. Use o identificador do registro no sistema de origem (ex.: ID no RD Station, código no ERP) para evitar duplicidade em integrações. |
+| external_sync_code | string | Não | Código externo de sincronização. Use o identificador do registro no sistema de origem (ex.: ID no RD Station, código no ERP) para evitar duplicidade em integrações. **Único por workspace**: tentativas de criar ou atualizar um registro com um `external_sync_code` já existente retornam erro `409 conflict`. |
 
 **Exemplo de Request Body:**
 
@@ -1502,7 +1502,7 @@ Lista paginada de atividades de CRM do workspace, com filtros por negociação, 
 | person_id | uuid | Não | Filtra por contato vinculado. |
 | organization_id | uuid | Não | Filtra por empresa vinculada. |
 | status | string | Não | Filtra por status (open|done|canceled). |
-| external_sync_code | string | Não | Filtra pelo código externo de sincronização. É o identificador único do registro no sistema de origem (ex.: ID no RD Station, código no ERP), usado por integrações para evitar duplicidade. |
+| external_sync_code | string | Não | Filtra pelo código externo de sincronização. É o identificador único do registro no sistema de origem (ex.: ID no RD Station, código no ERP), usado por integrações para evitar duplicidade. Único por workspace. |
 
 **Exemplo de Resposta:**
 
@@ -1593,7 +1593,7 @@ Cria uma nova atividade de CRM. O tipo de tarefa (`task_type_id`) padrão do wor
 | person_id | uuid | Não | Contato vinculado. |
 | organization_id | uuid | Não | Empresa vinculada. |
 | status | string (open|done|canceled) | Não | Status atual (default: open). |
-| external_sync_code | string | Não | Código externo de sincronização. Use o identificador do registro no sistema de origem (ex.: ID no RD Station, código no ERP) para evitar duplicidade em integrações. |
+| external_sync_code | string | Não | Código externo de sincronização. Use o identificador do registro no sistema de origem (ex.: ID no RD Station, código no ERP) para evitar duplicidade em integrações. **Único por workspace**: tentativas de criar ou atualizar um registro com um `external_sync_code` já existente retornam erro `409 conflict`. |
 
 **Exemplo de Request Body:**
 
@@ -1646,7 +1646,7 @@ Atualiza os campos editáveis de uma atividade.
 | person_id | uuid | Não | Contato vinculado. |
 | organization_id | uuid | Não | Empresa vinculada. |
 | status | string (open|done|canceled) | Não | Status atual (default: open). |
-| external_sync_code | string | Não | Código externo de sincronização. Use o identificador do registro no sistema de origem (ex.: ID no RD Station, código no ERP) para evitar duplicidade em integrações. |
+| external_sync_code | string | Não | Código externo de sincronização. Use o identificador do registro no sistema de origem (ex.: ID no RD Station, código no ERP) para evitar duplicidade em integrações. **Único por workspace**: tentativas de criar ou atualizar um registro com um `external_sync_code` já existente retornam erro `409 conflict`. |
 
 **Exemplo de Request Body:**
 
@@ -1747,7 +1747,7 @@ Retorna a lista paginada de produtos do workspace autenticado, com suporte a bus
 | q | string | Não | Busca textual no campo principal do recurso (geralmente `name` ou `title`). |
 | category_id | integer | Não | Filtra por categoria. |
 | type | string | Não | Filtra por tipo (product|service). |
-| external_sync_code | string | Não | Filtra pelo código externo de sincronização. É o identificador único do registro no sistema de origem (ex.: ID no RD Station, código no ERP), usado por integrações para evitar duplicidade. |
+| external_sync_code | string | Não | Filtra pelo código externo de sincronização. É o identificador único do registro no sistema de origem (ex.: ID no RD Station, código no ERP), usado por integrações para evitar duplicidade. Único por workspace. |
 
 **Exemplo de Resposta:**
 
@@ -1822,7 +1822,7 @@ Cria um(a) novo(a) produto no workspace autenticado.
 | price | decimal | Não | Preço unitário. |
 | currency | string (ISO 4217) | Não | Moeda. Ex.: BRL, USD. |
 | category_id | integer | Não | ID da categoria (ver `/item-categories`). |
-| external_sync_code | string | Não | Código externo de sincronização. Use o identificador do registro no sistema de origem (ex.: ID no RD Station, código no ERP) para evitar duplicidade em integrações. |
+| external_sync_code | string | Não | Código externo de sincronização. Use o identificador do registro no sistema de origem (ex.: ID no RD Station, código no ERP) para evitar duplicidade em integrações. **Único por workspace**: tentativas de criar ou atualizar um registro com um `external_sync_code` já existente retornam erro `409 conflict`. |
 
 **Exemplo de Request Body:**
 
@@ -1864,7 +1864,7 @@ Atualiza todos os campos editáveis de um(a) produto. Campos omitidos serão lim
 | price | decimal | Não | Preço unitário. |
 | currency | string (ISO 4217) | Não | Moeda. Ex.: BRL, USD. |
 | category_id | integer | Não | ID da categoria (ver `/item-categories`). |
-| external_sync_code | string | Não | Código externo de sincronização. Use o identificador do registro no sistema de origem (ex.: ID no RD Station, código no ERP) para evitar duplicidade em integrações. |
+| external_sync_code | string | Não | Código externo de sincronização. Use o identificador do registro no sistema de origem (ex.: ID no RD Station, código no ERP) para evitar duplicidade em integrações. **Único por workspace**: tentativas de criar ou atualizar um registro com um `external_sync_code` já existente retornam erro `409 conflict`. |
 
 **Exemplo de Request Body:**
 
@@ -1906,7 +1906,7 @@ Atualiza apenas os campos enviados no body. Use para edições incrementais.
 | price | decimal | Não | Preço unitário. |
 | currency | string (ISO 4217) | Não | Moeda. Ex.: BRL, USD. |
 | category_id | integer | Não | ID da categoria (ver `/item-categories`). |
-| external_sync_code | string | Não | Código externo de sincronização. Use o identificador do registro no sistema de origem (ex.: ID no RD Station, código no ERP) para evitar duplicidade em integrações. |
+| external_sync_code | string | Não | Código externo de sincronização. Use o identificador do registro no sistema de origem (ex.: ID no RD Station, código no ERP) para evitar duplicidade em integrações. **Único por workspace**: tentativas de criar ou atualizar um registro com um `external_sync_code` já existente retornam erro `409 conflict`. |
 
 **Exemplo de Request Body:**
 
@@ -2138,7 +2138,7 @@ Move o(a) categoria de produto para a lixeira (soft delete). Registros podem ser
 
 ## Funis (Pipelines)
 
-Funis de vendas. Cada funil contém múltiplas etapas (stages) ordenadas. Para listar as etapas de um funil, use `GET /stages?pipeline_id={id}`.
+Funis de vendas. Cada funil contém múltiplas etapas (stages) ordenadas. Você pode criar etapas em lote no `POST /pipelines` enviando o array `stages`, ou gerenciá-las depois pelos endpoints de `/stages`.
 
 **Tabela:** `pipelines`
 
@@ -2157,7 +2157,7 @@ Retorna a lista paginada de funis do workspace autenticado, com suporte a busca,
 | order_by | string | Não | Campo de ordenação. Ex.: `created_at`. |
 | order_direction | string | Não | Direção da ordenação: `asc` ou `desc` (default: desc). |
 | q | string | Não | Busca textual no campo principal do recurso (geralmente `name` ou `title`). |
-| external_sync_code | string | Não | Filtra pelo código externo de sincronização. É o identificador único do registro no sistema de origem (ex.: ID no RD Station, código no ERP), usado por integrações para evitar duplicidade. |
+| external_sync_code | string | Não | Filtra pelo código externo de sincronização. É o identificador único do registro no sistema de origem (ex.: ID no RD Station, código no ERP), usado por integrações para evitar duplicidade. Único por workspace. |
 
 **Exemplo de Resposta:**
 
@@ -2224,15 +2224,43 @@ Cria um(a) novo(a) funil no workspace autenticado.
 | Nome | Tipo | Obrigatório | Descrição |
 |------|------|-------------|-----------|
 | name | string | Sim | Nome do funil. |
-| position | integer | Não | Ordem de exibição. |
-| is_default | boolean | Não | Define se é o funil padrão do workspace. |
-| external_sync_code | string | Não | Código externo de sincronização. Use o identificador do registro no sistema de origem (ex.: ID no RD Station, código no ERP) para evitar duplicidade em integrações. |
+| position | integer | Não | Ordem de exibição do funil na UI. |
+| is_default | boolean | Não | Define o funil padrão do workspace para criação de negociações. Apenas um pode ser padrão. |
+| stages | array<object> | Não | **Apenas no POST.** Lista opcional de etapas criadas em lote junto com o funil. Cada item: `name` (obrigatório), `position` (default: ordem do array), `is_won`, `is_lost`, `color` (hex), `sla_days`, `external_sync_code`. Máximo de uma etapa com `is_won=true` e uma com `is_lost=true`. Se a criação de qualquer etapa falhar, o funil também é revertido. |
+| external_sync_code | string | Não | Código externo de sincronização. Use o identificador do registro no sistema de origem (ex.: ID no RD Station, código no ERP) para evitar duplicidade em integrações. **Único por workspace**: tentativas de criar ou atualizar um registro com um `external_sync_code` já existente retornam erro `409 conflict`. |
 
 **Exemplo de Request Body:**
 
 ```json
 {
-  "name": "Vendas Inbound"
+  "name": "Vendas Inbound",
+  "is_default": true,
+  "stages": [
+    {
+      "name": "Novo lead",
+      "color": "#94a3b8"
+    },
+    {
+      "name": "Qualificado",
+      "color": "#3b82f6",
+      "sla_days": 2
+    },
+    {
+      "name": "Proposta enviada",
+      "color": "#a855f7",
+      "sla_days": 5
+    },
+    {
+      "name": "Ganho",
+      "color": "#10b981",
+      "is_won": true
+    },
+    {
+      "name": "Perdido",
+      "color": "#ef4444",
+      "is_lost": true
+    }
+  ]
 }
 ```
 
@@ -2245,7 +2273,29 @@ Cria um(a) novo(a) funil no workspace autenticado.
     "name": "Vendas Inbound",
     "position": 1,
     "is_default": true,
-    "created_at": "2026-01-01T00:00:00Z"
+    "created_at": "2026-01-01T00:00:00Z",
+    "stages": [
+      {
+        "id": "s0000000-0000-0000-0000-000000000001",
+        "pipeline_id": "p0000000-0000-0000-0000-000000000001",
+        "name": "Novo lead",
+        "position": 0,
+        "color": "#94a3b8",
+        "is_won": false,
+        "is_lost": false,
+        "sla_days": null
+      },
+      {
+        "id": "s0000000-0000-0000-0000-000000000002",
+        "pipeline_id": "p0000000-0000-0000-0000-000000000001",
+        "name": "Qualificado",
+        "position": 1,
+        "color": "#3b82f6",
+        "is_won": false,
+        "is_lost": false,
+        "sla_days": 2
+      }
+    ]
   }
 }
 ```
@@ -2261,9 +2311,9 @@ Atualiza todos os campos editáveis de um(a) funil. Campos omitidos serão limpo
 | Nome | Tipo | Obrigatório | Descrição |
 |------|------|-------------|-----------|
 | name | string | Sim | Nome do funil. |
-| position | integer | Não | Ordem de exibição. |
-| is_default | boolean | Não | Define se é o funil padrão do workspace. |
-| external_sync_code | string | Não | Código externo de sincronização. Use o identificador do registro no sistema de origem (ex.: ID no RD Station, código no ERP) para evitar duplicidade em integrações. |
+| position | integer | Não | Ordem de exibição do funil na UI. |
+| is_default | boolean | Não | Define o funil padrão do workspace para criação de negociações. Apenas um pode ser padrão. |
+| external_sync_code | string | Não | Código externo de sincronização. Use o identificador do registro no sistema de origem (ex.: ID no RD Station, código no ERP) para evitar duplicidade em integrações. **Único por workspace**: tentativas de criar ou atualizar um registro com um `external_sync_code` já existente retornam erro `409 conflict`. |
 
 **Exemplo de Request Body:**
 
@@ -2298,9 +2348,9 @@ Atualiza apenas os campos enviados no body. Use para edições incrementais.
 | Nome | Tipo | Obrigatório | Descrição |
 |------|------|-------------|-----------|
 | name | string | Não | Nome do funil. |
-| position | integer | Não | Ordem de exibição. |
-| is_default | boolean | Não | Define se é o funil padrão do workspace. |
-| external_sync_code | string | Não | Código externo de sincronização. Use o identificador do registro no sistema de origem (ex.: ID no RD Station, código no ERP) para evitar duplicidade em integrações. |
+| position | integer | Não | Ordem de exibição do funil na UI. |
+| is_default | boolean | Não | Define o funil padrão do workspace para criação de negociações. Apenas um pode ser padrão. |
+| external_sync_code | string | Não | Código externo de sincronização. Use o identificador do registro no sistema de origem (ex.: ID no RD Station, código no ERP) para evitar duplicidade em integrações. **Único por workspace**: tentativas de criar ou atualizar um registro com um `external_sync_code` já existente retornam erro `409 conflict`. |
 
 **Exemplo de Request Body:**
 
@@ -2344,7 +2394,7 @@ Move o(a) funil para a lixeira (soft delete). Registros podem ser restaurados em
 
 ## Etapas (Stages)
 
-Etapas que compõem cada funil de vendas. Recurso **somente leitura** via API — criação e edição são feitas pela tela de Funis.
+Etapas que compõem cada funil de vendas. Suporta CRUD completo. Para criar várias etapas de uma vez junto com um novo funil, use `POST /pipelines` com o campo `stages[]`. `pipeline_id` não pode ser alterado após a criação (mover etapa entre funis quebraria o histórico de negociações).
 
 **Tabela:** `stages`
 
@@ -2359,7 +2409,6 @@ Retorna todas as etapas de um funil, ordenadas por `position`.
 | Nome | Tipo | Obrigatório | Descrição |
 |------|------|-------------|-----------|
 | pipeline_id | uuid | Sim | ID do funil. |
-| external_sync_code | string | Não | Filtra pelo código externo de sincronização. É o identificador único do registro no sistema de origem (ex.: ID no RD Station, código no ERP), usado por integrações para evitar duplicidade. |
 
 **Exemplo de Resposta:**
 
@@ -2371,7 +2420,11 @@ Retorna todas as etapas de um funil, ordenadas por `position`.
       "pipeline_id": "p0000000-0000-0000-0000-000000000001",
       "name": "Proposta enviada",
       "position": 3,
-      "probability": 60,
+      "is_won": false,
+      "is_lost": false,
+      "color": "#a855f7",
+      "sla_days": 5,
+      "external_sync_code": null,
       "created_at": "2026-01-01T00:00:00Z"
     }
   ],
@@ -2400,7 +2453,11 @@ Retorna uma etapa pelo ID.
     "pipeline_id": "p0000000-0000-0000-0000-000000000001",
     "name": "Proposta enviada",
     "position": 3,
-    "probability": 60,
+    "is_won": false,
+    "is_lost": false,
+    "color": "#a855f7",
+    "sla_days": 5,
+    "external_sync_code": null,
     "created_at": "2026-01-01T00:00:00Z"
   }
 }
@@ -2413,6 +2470,190 @@ Retorna uma etapa pelo ID.
   "error": {
     "code": "not_found",
     "message": "Etapa não encontrada."
+  }
+}
+```
+
+### Criar etapa
+
+`POST` `/stages`
+
+Cria uma nova etapa em um funil existente. Valida que `pipeline_id` pertence ao workspace autenticado. Se `position` for omitido, a etapa é adicionada ao final do funil.
+
+**Body**
+
+| Nome | Tipo | Obrigatório | Descrição |
+|------|------|-------------|-----------|
+| pipeline_id | uuid | Sim | Funil ao qual a etapa pertence. Imutável após criação. |
+| name | string | Sim | Nome da etapa. |
+| position | integer | Não | Ordem da etapa no funil (0 = primeira). Se omitido no POST, a etapa vai para o final. |
+| is_won | boolean | Não | Marca como etapa terminal de ganho. Apenas uma por funil. |
+| is_lost | boolean | Não | Marca como etapa terminal de perda. Apenas uma por funil. |
+| color | string | Não | Cor visual no kanban (ex.: `#2563eb`). |
+| sla_days | integer | Não | Dias previstos de permanência da negociação na etapa (SLA / aging). |
+| external_sync_code | string | Não | Código externo único por funil. Útil para integrações. |
+
+**Exemplo de Request Body:**
+
+```json
+{
+  "pipeline_id": "p0000000-0000-0000-0000-000000000001",
+  "name": "Proposta enviada",
+  "color": "#a855f7",
+  "sla_days": 5
+}
+```
+
+**Exemplo de Resposta:**
+
+```json
+{
+  "data": {
+    "id": "s0000000-0000-0000-0000-000000000003",
+    "pipeline_id": "p0000000-0000-0000-0000-000000000001",
+    "name": "Proposta enviada",
+    "position": 3,
+    "is_won": false,
+    "is_lost": false,
+    "color": "#a855f7",
+    "sla_days": 5,
+    "external_sync_code": null,
+    "created_at": "2026-01-01T00:00:00Z"
+  }
+}
+```
+
+**Exemplo de Erro:**
+
+```json
+{
+  "error": {
+    "code": "conflict",
+    "message": "Já existe uma etapa de ganho neste funil. Apenas uma é permitida."
+  }
+}
+```
+
+### Atualizar etapa
+
+`PUT` `/stages/{id}`
+
+Atualiza todos os campos editáveis. Reordene etapas alterando `position` — as demais não são deslocadas automaticamente, então gerencie posições no cliente se precisar de ordem contígua.
+
+**Body**
+
+| Nome | Tipo | Obrigatório | Descrição |
+|------|------|-------------|-----------|
+| name | string | Sim | Nome da etapa. |
+| position | integer | Não | Ordem da etapa no funil (0 = primeira). Se omitido no POST, a etapa vai para o final. |
+| is_won | boolean | Não | Marca como etapa terminal de ganho. Apenas uma por funil. |
+| is_lost | boolean | Não | Marca como etapa terminal de perda. Apenas uma por funil. |
+| color | string | Não | Cor visual no kanban (ex.: `#2563eb`). |
+| sla_days | integer | Não | Dias previstos de permanência da negociação na etapa (SLA / aging). |
+| external_sync_code | string | Não | Código externo único por funil. Útil para integrações. |
+
+**Exemplo de Request Body:**
+
+```json
+{
+  "name": "Proposta enviada",
+  "position": 3,
+  "color": "#a855f7",
+  "sla_days": 5
+}
+```
+
+**Exemplo de Resposta:**
+
+```json
+{
+  "data": {
+    "id": "s0000000-0000-0000-0000-000000000003",
+    "pipeline_id": "p0000000-0000-0000-0000-000000000001",
+    "name": "Proposta enviada",
+    "position": 3,
+    "is_won": false,
+    "is_lost": false,
+    "color": "#a855f7",
+    "sla_days": 5,
+    "external_sync_code": null,
+    "created_at": "2026-01-01T00:00:00Z"
+  }
+}
+```
+
+### Atualização parcial de etapa
+
+`PATCH` `/stages/{id}`
+
+Atualiza apenas os campos enviados. Útil para reordenar (`position`) ou alterar cor isoladamente.
+
+**Body**
+
+| Nome | Tipo | Obrigatório | Descrição |
+|------|------|-------------|-----------|
+| name | string | Não | Nome da etapa. |
+| position | integer | Não | Ordem da etapa no funil (0 = primeira). Se omitido no POST, a etapa vai para o final. |
+| is_won | boolean | Não | Marca como etapa terminal de ganho. Apenas uma por funil. |
+| is_lost | boolean | Não | Marca como etapa terminal de perda. Apenas uma por funil. |
+| color | string | Não | Cor visual no kanban (ex.: `#2563eb`). |
+| sla_days | integer | Não | Dias previstos de permanência da negociação na etapa (SLA / aging). |
+| external_sync_code | string | Não | Código externo único por funil. Útil para integrações. |
+
+**Exemplo de Request Body:**
+
+```json
+{
+  "position": 2
+}
+```
+
+**Exemplo de Resposta:**
+
+```json
+{
+  "data": {
+    "id": "s0000000-0000-0000-0000-000000000003",
+    "pipeline_id": "p0000000-0000-0000-0000-000000000001",
+    "name": "Proposta enviada",
+    "position": 3,
+    "is_won": false,
+    "is_lost": false,
+    "color": "#a855f7",
+    "sla_days": 5,
+    "external_sync_code": null,
+    "created_at": "2026-01-01T00:00:00Z"
+  }
+}
+```
+
+### Remover etapa
+
+`DELETE` `/stages/{id}`
+
+Remove a etapa permanentemente. Retorna `409 conflict` se houver negociações vinculadas (mova-as antes).
+
+**Exemplo de Resposta:**
+
+```json
+{
+  "data": {
+    "id": "s0000000-0000-0000-0000-000000000003",
+    "deleted": true
+  }
+}
+```
+
+**Exemplo de Erro:**
+
+```json
+{
+  "error": {
+    "code": "conflict",
+    "message": "Não é possível remover: há 12 negociação(ões) vinculada(s) a esta etapa.",
+    "details": {
+      "deals_count": 12
+    }
   }
 }
 ```
@@ -2439,7 +2680,7 @@ Retorna a lista paginada de motivos de perda do workspace autenticado, com supor
 | order_by | string | Não | Campo de ordenação. Ex.: `created_at`. |
 | order_direction | string | Não | Direção da ordenação: `asc` ou `desc` (default: desc). |
 | q | string | Não | Busca textual no campo principal do recurso (geralmente `name` ou `title`). |
-| external_sync_code | string | Não | Filtra pelo código externo de sincronização. É o identificador único do registro no sistema de origem (ex.: ID no RD Station, código no ERP), usado por integrações para evitar duplicidade. |
+| external_sync_code | string | Não | Filtra pelo código externo de sincronização. É o identificador único do registro no sistema de origem (ex.: ID no RD Station, código no ERP), usado por integrações para evitar duplicidade. Único por workspace. |
 
 **Exemplo de Resposta:**
 
@@ -2503,7 +2744,7 @@ Cria um(a) novo(a) motivo de perda no workspace autenticado.
 |------|------|-------------|-----------|
 | name | string | Sim | Descrição do motivo. |
 | is_default | boolean | Não | Marca como motivo padrão do workspace. |
-| external_sync_code | string | Não | Código externo de sincronização. Use o identificador do registro no sistema de origem (ex.: ID no RD Station, código no ERP) para evitar duplicidade em integrações. |
+| external_sync_code | string | Não | Código externo de sincronização. Use o identificador do registro no sistema de origem (ex.: ID no RD Station, código no ERP) para evitar duplicidade em integrações. **Único por workspace**: tentativas de criar ou atualizar um registro com um `external_sync_code` já existente retornam erro `409 conflict`. |
 
 **Exemplo de Request Body:**
 
@@ -2537,7 +2778,7 @@ Atualiza todos os campos editáveis de um(a) motivo de perda. Campos omitidos se
 |------|------|-------------|-----------|
 | name | string | Sim | Descrição do motivo. |
 | is_default | boolean | Não | Marca como motivo padrão do workspace. |
-| external_sync_code | string | Não | Código externo de sincronização. Use o identificador do registro no sistema de origem (ex.: ID no RD Station, código no ERP) para evitar duplicidade em integrações. |
+| external_sync_code | string | Não | Código externo de sincronização. Use o identificador do registro no sistema de origem (ex.: ID no RD Station, código no ERP) para evitar duplicidade em integrações. **Único por workspace**: tentativas de criar ou atualizar um registro com um `external_sync_code` já existente retornam erro `409 conflict`. |
 
 **Exemplo de Request Body:**
 
@@ -2571,7 +2812,7 @@ Atualiza apenas os campos enviados no body. Use para edições incrementais.
 |------|------|-------------|-----------|
 | name | string | Não | Descrição do motivo. |
 | is_default | boolean | Não | Marca como motivo padrão do workspace. |
-| external_sync_code | string | Não | Código externo de sincronização. Use o identificador do registro no sistema de origem (ex.: ID no RD Station, código no ERP) para evitar duplicidade em integrações. |
+| external_sync_code | string | Não | Código externo de sincronização. Use o identificador do registro no sistema de origem (ex.: ID no RD Station, código no ERP) para evitar duplicidade em integrações. **Único por workspace**: tentativas de criar ou atualizar um registro com um `external_sync_code` já existente retornam erro `409 conflict`. |
 
 **Exemplo de Request Body:**
 
@@ -2632,7 +2873,7 @@ Retorna a lista paginada de motivos de ganho do workspace autenticado, com supor
 | order_by | string | Não | Campo de ordenação. Ex.: `created_at`. |
 | order_direction | string | Não | Direção da ordenação: `asc` ou `desc` (default: desc). |
 | q | string | Não | Busca textual no campo principal do recurso (geralmente `name` ou `title`). |
-| external_sync_code | string | Não | Filtra pelo código externo de sincronização. É o identificador único do registro no sistema de origem (ex.: ID no RD Station, código no ERP), usado por integrações para evitar duplicidade. |
+| external_sync_code | string | Não | Filtra pelo código externo de sincronização. É o identificador único do registro no sistema de origem (ex.: ID no RD Station, código no ERP), usado por integrações para evitar duplicidade. Único por workspace. |
 
 **Exemplo de Resposta:**
 
@@ -2696,7 +2937,7 @@ Cria um(a) novo(a) motivo de ganho no workspace autenticado.
 |------|------|-------------|-----------|
 | name | string | Sim | Descrição do motivo de ganho. |
 | is_default | boolean | Não | Marca como motivo padrão do workspace. |
-| external_sync_code | string | Não | Código externo de sincronização. Use o identificador do registro no sistema de origem (ex.: ID no RD Station, código no ERP) para evitar duplicidade em integrações. |
+| external_sync_code | string | Não | Código externo de sincronização. Use o identificador do registro no sistema de origem (ex.: ID no RD Station, código no ERP) para evitar duplicidade em integrações. **Único por workspace**: tentativas de criar ou atualizar um registro com um `external_sync_code` já existente retornam erro `409 conflict`. |
 
 **Exemplo de Request Body:**
 
@@ -2730,7 +2971,7 @@ Atualiza todos os campos editáveis de um(a) motivo de ganho. Campos omitidos se
 |------|------|-------------|-----------|
 | name | string | Sim | Descrição do motivo de ganho. |
 | is_default | boolean | Não | Marca como motivo padrão do workspace. |
-| external_sync_code | string | Não | Código externo de sincronização. Use o identificador do registro no sistema de origem (ex.: ID no RD Station, código no ERP) para evitar duplicidade em integrações. |
+| external_sync_code | string | Não | Código externo de sincronização. Use o identificador do registro no sistema de origem (ex.: ID no RD Station, código no ERP) para evitar duplicidade em integrações. **Único por workspace**: tentativas de criar ou atualizar um registro com um `external_sync_code` já existente retornam erro `409 conflict`. |
 
 **Exemplo de Request Body:**
 
@@ -2764,7 +3005,7 @@ Atualiza apenas os campos enviados no body. Use para edições incrementais.
 |------|------|-------------|-----------|
 | name | string | Não | Descrição do motivo de ganho. |
 | is_default | boolean | Não | Marca como motivo padrão do workspace. |
-| external_sync_code | string | Não | Código externo de sincronização. Use o identificador do registro no sistema de origem (ex.: ID no RD Station, código no ERP) para evitar duplicidade em integrações. |
+| external_sync_code | string | Não | Código externo de sincronização. Use o identificador do registro no sistema de origem (ex.: ID no RD Station, código no ERP) para evitar duplicidade em integrações. **Único por workspace**: tentativas de criar ou atualizar um registro com um `external_sync_code` já existente retornam erro `409 conflict`. |
 
 **Exemplo de Request Body:**
 
@@ -3020,7 +3261,7 @@ Retorna a lista paginada de origens do workspace autenticado, com suporte a busc
 | order_direction | string | Não | Direção da ordenação: `asc` ou `desc` (default: desc). |
 | q | string | Não | Busca textual no campo principal do recurso (geralmente `name` ou `title`). |
 | group_id | uuid | Não | Filtra por grupo de origem. |
-| external_sync_code | string | Não | Filtra pelo código externo de sincronização. É o identificador único do registro no sistema de origem (ex.: ID no RD Station, código no ERP), usado por integrações para evitar duplicidade. |
+| external_sync_code | string | Não | Filtra pelo código externo de sincronização. É o identificador único do registro no sistema de origem (ex.: ID no RD Station, código no ERP), usado por integrações para evitar duplicidade. Único por workspace. |
 
 **Exemplo de Resposta:**
 
@@ -3086,7 +3327,7 @@ Cria um(a) novo(a) origem no workspace autenticado.
 |------|------|-------------|-----------|
 | name | string | Sim | Nome da origem (fonte). |
 | group_id | uuid | Não | Grupo de origem ao qual a fonte pertence. |
-| external_sync_code | string | Não | Código externo de sincronização. Use o identificador do registro no sistema de origem (ex.: ID no RD Station, código no ERP) para evitar duplicidade em integrações. |
+| external_sync_code | string | Não | Código externo de sincronização. Use o identificador do registro no sistema de origem (ex.: ID no RD Station, código no ERP) para evitar duplicidade em integrações. **Único por workspace**: tentativas de criar ou atualizar um registro com um `external_sync_code` já existente retornam erro `409 conflict`. |
 
 **Exemplo de Request Body:**
 
@@ -3121,7 +3362,7 @@ Atualiza todos os campos editáveis de um(a) origem. Campos omitidos serão limp
 |------|------|-------------|-----------|
 | name | string | Sim | Nome da origem (fonte). |
 | group_id | uuid | Não | Grupo de origem ao qual a fonte pertence. |
-| external_sync_code | string | Não | Código externo de sincronização. Use o identificador do registro no sistema de origem (ex.: ID no RD Station, código no ERP) para evitar duplicidade em integrações. |
+| external_sync_code | string | Não | Código externo de sincronização. Use o identificador do registro no sistema de origem (ex.: ID no RD Station, código no ERP) para evitar duplicidade em integrações. **Único por workspace**: tentativas de criar ou atualizar um registro com um `external_sync_code` já existente retornam erro `409 conflict`. |
 
 **Exemplo de Request Body:**
 
@@ -3156,7 +3397,7 @@ Atualiza apenas os campos enviados no body. Use para edições incrementais.
 |------|------|-------------|-----------|
 | name | string | Não | Nome da origem (fonte). |
 | group_id | uuid | Não | Grupo de origem ao qual a fonte pertence. |
-| external_sync_code | string | Não | Código externo de sincronização. Use o identificador do registro no sistema de origem (ex.: ID no RD Station, código no ERP) para evitar duplicidade em integrações. |
+| external_sync_code | string | Não | Código externo de sincronização. Use o identificador do registro no sistema de origem (ex.: ID no RD Station, código no ERP) para evitar duplicidade em integrações. **Único por workspace**: tentativas de criar ou atualizar um registro com um `external_sync_code` já existente retornam erro `409 conflict`. |
 
 **Exemplo de Request Body:**
 
@@ -3218,7 +3459,7 @@ Retorna a lista paginada de grupos de origem do workspace autenticado, com supor
 | order_by | string | Não | Campo de ordenação. Ex.: `created_at`. |
 | order_direction | string | Não | Direção da ordenação: `asc` ou `desc` (default: desc). |
 | q | string | Não | Busca textual no campo principal do recurso (geralmente `name` ou `title`). |
-| external_sync_code | string | Não | Filtra pelo código externo de sincronização. É o identificador único do registro no sistema de origem (ex.: ID no RD Station, código no ERP), usado por integrações para evitar duplicidade. |
+| external_sync_code | string | Não | Filtra pelo código externo de sincronização. É o identificador único do registro no sistema de origem (ex.: ID no RD Station, código no ERP), usado por integrações para evitar duplicidade. Único por workspace. |
 
 **Exemplo de Resposta:**
 
@@ -3281,7 +3522,7 @@ Cria um(a) novo(a) grupo de origem no workspace autenticado.
 | Nome | Tipo | Obrigatório | Descrição |
 |------|------|-------------|-----------|
 | name | string | Sim | Nome do grupo de origem. |
-| external_sync_code | string | Não | Código externo de sincronização. Use o identificador do registro no sistema de origem (ex.: ID no RD Station, código no ERP) para evitar duplicidade em integrações. |
+| external_sync_code | string | Não | Código externo de sincronização. Use o identificador do registro no sistema de origem (ex.: ID no RD Station, código no ERP) para evitar duplicidade em integrações. **Único por workspace**: tentativas de criar ou atualizar um registro com um `external_sync_code` já existente retornam erro `409 conflict`. |
 
 **Exemplo de Request Body:**
 
@@ -3314,7 +3555,7 @@ Atualiza todos os campos editáveis de um(a) grupo de origem. Campos omitidos se
 | Nome | Tipo | Obrigatório | Descrição |
 |------|------|-------------|-----------|
 | name | string | Sim | Nome do grupo de origem. |
-| external_sync_code | string | Não | Código externo de sincronização. Use o identificador do registro no sistema de origem (ex.: ID no RD Station, código no ERP) para evitar duplicidade em integrações. |
+| external_sync_code | string | Não | Código externo de sincronização. Use o identificador do registro no sistema de origem (ex.: ID no RD Station, código no ERP) para evitar duplicidade em integrações. **Único por workspace**: tentativas de criar ou atualizar um registro com um `external_sync_code` já existente retornam erro `409 conflict`. |
 
 **Exemplo de Request Body:**
 
@@ -3347,7 +3588,7 @@ Atualiza apenas os campos enviados no body. Use para edições incrementais.
 | Nome | Tipo | Obrigatório | Descrição |
 |------|------|-------------|-----------|
 | name | string | Não | Nome do grupo de origem. |
-| external_sync_code | string | Não | Código externo de sincronização. Use o identificador do registro no sistema de origem (ex.: ID no RD Station, código no ERP) para evitar duplicidade em integrações. |
+| external_sync_code | string | Não | Código externo de sincronização. Use o identificador do registro no sistema de origem (ex.: ID no RD Station, código no ERP) para evitar duplicidade em integrações. **Único por workspace**: tentativas de criar ou atualizar um registro com um `external_sync_code` já existente retornam erro `409 conflict`. |
 
 **Exemplo de Request Body:**
 
@@ -3408,7 +3649,7 @@ Retorna a lista paginada de canais do workspace autenticado, com suporte a busca
 | order_by | string | Não | Campo de ordenação. Ex.: `created_at`. |
 | order_direction | string | Não | Direção da ordenação: `asc` ou `desc` (default: desc). |
 | q | string | Não | Busca textual no campo principal do recurso (geralmente `name` ou `title`). |
-| external_sync_code | string | Não | Filtra pelo código externo de sincronização. É o identificador único do registro no sistema de origem (ex.: ID no RD Station, código no ERP), usado por integrações para evitar duplicidade. |
+| external_sync_code | string | Não | Filtra pelo código externo de sincronização. É o identificador único do registro no sistema de origem (ex.: ID no RD Station, código no ERP), usado por integrações para evitar duplicidade. Único por workspace. |
 
 **Exemplo de Resposta:**
 
@@ -3471,7 +3712,7 @@ Cria um(a) novo(a) canal no workspace autenticado.
 | Nome | Tipo | Obrigatório | Descrição |
 |------|------|-------------|-----------|
 | name | string | Sim | Nome do canal / campanha. |
-| external_sync_code | string | Não | Código externo de sincronização. Use o identificador do registro no sistema de origem (ex.: ID no RD Station, código no ERP) para evitar duplicidade em integrações. |
+| external_sync_code | string | Não | Código externo de sincronização. Use o identificador do registro no sistema de origem (ex.: ID no RD Station, código no ERP) para evitar duplicidade em integrações. **Único por workspace**: tentativas de criar ou atualizar um registro com um `external_sync_code` já existente retornam erro `409 conflict`. |
 
 **Exemplo de Request Body:**
 
@@ -3504,7 +3745,7 @@ Atualiza todos os campos editáveis de um(a) canal. Campos omitidos serão limpo
 | Nome | Tipo | Obrigatório | Descrição |
 |------|------|-------------|-----------|
 | name | string | Sim | Nome do canal / campanha. |
-| external_sync_code | string | Não | Código externo de sincronização. Use o identificador do registro no sistema de origem (ex.: ID no RD Station, código no ERP) para evitar duplicidade em integrações. |
+| external_sync_code | string | Não | Código externo de sincronização. Use o identificador do registro no sistema de origem (ex.: ID no RD Station, código no ERP) para evitar duplicidade em integrações. **Único por workspace**: tentativas de criar ou atualizar um registro com um `external_sync_code` já existente retornam erro `409 conflict`. |
 
 **Exemplo de Request Body:**
 
@@ -3537,7 +3778,7 @@ Atualiza apenas os campos enviados no body. Use para edições incrementais.
 | Nome | Tipo | Obrigatório | Descrição |
 |------|------|-------------|-----------|
 | name | string | Não | Nome do canal / campanha. |
-| external_sync_code | string | Não | Código externo de sincronização. Use o identificador do registro no sistema de origem (ex.: ID no RD Station, código no ERP) para evitar duplicidade em integrações. |
+| external_sync_code | string | Não | Código externo de sincronização. Use o identificador do registro no sistema de origem (ex.: ID no RD Station, código no ERP) para evitar duplicidade em integrações. **Único por workspace**: tentativas de criar ou atualizar um registro com um `external_sync_code` já existente retornam erro `409 conflict`. |
 
 **Exemplo de Request Body:**
 
@@ -3598,7 +3839,7 @@ Retorna a lista paginada de tipos de atividade do workspace autenticado, com sup
 | order_by | string | Não | Campo de ordenação. Ex.: `created_at`. |
 | order_direction | string | Não | Direção da ordenação: `asc` ou `desc` (default: desc). |
 | q | string | Não | Busca textual no campo principal do recurso (geralmente `name` ou `title`). |
-| external_sync_code | string | Não | Filtra pelo código externo de sincronização. É o identificador único do registro no sistema de origem (ex.: ID no RD Station, código no ERP), usado por integrações para evitar duplicidade. |
+| external_sync_code | string | Não | Filtra pelo código externo de sincronização. É o identificador único do registro no sistema de origem (ex.: ID no RD Station, código no ERP), usado por integrações para evitar duplicidade. Único por workspace. |
 
 **Exemplo de Resposta:**
 
@@ -3673,7 +3914,7 @@ Cria um(a) novo(a) tipo de atividade no workspace autenticado.
 | color | string | Não | Cor em hex (ex.: #3B82F6). |
 | is_default | boolean | Não | Marca como tipo padrão. |
 | position | integer | Não | Ordem de exibição. |
-| external_sync_code | string | Não | Código externo de sincronização. Use o identificador do registro no sistema de origem (ex.: ID no RD Station, código no ERP) para evitar duplicidade em integrações. |
+| external_sync_code | string | Não | Código externo de sincronização. Use o identificador do registro no sistema de origem (ex.: ID no RD Station, código no ERP) para evitar duplicidade em integrações. **Único por workspace**: tentativas de criar ou atualizar um registro com um `external_sync_code` já existente retornam erro `409 conflict`. |
 
 **Exemplo de Request Body:**
 
@@ -3714,7 +3955,7 @@ Atualiza todos os campos editáveis de um(a) tipo de atividade. Campos omitidos 
 | color | string | Não | Cor em hex (ex.: #3B82F6). |
 | is_default | boolean | Não | Marca como tipo padrão. |
 | position | integer | Não | Ordem de exibição. |
-| external_sync_code | string | Não | Código externo de sincronização. Use o identificador do registro no sistema de origem (ex.: ID no RD Station, código no ERP) para evitar duplicidade em integrações. |
+| external_sync_code | string | Não | Código externo de sincronização. Use o identificador do registro no sistema de origem (ex.: ID no RD Station, código no ERP) para evitar duplicidade em integrações. **Único por workspace**: tentativas de criar ou atualizar um registro com um `external_sync_code` já existente retornam erro `409 conflict`. |
 
 **Exemplo de Request Body:**
 
@@ -3755,7 +3996,7 @@ Atualiza apenas os campos enviados no body. Use para edições incrementais.
 | color | string | Não | Cor em hex (ex.: #3B82F6). |
 | is_default | boolean | Não | Marca como tipo padrão. |
 | position | integer | Não | Ordem de exibição. |
-| external_sync_code | string | Não | Código externo de sincronização. Use o identificador do registro no sistema de origem (ex.: ID no RD Station, código no ERP) para evitar duplicidade em integrações. |
+| external_sync_code | string | Não | Código externo de sincronização. Use o identificador do registro no sistema de origem (ex.: ID no RD Station, código no ERP) para evitar duplicidade em integrações. **Único por workspace**: tentativas de criar ou atualizar um registro com um `external_sync_code` já existente retornam erro `409 conflict`. |
 
 **Exemplo de Request Body:**
 
@@ -3822,7 +4063,7 @@ Retorna a lista paginada de campos personalizados do workspace autenticado, com 
 | q | string | Não | Busca textual no campo principal do recurso (geralmente `name` ou `title`). |
 | entity | string | Não | Filtra por entidade alvo. |
 | type | string | Não | Filtra por tipo. |
-| external_sync_code | string | Não | Filtra pelo código externo de sincronização. É o identificador único do registro no sistema de origem (ex.: ID no RD Station, código no ERP), usado por integrações para evitar duplicidade. |
+| external_sync_code | string | Não | Filtra pelo código externo de sincronização. É o identificador único do registro no sistema de origem (ex.: ID no RD Station, código no ERP), usado por integrações para evitar duplicidade. Único por workspace. |
 
 **Exemplo de Resposta:**
 
@@ -3914,7 +4155,7 @@ Cria um(a) novo(a) campo personalizado no workspace autenticado.
 | show_on_create | boolean | Não | Exibe o campo no formulário de criação. |
 | is_required | boolean | Não | Torna o campo obrigatório. |
 | pipeline_ids | uuid[] | Não | Restringe a aparecer somente nestes funis (apenas entity=deals). |
-| external_sync_code | string | Não | Código externo de sincronização. Use o identificador do registro no sistema de origem (ex.: ID no RD Station, código no ERP) para evitar duplicidade em integrações. |
+| external_sync_code | string | Não | Código externo de sincronização. Use o identificador do registro no sistema de origem (ex.: ID no RD Station, código no ERP) para evitar duplicidade em integrações. **Único por workspace**: tentativas de criar ou atualizar um registro com um `external_sync_code` já existente retornam erro `409 conflict`. |
 
 **Exemplo de Request Body:**
 
@@ -3967,7 +4208,7 @@ Atualiza todos os campos editáveis de um(a) campo personalizado. Campos omitido
 | show_on_create | boolean | Não | Exibe o campo no formulário de criação. |
 | is_required | boolean | Não | Torna o campo obrigatório. |
 | pipeline_ids | uuid[] | Não | Restringe a aparecer somente nestes funis (apenas entity=deals). |
-| external_sync_code | string | Não | Código externo de sincronização. Use o identificador do registro no sistema de origem (ex.: ID no RD Station, código no ERP) para evitar duplicidade em integrações. |
+| external_sync_code | string | Não | Código externo de sincronização. Use o identificador do registro no sistema de origem (ex.: ID no RD Station, código no ERP) para evitar duplicidade em integrações. **Único por workspace**: tentativas de criar ou atualizar um registro com um `external_sync_code` já existente retornam erro `409 conflict`. |
 
 **Exemplo de Request Body:**
 
@@ -4020,7 +4261,7 @@ Atualiza apenas os campos enviados no body. Use para edições incrementais.
 | show_on_create | boolean | Não | Exibe o campo no formulário de criação. |
 | is_required | boolean | Não | Torna o campo obrigatório. |
 | pipeline_ids | uuid[] | Não | Restringe a aparecer somente nestes funis (apenas entity=deals). |
-| external_sync_code | string | Não | Código externo de sincronização. Use o identificador do registro no sistema de origem (ex.: ID no RD Station, código no ERP) para evitar duplicidade em integrações. |
+| external_sync_code | string | Não | Código externo de sincronização. Use o identificador do registro no sistema de origem (ex.: ID no RD Station, código no ERP) para evitar duplicidade em integrações. **Único por workspace**: tentativas de criar ou atualizar um registro com um `external_sync_code` já existente retornam erro `409 conflict`. |
 
 **Exemplo de Request Body:**
 
