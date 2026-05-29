@@ -322,6 +322,13 @@ export const contactFields: INodeProperties[] = [
 				description: 'Email address of the contact',
 			},
 			{
+				displayName: 'Mobile Phone',
+				name: 'mobile',
+				type: 'string',
+				default: '',
+				description: 'Mobile phone number of the contact',
+			},
+			{
 				displayName: 'Name',
 				name: 'namePatch',
 				type: 'string',
@@ -332,6 +339,13 @@ export const contactFields: INodeProperties[] = [
 					},
 				},
 				description: 'Full name of the contact',
+			},
+			{
+				displayName: 'Observation',
+				name: 'observation',
+				type: 'string',
+				default: '',
+				description: 'Observation or notes about the contact',
 			},
 			{
 				displayName: 'Organization ID',
@@ -353,6 +367,13 @@ export const contactFields: INodeProperties[] = [
 				type: 'string',
 				default: '',
 				description: 'Phone number of the contact',
+			},
+			{
+				displayName: 'Status',
+				name: 'status',
+				type: 'string',
+				default: 'active',
+				description: 'Status of the contact (e.g. active)',
 			},
 		],
 	},
