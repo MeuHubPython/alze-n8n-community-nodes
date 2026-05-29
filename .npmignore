@@ -1,0 +1,14 @@
+# Ignore source maps in npm package to reduce size and avoid false-positive obfuscated code alerts
+dist/**/*.js.map
+dist/**/*.tsbuildinfo
+*.tsbuildinfo
+
+# Ignore configuration and metadata
+.vscode/
+.github/
+icons/
+README_TEMPLATE.md
+alze-api-reference.md
+tsconfig.json
+eslint.config.mjs
+.prettierrc.js
