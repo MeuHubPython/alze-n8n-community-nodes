@@ -60,9 +60,9 @@ export const originGroupFields: INodeProperties[] = [
 	{
 		displayName: 'Origin Group ID',
 		name: 'originGroupId',
-		type: 'number',
+		type: 'string',
 		required: true,
-		default: 0,
+		default: '',
 		displayOptions: {
 			show: {
 				resource: ['originGroup'],

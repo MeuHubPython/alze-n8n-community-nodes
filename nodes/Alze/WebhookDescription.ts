@@ -60,9 +60,9 @@ export const webhookFields: INodeProperties[] = [
 	{
 		displayName: 'Webhook ID',
 		name: 'webhookId',
-		type: 'number',
+		type: 'string',
 		required: true,
-		default: 0,
+		default: '',
 		displayOptions: {
 			show: {
 				resource: ['webhook'],
@@ -106,6 +106,41 @@ export const webhookFields: INodeProperties[] = [
 			},
 		},
 		description: 'Name/title of the webhook',
+	},
+
+	{
+		displayName: 'Target URL',
+		name: 'targetUrl',
+		type: 'string',
+		required: true,
+		default: '',
+		displayOptions: {
+			show: {
+				resource: ['webhook'],
+				operation: ['create', 'update'],
+			},
+		},
+		description: 'The HTTPS URL that will receive the webhook payloads',
+	},
+	{
+		displayName: 'Events',
+		name: 'events',
+		type: 'multiOptions',
+		required: true,
+		options: [
+			{ name: 'Activity Completed', value: 'activity.completed' },
+			{ name: 'Deal Created', value: 'deal.created' },
+			{ name: 'Deal Lost', value: 'deal.lost' },
+			{ name: 'Deal Won', value: 'deal.won' },
+		],
+		default: [],
+		displayOptions: {
+			show: {
+				resource: ['webhook'],
+				operation: ['create', 'update'],
+			},
+		},
+		description: 'The list of events to trigger this webhook',
 	},
 
 	// ----------------------------------
@@ -200,11 +235,36 @@ export const webhookFields: INodeProperties[] = [
 		},
 		options: [
 			{
-				displayName: 'Is Default',
-				name: 'is_default',
+				displayName: 'Description',
+				name: 'description',
+				type: 'string',
+				default: '',
+				description: 'A brief description of this webhook',
+			},
+			{
+				displayName: 'Events',
+				name: 'eventsPatch',
+				type: 'multiOptions',
+				options: [
+					{ name: 'Activity Completed', value: 'activity.completed' },
+					{ name: 'Deal Created', value: 'deal.created' },
+					{ name: 'Deal Lost', value: 'deal.lost' },
+					{ name: 'Deal Won', value: 'deal.won' },
+				],
+				default: [],
+				displayOptions: {
+					show: {
+						'/operation': ['patch'],
+					},
+				},
+				description: 'The list of events to trigger this webhook',
+			},
+			{
+				displayName: 'Is Active',
+				name: 'is_active',
 				type: 'boolean',
-				default: false,
-				description: 'Whether this is the default option',
+				default: true,
+				description: 'Whether the webhook is active',
 			},
 			{
 				displayName: 'Name',
@@ -217,6 +277,28 @@ export const webhookFields: INodeProperties[] = [
 					},
 				},
 				description: 'Name of the webhook',
+			},
+			{
+				displayName: 'Secret',
+				name: 'secret',
+				type: 'string',
+				default: '',
+				typeOptions: {
+					password: true,
+				},
+				description: 'HMAC signature secret for payload verification',
+			},
+			{
+				displayName: 'Target URL',
+				name: 'targetUrlPatch',
+				type: 'string',
+				default: '',
+				displayOptions: {
+					show: {
+						'/operation': ['patch'],
+					},
+				},
+				description: 'The HTTPS URL that will receive the webhook payloads',
 			},
 		],
 	},

@@ -60,9 +60,9 @@ export const leadOriginFields: INodeProperties[] = [
 	{
 		displayName: 'Lead Origin ID',
 		name: 'leadOriginId',
-		type: 'number',
+		type: 'string',
 		required: true,
-		default: 0,
+		default: '',
 		displayOptions: {
 			show: {
 				resource: ['leadOrigin'],

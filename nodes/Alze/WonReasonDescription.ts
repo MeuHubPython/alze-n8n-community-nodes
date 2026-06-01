@@ -60,7 +60,7 @@ export const wonReasonFields: INodeProperties[] = [
 	{
 		displayName: 'Won Reason ID',
 		name: 'wonReasonId',
-		type: 'number',
+		type: 'string',
 		required: true,
 		default: '',
 		displayOptions: {

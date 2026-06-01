@@ -443,36 +443,34 @@ export class Alze implements INodeType {
 						responseData = responseData.data;
 					} else if (operation === 'create') {
 						const title = this.getNodeParameter('title', i) as string;
-						const type = this.getNodeParameter('type', i) as string;
+						const dealId = this.getNodeParameter('dealId', i) as string;
 						const dueDate = this.getNodeParameter('dueDate', i) as string;
+						let due_date = dueDate;
+						if (dueDate && dueDate.includes('T')) {
+							due_date = dueDate.split('T')[0];
+						}
 						const fields = this.getNodeParameter('fieldsToSet', i) as IDataObject;
-						const body: IDataObject = { title, type, due_date: dueDate, ...fields };
+						const body: IDataObject = { title, deal_id: dealId, due_date, ...fields };
+						if (body.due_date && typeof body.due_date === 'string' && body.due_date.includes('T')) {
+							body.due_date = (body.due_date as string).split('T')[0];
+						}
 						responseData = await alzeApiRequest.call(this, 'POST', '/activities', body);
 						responseData = responseData.data;
 					} else if (operation === 'update') {
 						const activityId = this.getNodeParameter('activityId', i) as string;
-						const title = this.getNodeParameter('titleUpdate', i) as string;
-						const type = this.getNodeParameter('typeUpdate', i) as string;
-						const dueDate = this.getNodeParameter('dueDateUpdate', i) as string;
 						const fields = this.getNodeParameter('fieldsToSet', i) as IDataObject;
-						const body: IDataObject = { title, type, due_date: dueDate, ...fields };
+						const body: IDataObject = { ...fields };
+						if (body.due_date && typeof body.due_date === 'string' && body.due_date.includes('T')) {
+							body.due_date = (body.due_date as string).split('T')[0];
+						}
 						responseData = await alzeApiRequest.call(this, 'PUT', `/activities/${activityId}`, body);
 						responseData = responseData.data;
 					} else if (operation === 'patch') {
 						const activityId = this.getNodeParameter('activityId', i) as string;
 						const fields = this.getNodeParameter('fieldsToSet', i) as IDataObject;
 						const body: IDataObject = { ...fields };
-						if (fields.titlePatch) {
-							body.title = fields.titlePatch;
-							delete body.titlePatch;
-						}
-						if (fields.typePatch) {
-							body.type = fields.typePatch;
-							delete body.typePatch;
-						}
-						if (fields.dueDatePatch) {
-							body.due_date = fields.dueDatePatch;
-							delete body.dueDatePatch;
+						if (body.due_date && typeof body.due_date === 'string' && body.due_date.includes('T')) {
+							body.due_date = (body.due_date as string).split('T')[0];
 						}
 						responseData = await alzeApiRequest.call(this, 'PATCH', `/activities/${activityId}`, body);
 						responseData = responseData.data;
@@ -784,15 +782,31 @@ export class Alze implements INodeType {
 						responseData = responseData.data;
 					} else if (operation === 'create') {
 						const name = this.getNodeParameter('name', i) as string;
+						const entity = this.getNodeParameter('entity', i) as string;
+						const type = this.getNodeParameter('type', i) as string;
 						const fields = this.getNodeParameter('fieldsToSet', i) as IDataObject;
-						const body: IDataObject = { name, ...fields };
+						const body: IDataObject = { name, entity, type, ...fields };
+						if (body.options && typeof body.options === 'string') {
+							body.options = (body.options as string).split(',').map(s => s.trim()).filter(Boolean);
+						}
+						if (body.pipeline_ids && typeof body.pipeline_ids === 'string') {
+							body.pipeline_ids = (body.pipeline_ids as string).split(',').map(s => s.trim()).filter(Boolean);
+						}
 						responseData = await alzeApiRequest.call(this, 'POST', '/custom-fields', body);
 						responseData = responseData.data;
 					} else if (operation === 'update') {
 						const id = this.getNodeParameter('customFieldId', i) as string;
 						const name = this.getNodeParameter('nameUpdate', i) as string;
+						const entity = this.getNodeParameter('entity', i) as string;
+						const type = this.getNodeParameter('type', i) as string;
 						const fields = this.getNodeParameter('fieldsToSet', i) as IDataObject;
-						const body: IDataObject = { name, ...fields };
+						const body: IDataObject = { name, entity, type, ...fields };
+						if (body.options && typeof body.options === 'string') {
+							body.options = (body.options as string).split(',').map(s => s.trim()).filter(Boolean);
+						}
+						if (body.pipeline_ids && typeof body.pipeline_ids === 'string') {
+							body.pipeline_ids = (body.pipeline_ids as string).split(',').map(s => s.trim()).filter(Boolean);
+						}
 						responseData = await alzeApiRequest.call(this, 'PUT', `/custom-fields/${id}`, body);
 						responseData = responseData.data;
 					} else if (operation === 'patch') {
@@ -802,6 +816,20 @@ export class Alze implements INodeType {
 						if (fields.namePatch) {
 							body.name = fields.namePatch;
 							delete body.namePatch;
+						}
+						if (fields.entityPatch) {
+							body.entity = fields.entityPatch;
+							delete body.entityPatch;
+						}
+						if (fields.typePatch) {
+							body.type = fields.typePatch;
+							delete body.typePatch;
+						}
+						if (body.options && typeof body.options === 'string') {
+							body.options = (body.options as string).split(',').map(s => s.trim()).filter(Boolean);
+						}
+						if (body.pipeline_ids && typeof body.pipeline_ids === 'string') {
+							body.pipeline_ids = (body.pipeline_ids as string).split(',').map(s => s.trim()).filter(Boolean);
 						}
 						responseData = await alzeApiRequest.call(this, 'PATCH', `/custom-fields/${id}`, body);
 						responseData = responseData.data;
@@ -1106,15 +1134,33 @@ export class Alze implements INodeType {
 						responseData = responseData.data;
 					} else if (operation === 'create') {
 						const name = this.getNodeParameter('name', i) as string;
+						const mode = this.getNodeParameter('mode', i) as string;
 						const fields = this.getNodeParameter('fieldsToSet', i) as IDataObject;
-						const body: IDataObject = { name, ...fields };
+						const body: IDataObject = { name, mode, ...fields };
+						if (body.originOwnerMapJson) {
+							try {
+								body.origin_owner_map = JSON.parse(body.originOwnerMapJson as string);
+							} catch {
+								// ignore parsing error
+							}
+							delete body.originOwnerMapJson;
+						}
 						responseData = await alzeApiRequest.call(this, 'POST', '/distribution-rules', body);
 						responseData = responseData.data;
 					} else if (operation === 'update') {
 						const id = this.getNodeParameter('distributionRuleId', i) as string;
 						const name = this.getNodeParameter('nameUpdate', i) as string;
+						const mode = this.getNodeParameter('mode', i) as string;
 						const fields = this.getNodeParameter('fieldsToSet', i) as IDataObject;
-						const body: IDataObject = { name, ...fields };
+						const body: IDataObject = { name, mode, ...fields };
+						if (body.originOwnerMapJson) {
+							try {
+								body.origin_owner_map = JSON.parse(body.originOwnerMapJson as string);
+							} catch {
+								// ignore parsing error
+							}
+							delete body.originOwnerMapJson;
+						}
 						responseData = await alzeApiRequest.call(this, 'PUT', `/distribution-rules/${id}`, body);
 						responseData = responseData.data;
 					} else if (operation === 'patch') {
@@ -1124,6 +1170,18 @@ export class Alze implements INodeType {
 						if (fields.namePatch) {
 							body.name = fields.namePatch;
 							delete body.namePatch;
+						}
+						if (fields.modePatch) {
+							body.mode = fields.modePatch;
+							delete body.modePatch;
+						}
+						if (body.originOwnerMapJson) {
+							try {
+								body.origin_owner_map = JSON.parse(body.originOwnerMapJson as string);
+							} catch {
+								// ignore parsing error
+							}
+							delete body.originOwnerMapJson;
 						}
 						responseData = await alzeApiRequest.call(this, 'PATCH', `/distribution-rules/${id}`, body);
 						responseData = responseData.data;
@@ -1152,15 +1210,19 @@ export class Alze implements INodeType {
 						responseData = responseData.data;
 					} else if (operation === 'create') {
 						const name = this.getNodeParameter('name', i) as string;
+						const target_url = this.getNodeParameter('targetUrl', i) as string;
+						const events = this.getNodeParameter('events', i) as string[];
 						const fields = this.getNodeParameter('fieldsToSet', i) as IDataObject;
-						const body: IDataObject = { name, ...fields };
+						const body: IDataObject = { name, target_url, events, ...fields };
 						responseData = await alzeApiRequest.call(this, 'POST', '/webhooks', body);
 						responseData = responseData.data;
 					} else if (operation === 'update') {
 						const id = this.getNodeParameter('webhookId', i) as string;
 						const name = this.getNodeParameter('nameUpdate', i) as string;
+						const target_url = this.getNodeParameter('targetUrl', i) as string;
+						const events = this.getNodeParameter('events', i) as string[];
 						const fields = this.getNodeParameter('fieldsToSet', i) as IDataObject;
-						const body: IDataObject = { name, ...fields };
+						const body: IDataObject = { name, target_url, events, ...fields };
 						responseData = await alzeApiRequest.call(this, 'PUT', `/webhooks/${id}`, body);
 						responseData = responseData.data;
 					} else if (operation === 'patch') {
@@ -1170,6 +1232,14 @@ export class Alze implements INodeType {
 						if (fields.namePatch) {
 							body.name = fields.namePatch;
 							delete body.namePatch;
+						}
+						if (fields.targetUrlPatch) {
+							body.target_url = fields.targetUrlPatch;
+							delete body.targetUrlPatch;
+						}
+						if (fields.eventsPatch) {
+							body.events = fields.eventsPatch;
+							delete body.eventsPatch;
 						}
 						responseData = await alzeApiRequest.call(this, 'PATCH', `/webhooks/${id}`, body);
 						responseData = responseData.data;

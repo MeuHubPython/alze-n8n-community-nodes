@@ -101,26 +101,18 @@ export const activityFields: INodeProperties[] = [
 		description: 'Title of the activity',
 	},
 	{
-		displayName: 'Type',
-		name: 'type',
-		type: 'options',
+		displayName: 'Deal ID',
+		name: 'dealId',
+		type: 'string',
 		required: true,
-		options: [
-			{ name: 'Call', value: 'call' },
-			{ name: 'Email', value: 'email' },
-			{ name: 'Meeting', value: 'meeting' },
-			{ name: 'Other', value: 'other' },
-			{ name: 'Task', value: 'task' },
-			{ name: 'Whatsapp', value: 'whatsapp' },
-		],
-		default: 'task',
+		default: '',
 		displayOptions: {
 			show: {
 				resource: ['activity'],
 				operation: ['create'],
 			},
 		},
-		description: 'Type of activity',
+		description: 'The ID of the associated deal',
 	},
 	{
 		displayName: 'Due Date',
@@ -132,60 +124,6 @@ export const activityFields: INodeProperties[] = [
 			show: {
 				resource: ['activity'],
 				operation: ['create'],
-			},
-		},
-		description: 'Deadline or scheduled date for the activity',
-	},
-
-	// ----------------------------------
-	//         activity: update
-	// ----------------------------------
-	{
-		displayName: 'Title',
-		name: 'titleUpdate',
-		type: 'string',
-		required: true,
-		default: '',
-		displayOptions: {
-			show: {
-				resource: ['activity'],
-				operation: ['update'],
-			},
-		},
-		description: 'Title of the activity',
-	},
-	{
-		displayName: 'Type',
-		name: 'typeUpdate',
-		type: 'options',
-		required: true,
-		options: [
-			{ name: 'Call', value: 'call' },
-			{ name: 'Email', value: 'email' },
-			{ name: 'Meeting', value: 'meeting' },
-			{ name: 'Other', value: 'other' },
-			{ name: 'Task', value: 'task' },
-			{ name: 'Whatsapp', value: 'whatsapp' },
-		],
-		default: 'task',
-		displayOptions: {
-			show: {
-				resource: ['activity'],
-				operation: ['update'],
-			},
-		},
-		description: 'Type of activity',
-	},
-	{
-		displayName: 'Due Date',
-		name: 'dueDateUpdate',
-		type: 'dateTime',
-		required: true,
-		default: '',
-		displayOptions: {
-			show: {
-				resource: ['activity'],
-				operation: ['update'],
 			},
 		},
 		description: 'Deadline or scheduled date for the activity',
@@ -265,24 +203,10 @@ export const activityFields: INodeProperties[] = [
 		options: [
 			{
 				displayName: 'Contact (Person) ID',
-				name: 'contact_id',
+				name: 'person_id',
 				type: 'string',
 				default: '',
-				description: 'Filter by associated contact ID',
-			},
-			{
-				displayName: 'Created After',
-				name: 'created_after',
-				type: 'dateTime',
-				default: '',
-				description: 'Filter activities created after this date',
-			},
-			{
-				displayName: 'Created Before',
-				name: 'created_before',
-				type: 'dateTime',
-				default: '',
-				description: 'Filter activities created before this date',
+				description: 'Filter activities by person ID',
 			},
 			{
 				displayName: 'Deal ID',
@@ -290,20 +214,6 @@ export const activityFields: INodeProperties[] = [
 				type: 'string',
 				default: '',
 				description: 'Filter by associated deal ID',
-			},
-			{
-				displayName: 'Due After',
-				name: 'due_after',
-				type: 'dateTime',
-				default: '',
-				description: 'Filter activities with due date >= value',
-			},
-			{
-				displayName: 'Due Before',
-				name: 'due_before',
-				type: 'dateTime',
-				default: '',
-				description: 'Filter activities with due date <= value',
 			},
 			{
 				displayName: 'External Sync Code',
@@ -320,13 +230,6 @@ export const activityFields: INodeProperties[] = [
 				description: 'Filter by associated organization ID',
 			},
 			{
-				displayName: 'Owner ID',
-				name: 'owner_id',
-				type: 'string',
-				default: '',
-				description: 'Filter by owner ID',
-			},
-			{
 				displayName: 'Status',
 				name: 'status',
 				type: 'options',
@@ -337,21 +240,6 @@ export const activityFields: INodeProperties[] = [
 				],
 				default: 'open',
 				description: 'Filter by activity status',
-			},
-			{
-				displayName: 'Type',
-				name: 'type',
-				type: 'options',
-				options: [
-					{ name: 'Call', value: 'call' },
-					{ name: 'Email', value: 'email' },
-					{ name: 'Meeting', value: 'meeting' },
-					{ name: 'Other', value: 'other' },
-					{ name: 'Task', value: 'task' },
-					{ name: 'Whatsapp', value: 'whatsapp' },
-				],
-				default: 'task',
-				description: 'Filter by activity type',
 			},
 		],
 	},
@@ -373,11 +261,18 @@ export const activityFields: INodeProperties[] = [
 		},
 		options: [
 			{
-				displayName: 'Contact ID',
-				name: 'contact_id',
+				displayName: 'Activity Type ID',
+				name: 'activity_type_id',
 				type: 'string',
 				default: '',
-				description: 'ID of the associated contact',
+				description: 'ID of the activity type (UUID)',
+			},
+			{
+				displayName: 'Contact (Person) ID',
+				name: 'person_id',
+				type: 'string',
+				default: '',
+				description: 'ID of the associated person/contact',
 			},
 			{
 				displayName: 'Deal ID',
@@ -387,26 +282,25 @@ export const activityFields: INodeProperties[] = [
 				description: 'ID of the associated deal',
 			},
 			{
-				displayName: 'Due Date',
-				name: 'dueDatePatch',
-				type: 'dateTime',
+				displayName: 'Description',
+				name: 'description',
+				type: 'string',
 				default: '',
-				displayOptions: {
-					show: {
-						'/operation': ['patch'],
-					},
-				},
-				description: 'Deadline or scheduled date for the activity',
+				description: 'Details / observations of the activity',
 			},
 			{
-				displayName: 'Duration (Minutes)',
-				name: 'duration',
-				type: 'number',
-				typeOptions: {
-					minValue: 1,
-				},
-				default: 15,
-				description: 'Duration of the activity in minutes',
+				displayName: 'Due Date',
+				name: 'due_date',
+				type: 'dateTime',
+				default: '',
+				description: 'Planned due date',
+			},
+			{
+				displayName: 'Due Time (HH:MM:SS)',
+				name: 'due_time',
+				type: 'string',
+				default: '',
+				description: 'Planned due time (e.g. 14:30:00)',
 			},
 			{
 				displayName: 'External Sync Code',
@@ -416,25 +310,11 @@ export const activityFields: INodeProperties[] = [
 				description: 'External synchronization code for integration',
 			},
 			{
-				displayName: 'Notes / Comments',
-				name: 'notes',
-				type: 'string',
-				default: '',
-				description: 'Notes or description of the activity',
-			},
-			{
 				displayName: 'Organization ID',
 				name: 'organization_id',
 				type: 'string',
 				default: '',
 				description: 'ID of the associated organization',
-			},
-			{
-				displayName: 'Owner ID',
-				name: 'owner_id',
-				type: 'string',
-				default: '',
-				description: 'ID of the owner of this activity',
 			},
 			{
 				displayName: 'Status',
@@ -450,35 +330,10 @@ export const activityFields: INodeProperties[] = [
 			},
 			{
 				displayName: 'Title',
-				name: 'titlePatch',
+				name: 'title',
 				type: 'string',
 				default: '',
-				displayOptions: {
-					show: {
-						'/operation': ['patch'],
-					},
-				},
 				description: 'Title of the activity',
-			},
-			{
-				displayName: 'Type',
-				name: 'typePatch',
-				type: 'options',
-				options: [
-					{ name: 'Call', value: 'call' },
-					{ name: 'Email', value: 'email' },
-					{ name: 'Meeting', value: 'meeting' },
-					{ name: 'Other', value: 'other' },
-					{ name: 'Task', value: 'task' },
-					{ name: 'Whatsapp', value: 'whatsapp' },
-				],
-				default: 'task',
-				displayOptions: {
-					show: {
-						'/operation': ['patch'],
-					},
-				},
-				description: 'Type of activity',
 			},
 		],
 	},

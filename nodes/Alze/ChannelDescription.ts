@@ -60,9 +60,9 @@ export const channelFields: INodeProperties[] = [
 	{
 		displayName: 'Channel ID',
 		name: 'channelId',
-		type: 'number',
+		type: 'string',
 		required: true,
-		default: 0,
+		default: '',
 		displayOptions: {
 			show: {
 				resource: ['channel'],

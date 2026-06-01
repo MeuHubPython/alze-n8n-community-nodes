@@ -60,9 +60,9 @@ export const activityTypeFields: INodeProperties[] = [
 	{
 		displayName: 'Activity Type ID',
 		name: 'activityTypeId',
-		type: 'number',
+		type: 'string',
 		required: true,
-		default: 0,
+		default: '',
 		displayOptions: {
 			show: {
 				resource: ['activityType'],

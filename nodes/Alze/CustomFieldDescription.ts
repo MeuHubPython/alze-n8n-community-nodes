@@ -107,6 +107,47 @@ export const customFieldFields: INodeProperties[] = [
 		},
 		description: 'Name/title of the custom field',
 	},
+	{
+		displayName: 'Entity',
+		name: 'entity',
+		type: 'options',
+		required: true,
+		options: [
+			{ name: 'Deals', value: 'deals' },
+			{ name: 'Organizations', value: 'organizations' },
+			{ name: 'Persons', value: 'persons' },
+		],
+		default: 'persons',
+		displayOptions: {
+			show: {
+				resource: ['customField'],
+				operation: ['create', 'update'],
+			},
+		},
+		description: 'The target entity for this custom field',
+	},
+	{
+		displayName: 'Type',
+		name: 'type',
+		type: 'options',
+		required: true,
+		options: [
+			{ name: 'Boolean', value: 'boolean' },
+			{ name: 'Date', value: 'date' },
+			{ name: 'Multiselect', value: 'multiselect' },
+			{ name: 'Number', value: 'number' },
+			{ name: 'Select', value: 'select' },
+			{ name: 'Text', value: 'text' },
+		],
+		default: 'text',
+		displayOptions: {
+			show: {
+				resource: ['customField'],
+				operation: ['create', 'update'],
+			},
+		},
+		description: 'The data type of the custom field',
+	},
 
 	// ----------------------------------
 	//         customField: list
@@ -234,6 +275,23 @@ export const customFieldFields: INodeProperties[] = [
 		},
 		options: [
 			{
+				displayName: 'Entity',
+				name: 'entityPatch',
+				type: 'options',
+				options: [
+					{ name: 'Deals', value: 'deals' },
+					{ name: 'Organizations', value: 'organizations' },
+					{ name: 'Persons', value: 'persons' },
+				],
+				default: 'persons',
+				displayOptions: {
+					show: {
+						'/operation': ['patch'],
+					},
+				},
+				description: 'The target entity for this custom field',
+			},
+			{
 				displayName: 'External Sync Code',
 				name: 'external_sync_code',
 				type: 'string',
@@ -241,11 +299,11 @@ export const customFieldFields: INodeProperties[] = [
 				description: 'External synchronization code for integration',
 			},
 			{
-				displayName: 'Is Default',
-				name: 'is_default',
+				displayName: 'Is Required',
+				name: 'is_required',
 				type: 'boolean',
 				default: false,
-				description: 'Whether this is the default option',
+				description: 'Whether this field is mandatory',
 			},
 			{
 				displayName: 'Name',
@@ -258,6 +316,54 @@ export const customFieldFields: INodeProperties[] = [
 					},
 				},
 				description: 'Name of the custom field',
+			},
+			{
+				displayName: 'Options',
+				name: 'options',
+				type: 'string',
+				default: '',
+				description: 'Comma-separated options (required for select/multiselect)',
+			},
+			{
+				displayName: 'Pipeline IDs',
+				name: 'pipeline_ids',
+				type: 'string',
+				default: '',
+				description: 'Comma-separated pipeline UUIDs (deals only)',
+			},
+			{
+				displayName: 'Position',
+				name: 'position',
+				type: 'number',
+				default: 1,
+				description: 'Display order position',
+			},
+			{
+				displayName: 'Show on Create',
+				name: 'show_on_create',
+				type: 'boolean',
+				default: true,
+				description: 'Whether to show the field on creation form',
+			},
+			{
+				displayName: 'Type',
+				name: 'typePatch',
+				type: 'options',
+				options: [
+					{ name: 'Boolean', value: 'boolean' },
+					{ name: 'Date', value: 'date' },
+					{ name: 'Multiselect', value: 'multiselect' },
+					{ name: 'Number', value: 'number' },
+					{ name: 'Select', value: 'select' },
+					{ name: 'Text', value: 'text' },
+				],
+				default: 'text',
+				displayOptions: {
+					show: {
+						'/operation': ['patch'],
+					},
+				},
+				description: 'The data type of the custom field',
 			},
 		],
 	},

@@ -60,7 +60,7 @@ export const lostReasonFields: INodeProperties[] = [
 	{
 		displayName: 'Lost Reason ID',
 		name: 'lostReasonId',
-		type: 'number',
+		type: 'string',
 		required: true,
 		default: '',
 		displayOptions: {

@@ -60,9 +60,9 @@ export const distributionRuleFields: INodeProperties[] = [
 	{
 		displayName: 'Distribution Rule ID',
 		name: 'distributionRuleId',
-		type: 'number',
+		type: 'string',
 		required: true,
-		default: 0,
+		default: '',
 		displayOptions: {
 			show: {
 				resource: ['distributionRule'],
@@ -106,6 +106,25 @@ export const distributionRuleFields: INodeProperties[] = [
 			},
 		},
 		description: 'Name/title of the distribution rule',
+	},
+
+	{
+		displayName: 'Mode',
+		name: 'mode',
+		type: 'options',
+		required: true,
+		options: [
+			{ name: 'By Origin', value: 'by_origin' },
+			{ name: 'Round Robin', value: 'round_robin' },
+		],
+		default: 'round_robin',
+		displayOptions: {
+			show: {
+				resource: ['distributionRule'],
+				operation: ['create', 'update'],
+			},
+		},
+		description: 'The distribution mode',
 	},
 
 	// ----------------------------------
@@ -180,7 +199,26 @@ export const distributionRuleFields: INodeProperties[] = [
 				operation: ['list'],
 			},
 		},
-		options: [],
+		options: [
+			{
+				displayName: 'Is Active',
+				name: 'is_active',
+				type: 'boolean',
+				default: true,
+				description: 'Whether to filter by active status',
+			},
+			{
+				displayName: 'Mode',
+				name: 'mode',
+				type: 'options',
+				options: [
+					{ name: 'By Origin', value: 'by_origin' },
+					{ name: 'Round Robin', value: 'round_robin' },
+				],
+				default: 'round_robin',
+				description: 'Filter by distribution mode',
+			},
+		],
 	},
 
 	// ----------------------------------
@@ -200,11 +238,34 @@ export const distributionRuleFields: INodeProperties[] = [
 		},
 		options: [
 			{
-				displayName: 'Is Default',
-				name: 'is_default',
+				displayName: 'Apply Only When Unassigned',
+				name: 'apply_only_when_unassigned',
 				type: 'boolean',
-				default: false,
-				description: 'Whether this is the default option',
+				default: true,
+				description: 'Whether to apply rule only when the deal has no owner',
+			},
+			{
+				displayName: 'Is Active',
+				name: 'is_active',
+				type: 'boolean',
+				default: true,
+				description: 'Whether the distribution rule is active',
+			},
+			{
+				displayName: 'Mode',
+				name: 'modePatch',
+				type: 'options',
+				options: [
+					{ name: 'By Origin', value: 'by_origin' },
+					{ name: 'Round Robin', value: 'round_robin' },
+				],
+				default: 'round_robin',
+				displayOptions: {
+					show: {
+						'/operation': ['patch'],
+					},
+				},
+				description: 'The distribution mode',
 			},
 			{
 				displayName: 'Name',
@@ -217,6 +278,13 @@ export const distributionRuleFields: INodeProperties[] = [
 					},
 				},
 				description: 'Name of the distribution rule',
+			},
+			{
+				displayName: 'Origin Owner Map (JSON)',
+				name: 'originOwnerMapJson',
+				type: 'json',
+				default: '{}',
+				description: 'Map of origin_id -> owner_id, e.g. {"origin-uuid": "owner-uuid"}',
 			},
 		],
 	},

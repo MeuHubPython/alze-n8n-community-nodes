@@ -621,6 +621,18 @@ export const dealFields: INodeProperties[] = [
 				description: 'The stage of this deal within the pipeline',
 			},
 			{
+				displayName: 'Status',
+				name: 'status',
+				type: 'options',
+				options: [
+					{ name: 'Open', value: 'open' },
+					{ name: 'Won', value: 'won' },
+					{ name: 'Lost', value: 'lost' },
+				],
+				default: 'open',
+				description: 'Status of the deal',
+			},
+			{
 				displayName: 'Temperature',
 				name: 'temperature',
 				type: 'options',

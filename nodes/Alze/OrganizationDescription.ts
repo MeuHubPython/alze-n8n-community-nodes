@@ -233,6 +233,17 @@ export const organizationFields: INodeProperties[] = [
 				default: '',
 				description: 'Filter by owner / seller',
 			},
+			{
+				displayName: 'Status',
+				name: 'status',
+				type: 'options',
+				options: [
+					{ name: 'Active', value: 'active' },
+					{ name: 'Inactive', value: 'inactive' },
+				],
+				default: 'active',
+				description: 'Filter by status',
+			},
 		],
 	},
 
@@ -252,6 +263,13 @@ export const organizationFields: INodeProperties[] = [
 			},
 		},
 		options: [
+			{
+				displayName: 'CNPJ',
+				name: 'cnpj',
+				type: 'string',
+				default: '',
+				description: 'CNPJ of the organization',
+			},
 			{
 				displayName: 'Custom Fields (JSON)',
 				name: 'customFieldsJson',
@@ -293,11 +311,33 @@ export const organizationFields: INodeProperties[] = [
 				],
 			},
 			{
+				displayName: 'Email',
+				name: 'email',
+				type: 'string',
+				placeholder: 'name@email.com',
+				default: '',
+				description: 'Email of the organization',
+			},
+			{
 				displayName: 'External Sync Code',
 				name: 'external_sync_code',
 				type: 'string',
 				default: '',
 				description: 'External synchronization code for integration',
+			},
+			{
+				displayName: 'Facebook',
+				name: 'facebook',
+				type: 'string',
+				default: '',
+				description: 'Facebook link of the organization',
+			},
+			{
+				displayName: 'Linkedin',
+				name: 'linkedin',
+				type: 'string',
+				default: '',
+				description: 'Linkedin link of the organization',
 			},
 			{
 				displayName: 'Name',
@@ -310,6 +350,31 @@ export const organizationFields: INodeProperties[] = [
 					},
 				},
 				description: 'Company name or trade name',
+			},
+			{
+				displayName: 'Phone',
+				name: 'phone',
+				type: 'string',
+				default: '',
+				description: 'Phone of the organization',
+			},
+			{
+				displayName: 'Status',
+				name: 'status',
+				type: 'options',
+				options: [
+					{ name: 'Active', value: 'active' },
+					{ name: 'Inactive', value: 'inactive' },
+				],
+				default: 'active',
+				description: 'Status of the organization',
+			},
+			{
+				displayName: 'Website',
+				name: 'website',
+				type: 'string',
+				default: '',
+				description: 'Website URL of the organization',
 			},
 		],
 	},

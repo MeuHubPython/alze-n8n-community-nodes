@@ -249,6 +249,17 @@ export const contactFields: INodeProperties[] = [
 				default: '',
 				description: 'Filter by exact telephone',
 			},
+			{
+				displayName: 'Status',
+				name: 'status',
+				type: 'options',
+				options: [
+					{ name: 'Active', value: 'active' },
+					{ name: 'Inactive', value: 'inactive' },
+				],
+				default: 'active',
+				description: 'Filter by status',
+			},
 		],
 	},
 
@@ -268,6 +279,20 @@ export const contactFields: INodeProperties[] = [
 			},
 		},
 		options: [
+			{
+				displayName: 'City ID',
+				name: 'city_id',
+				type: 'number',
+				default: 0,
+				description: 'City ID for geography localization',
+			},
+			{
+				displayName: 'CPF',
+				name: 'cpf',
+				type: 'string',
+				default: '',
+				description: 'CPF of the contact',
+			},
 			{
 				displayName: 'Custom Fields (JSON)',
 				name: 'customFieldsJson',
@@ -322,6 +347,13 @@ export const contactFields: INodeProperties[] = [
 				type: 'string',
 				default: '',
 				description: 'External synchronization code for integration',
+			},
+			{
+				displayName: 'Job Title',
+				name: 'job_title',
+				type: 'string',
+				default: '',
+				description: 'Job title of the contact',
 			},
 			{
 				displayName: 'Mobile Phone',
