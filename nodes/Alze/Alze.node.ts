@@ -306,7 +306,7 @@ export class Alze implements INodeType {
 						responseData = responseData.data;
 					} else if (operation === 'win') {
 						const dealId = this.getNodeParameter('dealId', i) as string;
-						const wonAt = this.getNodeParameter('wonAt', i) as string;
+						const wonAt = this.getNodeParameter('wonAt', i, undefined) as string | undefined;
 						const wonReasonId = this.getNodeParameter('wonReasonId', i) as string;
 						const value = this.getNodeParameter('value', i) as number;
 						const body: IDataObject = {};
@@ -317,7 +317,7 @@ export class Alze implements INodeType {
 						responseData = responseData.data;
 					} else if (operation === 'lose') {
 						const dealId = this.getNodeParameter('dealId', i) as string;
-						const lostAt = this.getNodeParameter('lostAt', i) as string;
+						const lostAt = this.getNodeParameter('lostAt', i, undefined) as string | undefined;
 						const lostReasonId = this.getNodeParameter('lostReasonId', i) as string;
 						const body: IDataObject = {};
 						if (lostAt) body.lost_at = lostAt;
@@ -327,7 +327,7 @@ export class Alze implements INodeType {
 					} else if (operation === 'stage') {
 						const dealId = this.getNodeParameter('dealId', i) as string;
 						const stageId = this.getNodeParameter('stageIdMove', i) as string;
-						const movedAt = this.getNodeParameter('movedAt', i) as string;
+						const movedAt = this.getNodeParameter('movedAt', i, undefined) as string | undefined;
 						const body: IDataObject = { stage_id: stageId };
 						if (movedAt) body.moved_at = movedAt;
 						responseData = await alzeApiRequest.call(this, 'PATCH', `/deals/${dealId}/stage`, body);
