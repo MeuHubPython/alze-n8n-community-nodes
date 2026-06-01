@@ -317,7 +317,7 @@ export class Alze implements INodeType {
 						const dealId = this.getNodeParameter('dealId', i) as string;
 						const lostReasonId = this.getNodeParameter('lostReasonId', i) as string;
 						const body: IDataObject = {};
-						if (lostReasonId) body.lost_reason_id = Number(lostReasonId);
+						if (lostReasonId) body.loss_reason_id = Number(lostReasonId);
 						responseData = await alzeApiRequest.call(this, 'PATCH', `/deals/${dealId}/lose`, body);
 						responseData = responseData.data;
 					} else if (operation === 'stage') {
