@@ -200,11 +200,11 @@ export const tagFields: INodeProperties[] = [
 		},
 		options: [
 			{
-				displayName: 'Is Default',
-				name: 'is_default',
-				type: 'boolean',
-				default: false,
-				description: 'Whether this is the default option',
+				displayName: 'Color',
+				name: 'color',
+				type: 'color',
+				default: '',
+				description: 'Hex color code (e.g. #FF6B6B) for the tag',
 			},
 			{
 				displayName: 'Name',

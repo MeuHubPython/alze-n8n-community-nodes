@@ -200,13 +200,6 @@ export const itemCategoryFields: INodeProperties[] = [
 		},
 		options: [
 			{
-				displayName: 'Is Default',
-				name: 'is_default',
-				type: 'boolean',
-				default: false,
-				description: 'Whether this is the default option',
-			},
-			{
 				displayName: 'Name',
 				name: 'namePatch',
 				type: 'string',
