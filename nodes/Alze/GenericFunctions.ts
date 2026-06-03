@@ -24,6 +24,21 @@ export async function alzeApiRequest(
 	const credentials = await this.getCredentials('alzeApi');
 	const apiKey = credentials.apiKey as string;
 
+	// Clean empty string values from body and query parameters
+	const cleanedBody: IDataObject = {};
+	for (const key of Object.keys(body)) {
+		if (body[key] !== '') {
+			cleanedBody[key] = body[key];
+		}
+	}
+
+	const cleanedQs: IDataObject = {};
+	for (const key of Object.keys(qs)) {
+		if (qs[key] !== '') {
+			cleanedQs[key] = qs[key];
+		}
+	}
+
 	const options: IHttpRequestOptions = {
 		headers: {
 			'Authorization': `Bearer ${apiKey}`,
@@ -31,13 +46,13 @@ export async function alzeApiRequest(
 			...headers,
 		},
 		method,
-		body,
-		qs,
+		body: cleanedBody,
+		qs: cleanedQs,
 		url: uri || `https://hjjqtkdmxpqzjjlsebfv.supabase.co/functions/v1/public-api/api/v1${resource}`,
 		json: true,
 	};
 
-	if (Object.keys(body).length === 0) {
+	if (Object.keys(cleanedBody).length === 0) {
 		delete options.body;
 	}
 
