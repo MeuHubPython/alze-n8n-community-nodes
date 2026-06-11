@@ -137,7 +137,7 @@ export const leadOriginFields: INodeProperties[] = [
 		},
 		typeOptions: {
 			minValue: 1,
-			maxValue: 500,
+			maxValue: 100,
 		},
 		default: 50,
 		description: 'Max number of results to return',
@@ -156,17 +156,34 @@ export const leadOriginFields: INodeProperties[] = [
 		description: 'Search string',
 	},
 	{
-		displayName: 'Sort',
-		name: 'sort',
+		displayName: 'Order By',
+		name: 'orderBy',
 		type: 'string',
+		default: '',
 		displayOptions: {
 			show: {
-				operation: ['list'],
 				resource: ['leadOrigin'],
+				operation: ['list'],
 			},
 		},
-		default: '',
-		description: 'Sort logic (e.g. name:asc)',
+		description: 'Field to sort by. E.g. created_at',
+	},
+	{
+		displayName: 'Order Direction',
+		name: 'orderDirection',
+		type: 'options',
+		options: [
+			{ name: 'Ascending', value: 'asc' },
+			{ name: 'Descending', value: 'desc' },
+		],
+		default: 'desc',
+		displayOptions: {
+			show: {
+				resource: ['leadOrigin'],
+				operation: ['list'],
+			},
+		},
+		description: 'Sort direction (asc or desc)',
 	},
 	{
 		displayName: 'Additional Fields',

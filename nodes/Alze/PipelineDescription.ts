@@ -156,8 +156,8 @@ export const pipelineFields: INodeProperties[] = [
 		description: 'Text search in pipeline name',
 	},
 	{
-		displayName: 'Sort',
-		name: 'sort',
+		displayName: 'Order By',
+		name: 'orderBy',
 		type: 'string',
 		default: '',
 		displayOptions: {
@@ -166,7 +166,24 @@ export const pipelineFields: INodeProperties[] = [
 				operation: ['list'],
 			},
 		},
-		description: 'Field to sort by. Prefix with - for descending. E.g. -created_at',
+		description: 'Field to sort by. E.g. created_at',
+	},
+	{
+		displayName: 'Order Direction',
+		name: 'orderDirection',
+		type: 'options',
+		options: [
+			{ name: 'Ascending', value: 'asc' },
+			{ name: 'Descending', value: 'desc' },
+		],
+		default: 'desc',
+		displayOptions: {
+			show: {
+				resource: ['pipeline'],
+				operation: ['list'],
+			},
+		},
+		description: 'Sort direction (asc or desc)',
 	},
 	{
 		displayName: 'Additional Fields',
@@ -181,27 +198,6 @@ export const pipelineFields: INodeProperties[] = [
 			},
 		},
 		options: [
-			{
-				displayName: 'Active',
-				name: 'active',
-				type: 'boolean',
-				default: true,
-				description: 'Whether to filter only active/inactive pipelines',
-			},
-			{
-				displayName: 'Created After',
-				name: 'created_after',
-				type: 'dateTime',
-				default: '',
-				description: 'Filter pipelines created after this date',
-			},
-			{
-				displayName: 'Created Before',
-				name: 'created_before',
-				type: 'dateTime',
-				default: '',
-				description: 'Filter pipelines created before this date',
-			},
 			{
 				displayName: 'External Sync Code',
 				name: 'external_sync_code',

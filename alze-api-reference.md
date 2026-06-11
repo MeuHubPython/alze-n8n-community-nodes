@@ -195,9 +195,14 @@ Retorna o registro de um(a) contato pelo ID.
 
 ```json
 {
-  "error": {
+  "error": "contato não encontrado.",
+  "message": "contato não encontrado.",
+  "code": "not_found",
+  "details": null,
+  "error_object": {
     "code": "not_found",
-    "message": "contato não encontrado."
+    "message": "contato não encontrado.",
+    "details": null
   }
 }
 ```
@@ -507,9 +512,14 @@ Retorna o registro de um(a) empresa pelo ID.
 
 ```json
 {
-  "error": {
+  "error": "empresa não encontrado.",
+  "message": "empresa não encontrado.",
+  "code": "not_found",
+  "details": null,
+  "error_object": {
     "code": "not_found",
-    "message": "empresa não encontrado."
+    "message": "empresa não encontrado.",
+    "details": null
   }
 }
 ```
@@ -842,9 +852,14 @@ Retorna o registro de um(a) negociação pelo ID.
 
 ```json
 {
-  "error": {
+  "error": "negociação não encontrado.",
+  "message": "negociação não encontrado.",
+  "code": "not_found",
+  "details": null,
+  "error_object": {
     "code": "not_found",
-    "message": "negociação não encontrado."
+    "message": "negociação não encontrado.",
+    "details": null
   }
 }
 ```
@@ -1800,9 +1815,14 @@ Retorna o registro de um(a) produto pelo ID.
 
 ```json
 {
-  "error": {
+  "error": "produto não encontrado.",
+  "message": "produto não encontrado.",
+  "code": "not_found",
+  "details": null,
+  "error_object": {
     "code": "not_found",
-    "message": "produto não encontrado."
+    "message": "produto não encontrado.",
+    "details": null
   }
 }
 ```
@@ -2015,9 +2035,14 @@ Retorna o registro de um(a) categoria de produto pelo ID.
 
 ```json
 {
-  "error": {
+  "error": "categoria de produto não encontrado.",
+  "message": "categoria de produto não encontrado.",
+  "code": "not_found",
+  "details": null,
+  "error_object": {
     "code": "not_found",
-    "message": "categoria de produto não encontrado."
+    "message": "categoria de produto não encontrado.",
+    "details": null
   }
 }
 ```
@@ -2146,7 +2171,7 @@ Funis de vendas. Cada funil contém múltiplas etapas (stages) ordenadas. Você 
 
 `GET` `/pipelines`
 
-Retorna a lista paginada de funis do workspace autenticado, com suporte a busca, filtros e ordenação.
+Retorna a lista paginada de funis do workspace autenticado, com suporte a busca, filtros e ordenação. Cada funil retornado inclui o array `stages` com suas etapas ordenadas por `position`.
 
 **Query Parameters**
 
@@ -2169,14 +2194,46 @@ Retorna a lista paginada de funis do workspace autenticado, com suporte a busca,
       "name": "Vendas Inbound",
       "position": 1,
       "is_default": true,
-      "created_at": "2026-01-01T00:00:00Z"
+      "created_at": "2026-01-01T00:00:00Z",
+      "stages": [
+        {
+          "id": "s0000000-0000-0000-0000-000000000001",
+          "pipeline_id": "p0000000-0000-0000-0000-000000000001",
+          "name": "Novo lead",
+          "position": 0,
+          "color": "#94a3b8",
+          "is_won": false,
+          "is_lost": false,
+          "sla_days": null
+        },
+        {
+          "id": "s0000000-0000-0000-0000-000000000002",
+          "pipeline_id": "p0000000-0000-0000-0000-000000000001",
+          "name": "Qualificado",
+          "position": 1,
+          "color": "#3b82f6",
+          "is_won": false,
+          "is_lost": false,
+          "sla_days": 2
+        },
+        {
+          "id": "s0000000-0000-0000-0000-000000000003",
+          "pipeline_id": "p0000000-0000-0000-0000-000000000001",
+          "name": "Ganho",
+          "position": 2,
+          "color": "#10b981",
+          "is_won": true,
+          "is_lost": false,
+          "sla_days": null
+        }
+      ]
     }
   ],
   "meta": {
-    "total": 142,
+    "total": 1,
     "page": 1,
     "page_size": 20,
-    "next": "/pipelines?page=2",
+    "next": null,
     "prev": null
   }
 }
@@ -2186,7 +2243,7 @@ Retorna a lista paginada de funis do workspace autenticado, com suporte a busca,
 
 `GET` `/pipelines/{id}`
 
-Retorna o registro de um(a) funil pelo ID.
+Retorna o registro de um(a) funil pelo ID. A resposta inclui o array `stages` com as etapas do funil ordenadas por `position`.
 
 **Exemplo de Resposta:**
 
@@ -2197,7 +2254,39 @@ Retorna o registro de um(a) funil pelo ID.
     "name": "Vendas Inbound",
     "position": 1,
     "is_default": true,
-    "created_at": "2026-01-01T00:00:00Z"
+    "created_at": "2026-01-01T00:00:00Z",
+    "stages": [
+      {
+        "id": "s0000000-0000-0000-0000-000000000001",
+        "pipeline_id": "p0000000-0000-0000-0000-000000000001",
+        "name": "Novo lead",
+        "position": 0,
+        "color": "#94a3b8",
+        "is_won": false,
+        "is_lost": false,
+        "sla_days": null
+      },
+      {
+        "id": "s0000000-0000-0000-0000-000000000002",
+        "pipeline_id": "p0000000-0000-0000-0000-000000000001",
+        "name": "Qualificado",
+        "position": 1,
+        "color": "#3b82f6",
+        "is_won": false,
+        "is_lost": false,
+        "sla_days": 2
+      },
+      {
+        "id": "s0000000-0000-0000-0000-000000000003",
+        "pipeline_id": "p0000000-0000-0000-0000-000000000001",
+        "name": "Ganho",
+        "position": 2,
+        "color": "#10b981",
+        "is_won": true,
+        "is_lost": false,
+        "sla_days": null
+      }
+    ]
   }
 }
 ```
@@ -2206,9 +2295,14 @@ Retorna o registro de um(a) funil pelo ID.
 
 ```json
 {
-  "error": {
+  "error": "funil não encontrado.",
+  "message": "funil não encontrado.",
+  "code": "not_found",
+  "details": null,
+  "error_object": {
     "code": "not_found",
-    "message": "funil não encontrado."
+    "message": "funil não encontrado.",
+    "details": null
   }
 }
 ```
@@ -2294,6 +2388,16 @@ Cria um(a) novo(a) funil no workspace autenticado.
         "is_won": false,
         "is_lost": false,
         "sla_days": 2
+      },
+      {
+        "id": "s0000000-0000-0000-0000-000000000003",
+        "pipeline_id": "p0000000-0000-0000-0000-000000000001",
+        "name": "Ganho",
+        "position": 2,
+        "color": "#10b981",
+        "is_won": true,
+        "is_lost": false,
+        "sla_days": null
       }
     ]
   }
@@ -2725,9 +2829,14 @@ Retorna o registro de um(a) motivo de perda pelo ID.
 
 ```json
 {
-  "error": {
+  "error": "motivo de perda não encontrado.",
+  "message": "motivo de perda não encontrado.",
+  "code": "not_found",
+  "details": null,
+  "error_object": {
     "code": "not_found",
-    "message": "motivo de perda não encontrado."
+    "message": "motivo de perda não encontrado.",
+    "details": null
   }
 }
 ```
@@ -2918,9 +3027,14 @@ Retorna o registro de um(a) motivo de ganho pelo ID.
 
 ```json
 {
-  "error": {
+  "error": "motivo de ganho não encontrado.",
+  "message": "motivo de ganho não encontrado.",
+  "code": "not_found",
+  "details": null,
+  "error_object": {
     "code": "not_found",
-    "message": "motivo de ganho não encontrado."
+    "message": "motivo de ganho não encontrado.",
+    "details": null
   }
 }
 ```
@@ -3112,9 +3226,14 @@ Retorna o registro de um(a) tag pelo ID.
 
 ```json
 {
-  "error": {
+  "error": "tag não encontrado.",
+  "message": "tag não encontrado.",
+  "code": "not_found",
+  "details": null,
+  "error_object": {
     "code": "not_found",
-    "message": "tag não encontrado."
+    "message": "tag não encontrado.",
+    "details": null
   }
 }
 ```
@@ -3308,9 +3427,14 @@ Retorna o registro de um(a) origem pelo ID.
 
 ```json
 {
-  "error": {
+  "error": "origem não encontrado.",
+  "message": "origem não encontrado.",
+  "code": "not_found",
+  "details": null,
+  "error_object": {
     "code": "not_found",
-    "message": "origem não encontrado."
+    "message": "origem não encontrado.",
+    "details": null
   }
 }
 ```
@@ -3326,7 +3450,7 @@ Cria um(a) novo(a) origem no workspace autenticado.
 | Nome | Tipo | Obrigatório | Descrição |
 |------|------|-------------|-----------|
 | name | string | Sim | Nome da origem (fonte). |
-| group_id | uuid | Não | Grupo de origem ao qual a fonte pertence. |
+| group_id | uuid | Não | Grupo de origem ao qual a fonte pertence. Opcional — pode ser nulo. |
 | external_sync_code | string | Não | Código externo de sincronização. Use o identificador do registro no sistema de origem (ex.: ID no RD Station, código no ERP) para evitar duplicidade em integrações. **Único por workspace**: tentativas de criar ou atualizar um registro com um `external_sync_code` já existente retornam erro `409 conflict`. |
 
 **Exemplo de Request Body:**
@@ -3361,7 +3485,7 @@ Atualiza todos os campos editáveis de um(a) origem. Campos omitidos serão limp
 | Nome | Tipo | Obrigatório | Descrição |
 |------|------|-------------|-----------|
 | name | string | Sim | Nome da origem (fonte). |
-| group_id | uuid | Não | Grupo de origem ao qual a fonte pertence. |
+| group_id | uuid | Não | Grupo de origem ao qual a fonte pertence. Opcional — pode ser nulo. |
 | external_sync_code | string | Não | Código externo de sincronização. Use o identificador do registro no sistema de origem (ex.: ID no RD Station, código no ERP) para evitar duplicidade em integrações. **Único por workspace**: tentativas de criar ou atualizar um registro com um `external_sync_code` já existente retornam erro `409 conflict`. |
 
 **Exemplo de Request Body:**
@@ -3396,7 +3520,7 @@ Atualiza apenas os campos enviados no body. Use para edições incrementais.
 | Nome | Tipo | Obrigatório | Descrição |
 |------|------|-------------|-----------|
 | name | string | Não | Nome da origem (fonte). |
-| group_id | uuid | Não | Grupo de origem ao qual a fonte pertence. |
+| group_id | uuid | Não | Grupo de origem ao qual a fonte pertence. Opcional — pode ser nulo. |
 | external_sync_code | string | Não | Código externo de sincronização. Use o identificador do registro no sistema de origem (ex.: ID no RD Station, código no ERP) para evitar duplicidade em integrações. **Único por workspace**: tentativas de criar ou atualizar um registro com um `external_sync_code` já existente retornam erro `409 conflict`. |
 
 **Exemplo de Request Body:**
@@ -3504,9 +3628,14 @@ Retorna o registro de um(a) grupo de origem pelo ID.
 
 ```json
 {
-  "error": {
+  "error": "grupo de origem não encontrado.",
+  "message": "grupo de origem não encontrado.",
+  "code": "not_found",
+  "details": null,
+  "error_object": {
     "code": "not_found",
-    "message": "grupo de origem não encontrado."
+    "message": "grupo de origem não encontrado.",
+    "details": null
   }
 }
 ```
@@ -3694,9 +3823,14 @@ Retorna o registro de um(a) canal pelo ID.
 
 ```json
 {
-  "error": {
+  "error": "canal não encontrado.",
+  "message": "canal não encontrado.",
+  "code": "not_found",
+  "details": null,
+  "error_object": {
     "code": "not_found",
-    "message": "canal não encontrado."
+    "message": "canal não encontrado.",
+    "details": null
   }
 }
 ```
@@ -3892,9 +4026,14 @@ Retorna o registro de um(a) tipo de atividade pelo ID.
 
 ```json
 {
-  "error": {
+  "error": "tipo de atividade não encontrado.",
+  "message": "tipo de atividade não encontrado.",
+  "code": "not_found",
+  "details": null,
+  "error_object": {
     "code": "not_found",
-    "message": "tipo de atividade não encontrado."
+    "message": "tipo de atividade não encontrado.",
+    "details": null
   }
 }
 ```
@@ -4130,9 +4269,14 @@ Retorna o registro de um(a) campo personalizado pelo ID.
 
 ```json
 {
-  "error": {
+  "error": "campo personalizado não encontrado.",
+  "message": "campo personalizado não encontrado.",
+  "code": "not_found",
+  "details": null,
+  "error_object": {
     "code": "not_found",
-    "message": "campo personalizado não encontrado."
+    "message": "campo personalizado não encontrado.",
+    "details": null
   }
 }
 ```
@@ -4386,9 +4530,14 @@ Retorna o registro de um(a) template de e-mail pelo ID.
 
 ```json
 {
-  "error": {
+  "error": "template de e-mail não encontrado.",
+  "message": "template de e-mail não encontrado.",
+  "code": "not_found",
+  "details": null,
+  "error_object": {
     "code": "not_found",
-    "message": "template de e-mail não encontrado."
+    "message": "template de e-mail não encontrado.",
+    "details": null
   }
 }
 ```
@@ -4624,9 +4773,14 @@ Retorna o registro de um(a) automação pelo ID.
 
 ```json
 {
-  "error": {
+  "error": "automação não encontrado.",
+  "message": "automação não encontrado.",
+  "code": "not_found",
+  "details": null,
+  "error_object": {
     "code": "not_found",
-    "message": "automação não encontrado."
+    "message": "automação não encontrado.",
+    "details": null
   }
 }
 ```
@@ -4888,9 +5042,14 @@ Retorna o registro de um(a) regra de lead scoring pelo ID.
 
 ```json
 {
-  "error": {
+  "error": "regra de lead scoring não encontrado.",
+  "message": "regra de lead scoring não encontrado.",
+  "code": "not_found",
+  "details": null,
+  "error_object": {
     "code": "not_found",
-    "message": "regra de lead scoring não encontrado."
+    "message": "regra de lead scoring não encontrado.",
+    "details": null
   }
 }
 ```
@@ -5126,9 +5285,14 @@ Retorna o registro de um(a) regra de distribuição pelo ID.
 
 ```json
 {
-  "error": {
+  "error": "regra de distribuição não encontrado.",
+  "message": "regra de distribuição não encontrado.",
+  "code": "not_found",
+  "details": null,
+  "error_object": {
     "code": "not_found",
-    "message": "regra de distribuição não encontrado."
+    "message": "regra de distribuição não encontrado.",
+    "details": null
   }
 }
 ```
@@ -5359,9 +5523,14 @@ Retorna o registro de um(a) webhook pelo ID.
 
 ```json
 {
-  "error": {
+  "error": "webhook não encontrado.",
+  "message": "webhook não encontrado.",
+  "code": "not_found",
+  "details": null,
+  "error_object": {
     "code": "not_found",
-    "message": "webhook não encontrado."
+    "message": "webhook não encontrado.",
+    "details": null
   }
 }
 ```
@@ -5642,4 +5811,4 @@ Retorna o usuário associado ao token de API utilizado na requisição.
 
 ---
 
-*Documentação gerada automaticamente. Última atualização: 2026-05-29*
+*Documentação gerada automaticamente. Última atualização: 2026-06-11*

@@ -155,8 +155,8 @@ export const wonReasonFields: INodeProperties[] = [
 		description: 'Text search in won reason names',
 	},
 	{
-		displayName: 'Sort',
-		name: 'sort',
+		displayName: 'Order By',
+		name: 'orderBy',
 		type: 'string',
 		default: '',
 		displayOptions: {
@@ -165,7 +165,24 @@ export const wonReasonFields: INodeProperties[] = [
 				operation: ['list'],
 			},
 		},
-		description: 'Field to sort by. Prefix with - for descending. E.g. -created_at',
+		description: 'Field to sort by. E.g. created_at',
+	},
+	{
+		displayName: 'Order Direction',
+		name: 'orderDirection',
+		type: 'options',
+		options: [
+			{ name: 'Ascending', value: 'asc' },
+			{ name: 'Descending', value: 'desc' },
+		],
+		default: 'desc',
+		displayOptions: {
+			show: {
+				resource: ['wonReason'],
+				operation: ['list'],
+			},
+		},
+		description: 'Sort direction (asc or desc)',
 	},
 	{
 		displayName: 'Additional Fields',
@@ -180,20 +197,6 @@ export const wonReasonFields: INodeProperties[] = [
 			},
 		},
 		options: [
-			{
-				displayName: 'Created After',
-				name: 'created_after',
-				type: 'dateTime',
-				default: '',
-				description: 'Filter reasons created after this date',
-			},
-			{
-				displayName: 'Created Before',
-				name: 'created_before',
-				type: 'dateTime',
-				default: '',
-				description: 'Filter reasons created before this date',
-			},
 			{
 				displayName: 'External Sync Code',
 				name: 'external_sync_code',

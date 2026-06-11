@@ -176,8 +176,8 @@ export const activityFields: INodeProperties[] = [
 		description: 'Text search in titles',
 	},
 	{
-		displayName: 'Sort',
-		name: 'sort',
+		displayName: 'Order By',
+		name: 'orderBy',
 		type: 'string',
 		default: '',
 		displayOptions: {
@@ -186,7 +186,24 @@ export const activityFields: INodeProperties[] = [
 				operation: ['list'],
 			},
 		},
-		description: 'Field to sort by. Prefix with - for descending. E.g. -created_at',
+		description: 'Field to sort by. E.g. created_at',
+	},
+	{
+		displayName: 'Order Direction',
+		name: 'orderDirection',
+		type: 'options',
+		options: [
+			{ name: 'Ascending', value: 'asc' },
+			{ name: 'Descending', value: 'desc' },
+		],
+		default: 'desc',
+		displayOptions: {
+			show: {
+				resource: ['activity'],
+				operation: ['list'],
+			},
+		},
+		description: 'Sort direction (asc or desc)',
 	},
 	{
 		displayName: 'Additional Fields',
@@ -333,6 +350,11 @@ export const activityFields: INodeProperties[] = [
 				name: 'title',
 				type: 'string',
 				default: '',
+				displayOptions: {
+					show: {
+						'/operation': ['update', 'patch'],
+					},
+				},
 				description: 'Title of the activity',
 			},
 		],

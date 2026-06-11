@@ -167,8 +167,8 @@ export const contactFields: INodeProperties[] = [
 		description: 'Text search in name, email, or title',
 	},
 	{
-		displayName: 'Sort',
-		name: 'sort',
+		displayName: 'Order By',
+		name: 'orderBy',
 		type: 'string',
 		default: '',
 		displayOptions: {
@@ -177,7 +177,24 @@ export const contactFields: INodeProperties[] = [
 				operation: ['list'],
 			},
 		},
-		description: 'Field to sort by. Prefix with - for descending. E.g. -created_at',
+		description: 'Field to sort by. E.g. created_at',
+	},
+	{
+		displayName: 'Order Direction',
+		name: 'orderDirection',
+		type: 'options',
+		options: [
+			{ name: 'Ascending', value: 'asc' },
+			{ name: 'Descending', value: 'desc' },
+		],
+		default: 'desc',
+		displayOptions: {
+			show: {
+				resource: ['contact'],
+				operation: ['list'],
+			},
+		},
+		description: 'Sort direction (asc or desc)',
 	},
 	{
 		displayName: 'Additional Fields',
@@ -192,20 +209,6 @@ export const contactFields: INodeProperties[] = [
 			},
 		},
 		options: [
-			{
-				displayName: 'Created After',
-				name: 'created_after',
-				type: 'dateTime',
-				default: '',
-				description: 'Filter contacts created after this date',
-			},
-			{
-				displayName: 'Created Before',
-				name: 'created_before',
-				type: 'dateTime',
-				default: '',
-				description: 'Filter contacts created before this date',
-			},
 			{
 				displayName: 'Email',
 				name: 'email',
@@ -234,13 +237,6 @@ export const contactFields: INodeProperties[] = [
 				type: 'string',
 				default: '',
 				description: 'Filter by organization',
-			},
-			{
-				displayName: 'Owner ID',
-				name: 'owner_id',
-				type: 'string',
-				default: '',
-				description: 'Filter by owner / seller',
 			},
 			{
 				displayName: 'Phone',

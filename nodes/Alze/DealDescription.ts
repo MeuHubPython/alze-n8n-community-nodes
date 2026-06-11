@@ -165,8 +165,8 @@ export const dealFields: INodeProperties[] = [
 	{
 		displayName: 'Won Reason ID',
 		name: 'wonReasonId',
-		type: 'string',
-		default: '',
+		type: 'number',
+		default: 0,
 		displayOptions: {
 			show: {
 				resource: ['deal'],
@@ -198,8 +198,8 @@ export const dealFields: INodeProperties[] = [
 	{
 		displayName: 'Lost Reason ID',
 		name: 'lostReasonId',
-		type: 'string',
-		default: '',
+		type: 'number',
+		default: 0,
 		displayOptions: {
 			show: {
 				resource: ['deal'],
@@ -367,8 +367,8 @@ export const dealFields: INodeProperties[] = [
 		description: 'Text search in titles',
 	},
 	{
-		displayName: 'Sort',
-		name: 'sort',
+		displayName: 'Order By',
+		name: 'orderBy',
 		type: 'string',
 		default: '',
 		displayOptions: {
@@ -377,7 +377,24 @@ export const dealFields: INodeProperties[] = [
 				operation: ['list'],
 			},
 		},
-		description: 'Field to sort by. Prefix with - for descending. E.g. -created_at',
+		description: 'Field to sort by. E.g. created_at',
+	},
+	{
+		displayName: 'Order Direction',
+		name: 'orderDirection',
+		type: 'options',
+		options: [
+			{ name: 'Ascending', value: 'asc' },
+			{ name: 'Descending', value: 'desc' },
+		],
+		default: 'desc',
+		displayOptions: {
+			show: {
+				resource: ['deal'],
+				operation: ['list'],
+			},
+		},
+		description: 'Sort direction (asc or desc)',
 	},
 	{
 		displayName: 'Additional Fields',
@@ -398,34 +415,6 @@ export const dealFields: INodeProperties[] = [
 				type: 'string',
 				default: '',
 				description: 'Filter by contact (person) ID',
-			},
-			{
-				displayName: 'Created After',
-				name: 'created_after',
-				type: 'dateTime',
-				default: '',
-				description: 'Filter deals created after this date',
-			},
-			{
-				displayName: 'Created Before',
-				name: 'created_before',
-				type: 'dateTime',
-				default: '',
-				description: 'Filter deals created before this date',
-			},
-			{
-				displayName: 'Expected Close After',
-				name: 'expected_close_after',
-				type: 'dateTime',
-				default: '',
-				description: 'Filter by expectation close date >= value',
-			},
-			{
-				displayName: 'Expected Close Before',
-				name: 'expected_close_before',
-				type: 'dateTime',
-				default: '',
-				description: 'Filter by expectation close date <= value',
 			},
 			{
 				displayName: 'External Sync Code',
@@ -473,6 +462,18 @@ export const dealFields: INodeProperties[] = [
 				],
 				default: 'open',
 				description: 'Filter by status',
+			},
+			{
+				displayName: 'Temperature',
+				name: 'temperature',
+				type: 'options',
+				options: [
+					{ name: 'Cold', value: 'cold' },
+					{ name: 'Warm', value: 'warm' },
+					{ name: 'Hot', value: 'hot' },
+				],
+				default: 'warm',
+				description: 'Filter by qualitative temperature of the lead',
 			},
 		],
 	},
@@ -786,6 +787,19 @@ export const dealFields: INodeProperties[] = [
 			},
 		},
 		description: 'Whether to pin the note to the top',
+	},
+	{
+		displayName: 'External Sync Code',
+		name: 'externalSyncCode',
+		type: 'string',
+		default: '',
+		displayOptions: {
+			show: {
+				resource: ['deal'],
+				operation: ['addNote', 'updateNote'],
+			},
+		},
+		description: 'External synchronization code',
 	},
 	{
 		displayName: 'Additional Fields',

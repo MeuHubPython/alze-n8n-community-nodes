@@ -107,23 +107,7 @@ export const productFields: INodeProperties[] = [
 		},
 		description: 'Type of the item (product or service)',
 	},
-	{
-		displayName: 'Price',
-		name: 'price',
-		type: 'number',
-		typeOptions: {
-			numberPrecision: 2,
-		},
-		required: true,
-		default: 0,
-		displayOptions: {
-			show: {
-				resource: ['product'],
-				operation: ['create'],
-			},
-		},
-		description: 'Unit price of the product',
-	},
+
 
 	// ----------------------------------
 	//         product: update
@@ -160,23 +144,7 @@ export const productFields: INodeProperties[] = [
 		},
 		description: 'Type of the item (product or service)',
 	},
-	{
-		displayName: 'Price',
-		name: 'priceUpdate',
-		type: 'number',
-		typeOptions: {
-			numberPrecision: 2,
-		},
-		required: true,
-		default: 0,
-		displayOptions: {
-			show: {
-				resource: ['product'],
-				operation: ['update'],
-			},
-		},
-		description: 'Unit price of the product',
-	},
+
 
 	// ----------------------------------
 	//         product: list
@@ -225,8 +193,8 @@ export const productFields: INodeProperties[] = [
 		description: 'Text search in name or description',
 	},
 	{
-		displayName: 'Sort',
-		name: 'sort',
+		displayName: 'Order By',
+		name: 'orderBy',
 		type: 'string',
 		default: '',
 		displayOptions: {
@@ -235,7 +203,24 @@ export const productFields: INodeProperties[] = [
 				operation: ['list'],
 			},
 		},
-		description: 'Field to sort by. Prefix with - for descending. E.g. -created_at',
+		description: 'Field to sort by. E.g. created_at',
+	},
+	{
+		displayName: 'Order Direction',
+		name: 'orderDirection',
+		type: 'options',
+		options: [
+			{ name: 'Ascending', value: 'asc' },
+			{ name: 'Descending', value: 'desc' },
+		],
+		default: 'desc',
+		displayOptions: {
+			show: {
+				resource: ['product'],
+				operation: ['list'],
+			},
+		},
+		description: 'Sort direction (asc or desc)',
 	},
 	{
 		displayName: 'Additional Fields',
@@ -251,25 +236,11 @@ export const productFields: INodeProperties[] = [
 		},
 		options: [
 			{
-				displayName: 'Active',
-				name: 'active',
-				type: 'boolean',
-				default: true,
-				description: 'Whether to filter only active/inactive items',
-			},
-			{
-				displayName: 'Created After',
-				name: 'created_after',
-				type: 'dateTime',
-				default: '',
-				description: 'Filter products created after this date',
-			},
-			{
-				displayName: 'Created Before',
-				name: 'created_before',
-				type: 'dateTime',
-				default: '',
-				description: 'Filter products created before this date',
+				displayName: 'Category ID',
+				name: 'category_id',
+				type: 'number',
+				default: 0,
+				description: 'Filter by category ID',
 			},
 			{
 				displayName: 'External Sync Code',
@@ -279,11 +250,15 @@ export const productFields: INodeProperties[] = [
 				description: 'Filter by external synchronization code',
 			},
 			{
-				displayName: 'SKU',
-				name: 'sku',
-				type: 'string',
-				default: '',
-				description: 'Filter by exact Stock Keeping Unit code',
+				displayName: 'Type',
+				name: 'type',
+				type: 'options',
+				options: [
+					{ name: 'Product', value: 'product' },
+					{ name: 'Service', value: 'service' },
+				],
+				default: 'product',
+				description: 'Filter by item type (product or service)',
 			},
 		],
 	},
@@ -312,13 +287,6 @@ export const productFields: INodeProperties[] = [
 				description: 'Currency code in ISO 4217, default: BRL',
 			},
 			{
-				displayName: 'Description',
-				name: 'description',
-				type: 'string',
-				default: '',
-				description: 'Detailed description of the product',
-			},
-			{
 				displayName: 'External Sync Code',
 				name: 'external_sync_code',
 				type: 'string',
@@ -339,25 +307,13 @@ export const productFields: INodeProperties[] = [
 			},
 			{
 				displayName: 'Price',
-				name: 'pricePatch',
+				name: 'price',
 				type: 'number',
 				typeOptions: {
 					numberPrecision: 2,
 				},
 				default: 0,
-				displayOptions: {
-					show: {
-						'/operation': ['patch'],
-					},
-				},
 				description: 'Unit price of the product',
-			},
-			{
-				displayName: 'SKU',
-				name: 'sku',
-				type: 'string',
-				default: '',
-				description: 'Stock Keeping Unit (unique code)',
 			},
 			{
 				displayName: 'Type',
