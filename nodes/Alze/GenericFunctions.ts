@@ -39,6 +39,8 @@ export async function alzeApiRequest(
 		}
 	}
 
+	const fullUrl = uri || `https://hjjqtkdmxpqzjjlsebfv.supabase.co/functions/v1/public-api/api/v1${resource}`;
+
 	const options: IHttpRequestOptions = {
 		headers: {
 			'Authorization': `Bearer ${apiKey}`,
@@ -48,7 +50,7 @@ export async function alzeApiRequest(
 		method,
 		body: cleanedBody,
 		qs: cleanedQs,
-		url: uri || `https://hjjqtkdmxpqzjjlsebfv.supabase.co/functions/v1/public-api/api/v1${resource}`,
+		url: fullUrl,
 		json: true,
 	};
 
@@ -56,9 +58,41 @@ export async function alzeApiRequest(
 		delete options.body;
 	}
 
-	// eslint-disable-next-line @n8n/community-nodes/no-http-request-with-manual-auth
-	return this.helpers.httpRequest(options);
+	try {
+		// eslint-disable-next-line @n8n/community-nodes/no-http-request-with-manual-auth
+		return await this.helpers.httpRequest(options);
+	} catch (error: any) { // eslint-disable-line @typescript-eslint/no-explicit-any
+		// Extract meaningful error message from the API response body
+		const statusCode: number = error.response?.status ?? error.statusCode ?? 0;
+		const responseBody = error.response?.data ?? error.response?.body ?? error.cause?.response?.data;
+
+		let apiMessage: string | undefined;
+		if (responseBody) {
+			if (typeof responseBody === 'string') {
+				apiMessage = responseBody;
+			} else if (typeof responseBody === 'object') {
+				apiMessage =
+					responseBody.message ??
+					responseBody.error ??
+					responseBody.detail ??
+					JSON.stringify(responseBody);
+			}
+		}
+
+		const label = statusCode ? `[${statusCode}]` : '';
+		const context = `${method} ${fullUrl}`;
+		const message = apiMessage
+			? `${label} ${apiMessage} — ${context}`
+			: `${label} Request failed — ${context}`;
+
+		throw new NodeOperationError(
+			('getNode' in this ? this.getNode() : {} as INode),
+			message,
+			{ description: apiMessage ?? error.message },
+		);
+	}
 }
+
 
 /**
  * Handle Alze CRM API request with automatic page pagination if "Return All" is selected.
