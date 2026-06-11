@@ -126,6 +126,8 @@ export function handleCustomFields(node: INode, body: IDataObject, properties: I
 			throw new NodeOperationError(node, 'Custom Fields JSON is invalid. Please provide a valid JSON object.');
 		}
 	}
+	delete body.customFieldsUi;
+	delete body.customFieldsJson;
 }
 
 /**
