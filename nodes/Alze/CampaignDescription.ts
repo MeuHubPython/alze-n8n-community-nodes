@@ -1,6 +1,6 @@
 import { INodeProperties } from 'n8n-workflow';
 
-export const channelOperations: INodeProperties[] = [
+export const campaignOperations: INodeProperties[] = [
 	{
 		displayName: 'Operation',
 		name: 'operation',
@@ -8,72 +8,72 @@ export const channelOperations: INodeProperties[] = [
 		noDataExpression: true,
 		displayOptions: {
 			show: {
-				resource: ['channel'],
+				resource: ['campaign'],
 			},
 		},
 		options: [
 			{
 				name: 'Create',
 				value: 'create',
-				description: 'Create a new channel',
-				action: 'Create a channel',
+				description: 'Create a new campaign',
+				action: 'Create a campaign',
 			},
 			{
 				name: 'Delete',
 				value: 'delete',
-				description: 'Delete a channel',
-				action: 'Delete a channel',
+				description: 'Delete a campaign',
+				action: 'Delete a campaign',
 			},
 			{
 				name: 'Get',
 				value: 'get',
-				description: 'Get details of a channel',
-				action: 'Get a channel',
+				description: 'Get details of a campaign',
+				action: 'Get a campaign',
 			},
 			{
 				name: 'Get Many',
 				value: 'list',
-				description: 'List channels',
-				action: 'Get many channels',
+				description: 'List campaigns',
+				action: 'Get many campaigns',
 			},
 			{
 				name: 'Update',
 				value: 'update',
-				description: 'Update a channel (clears omitted fields)',
-				action: 'Update a channel',
+				description: 'Update a campaign (clears omitted fields)',
+				action: 'Update a campaign',
 			},
 			{
 				name: 'Update Partial',
 				value: 'patch',
-				description: 'Update a channel partially (incremental edit)',
-				action: 'Update partial channel',
+				description: 'Update a campaign partially (incremental edit)',
+				action: 'Update partial campaign',
 			},
 		],
 		default: 'list',
 	},
 ];
 
-export const channelFields: INodeProperties[] = [
+export const campaignFields: INodeProperties[] = [
 	// ----------------------------------
-	//         channel: get / delete / update / patch
+	//         campaign: get / delete / update / patch
 	// ----------------------------------
 	{
-		displayName: 'Channel ID',
-		name: 'channelId',
+		displayName: 'Campaign ID',
+		name: 'campaignId',
 		type: 'string',
 		required: true,
 		default: '',
 		displayOptions: {
 			show: {
-				resource: ['channel'],
+				resource: ['campaign'],
 				operation: ['get', 'delete', 'update', 'patch'],
 			},
 		},
-		description: 'The ID of the channel',
+		description: 'The ID of the campaign',
 	},
 
 	// ----------------------------------
-	//         channel: create
+	//         campaign: create
 	// ----------------------------------
 	{
 		displayName: 'Name',
@@ -83,15 +83,15 @@ export const channelFields: INodeProperties[] = [
 		default: '',
 		displayOptions: {
 			show: {
-				resource: ['channel'],
+				resource: ['campaign'],
 				operation: ['create'],
 			},
 		},
-		description: 'Name/title of the channel',
+		description: 'Name/title of the campaign',
 	},
 
 	// ----------------------------------
-	//         channel: update
+	//         campaign: update
 	// ----------------------------------
 	{
 		displayName: 'Name',
@@ -101,15 +101,15 @@ export const channelFields: INodeProperties[] = [
 		default: '',
 		displayOptions: {
 			show: {
-				resource: ['channel'],
+				resource: ['campaign'],
 				operation: ['update'],
 			},
 		},
-		description: 'Name/title of the channel',
+		description: 'Name/title of the campaign',
 	},
 
 	// ----------------------------------
-	//         channel: list
+	//         campaign: list
 	// ----------------------------------
 	{
 		displayName: 'Return All',
@@ -118,7 +118,7 @@ export const channelFields: INodeProperties[] = [
 		displayOptions: {
 			show: {
 				operation: ['list'],
-				resource: ['channel'],
+				resource: ['campaign'],
 			},
 		},
 		default: false,
@@ -131,7 +131,7 @@ export const channelFields: INodeProperties[] = [
 		displayOptions: {
 			show: {
 				operation: ['list'],
-				resource: ['channel'],
+				resource: ['campaign'],
 				returnAll: [false],
 			},
 		},
@@ -149,7 +149,7 @@ export const channelFields: INodeProperties[] = [
 		displayOptions: {
 			show: {
 				operation: ['list'],
-				resource: ['channel'],
+				resource: ['campaign'],
 			},
 		},
 		default: '',
@@ -162,7 +162,7 @@ export const channelFields: INodeProperties[] = [
 		displayOptions: {
 			show: {
 				operation: ['list'],
-				resource: ['channel'],
+				resource: ['campaign'],
 			},
 		},
 		default: '',
@@ -176,17 +176,17 @@ export const channelFields: INodeProperties[] = [
 		default: {},
 		displayOptions: {
 			show: {
-				resource: ['channel'],
+				resource: ['campaign'],
 				operation: ['list'],
 			},
 		},
 		options: [
 			{
-				displayName: 'Campaign ID',
-				name: 'campaign_id',
+				displayName: 'Source ID',
+				name: 'source_id',
 				type: 'string',
 				default: '',
-				description: 'Filter by campaign ID',
+				description: 'Filter by source ID',
 			},
 			{
 				displayName: 'External Sync Code',
@@ -195,18 +195,11 @@ export const channelFields: INodeProperties[] = [
 				default: '',
 				description: 'Filter by external synchronization code',
 			},
-			{
-				displayName: 'Source ID',
-				name: 'source_id',
-				type: 'string',
-				default: '',
-				description: 'Filter by source ID',
-			},
 		],
 	},
 
 	// ----------------------------------
-	//         channel: create / update / patch options
+	//         campaign: create / update / patch options
 	// ----------------------------------
 	{
 		displayName: 'Fields to Set',
@@ -216,17 +209,17 @@ export const channelFields: INodeProperties[] = [
 		default: {},
 		displayOptions: {
 			show: {
-				resource: ['channel'],
+				resource: ['campaign'],
 				operation: ['create', 'update', 'patch'],
 			},
 		},
 		options: [
 			{
-				displayName: 'Campaign ID',
-				name: 'campaign_id',
+				displayName: 'Source ID',
+				name: 'source_id',
 				type: 'string',
 				default: '',
-				description: 'ID of the campaign to associate this channel with',
+				description: 'ID of the source to associate this campaign with',
 			},
 			{
 				displayName: 'External Sync Code',
@@ -245,14 +238,7 @@ export const channelFields: INodeProperties[] = [
 						'/operation': ['patch'],
 					},
 				},
-				description: 'Name of the channel',
-			},
-			{
-				displayName: 'Source ID',
-				name: 'source_id',
-				type: 'string',
-				default: '',
-				description: 'ID of the source to associate this channel with',
+				description: 'Name of the campaign',
 			},
 		],
 	},

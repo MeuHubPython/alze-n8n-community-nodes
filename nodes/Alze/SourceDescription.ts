@@ -1,6 +1,6 @@
 import { INodeProperties } from 'n8n-workflow';
 
-export const channelOperations: INodeProperties[] = [
+export const sourceOperations: INodeProperties[] = [
 	{
 		displayName: 'Operation',
 		name: 'operation',
@@ -8,72 +8,72 @@ export const channelOperations: INodeProperties[] = [
 		noDataExpression: true,
 		displayOptions: {
 			show: {
-				resource: ['channel'],
+				resource: ['source'],
 			},
 		},
 		options: [
 			{
 				name: 'Create',
 				value: 'create',
-				description: 'Create a new channel',
-				action: 'Create a channel',
+				description: 'Create a new source',
+				action: 'Create a source',
 			},
 			{
 				name: 'Delete',
 				value: 'delete',
-				description: 'Delete a channel',
-				action: 'Delete a channel',
+				description: 'Delete a source',
+				action: 'Delete a source',
 			},
 			{
 				name: 'Get',
 				value: 'get',
-				description: 'Get details of a channel',
-				action: 'Get a channel',
+				description: 'Get details of a source',
+				action: 'Get a source',
 			},
 			{
 				name: 'Get Many',
 				value: 'list',
-				description: 'List channels',
-				action: 'Get many channels',
+				description: 'List sources',
+				action: 'Get many sources',
 			},
 			{
 				name: 'Update',
 				value: 'update',
-				description: 'Update a channel (clears omitted fields)',
-				action: 'Update a channel',
+				description: 'Update a source (clears omitted fields)',
+				action: 'Update a source',
 			},
 			{
 				name: 'Update Partial',
 				value: 'patch',
-				description: 'Update a channel partially (incremental edit)',
-				action: 'Update partial channel',
+				description: 'Update a source partially (incremental edit)',
+				action: 'Update partial source',
 			},
 		],
 		default: 'list',
 	},
 ];
 
-export const channelFields: INodeProperties[] = [
+export const sourceFields: INodeProperties[] = [
 	// ----------------------------------
-	//         channel: get / delete / update / patch
+	//         source: get / delete / update / patch
 	// ----------------------------------
 	{
-		displayName: 'Channel ID',
-		name: 'channelId',
+		displayName: 'Source ID',
+		name: 'sourceId',
 		type: 'string',
 		required: true,
 		default: '',
 		displayOptions: {
 			show: {
-				resource: ['channel'],
+				resource: ['source'],
 				operation: ['get', 'delete', 'update', 'patch'],
 			},
 		},
-		description: 'The ID of the channel',
+		description: 'The ID of the source',
 	},
 
 	// ----------------------------------
-	//         channel: create
+	//         source: create
 	// ----------------------------------
 	{
 		displayName: 'Name',
@@ -83,15 +83,15 @@ export const channelFields: INodeProperties[] = [
 		default: '',
 		displayOptions: {
 			show: {
-				resource: ['channel'],
+				resource: ['source'],
 				operation: ['create'],
 			},
 		},
-		description: 'Name/title of the channel',
+		description: 'Name/title of the source',
 	},
 
 	// ----------------------------------
-	//         channel: update
+	//         source: update
 	// ----------------------------------
 	{
 		displayName: 'Name',
@@ -101,15 +101,15 @@ export const channelFields: INodeProperties[] = [
 		default: '',
 		displayOptions: {
 			show: {
-				resource: ['channel'],
+				resource: ['source'],
 				operation: ['update'],
 			},
 		},
-		description: 'Name/title of the channel',
+		description: 'Name/title of the source',
 	},
 
 	// ----------------------------------
-	//         channel: list
+	//         source: list
 	// ----------------------------------
 	{
 		displayName: 'Return All',
@@ -118,7 +118,7 @@ export const channelFields: INodeProperties[] = [
 		displayOptions: {
 			show: {
 				operation: ['list'],
-				resource: ['channel'],
+				resource: ['source'],
 			},
 		},
 		default: false,
@@ -131,7 +131,7 @@ export const channelFields: INodeProperties[] = [
 		displayOptions: {
 			show: {
 				operation: ['list'],
-				resource: ['channel'],
+				resource: ['source'],
 				returnAll: [false],
 			},
 		},
@@ -149,7 +149,7 @@ export const channelFields: INodeProperties[] = [
 		displayOptions: {
 			show: {
 				operation: ['list'],
-				resource: ['channel'],
+				resource: ['source'],
 			},
 		},
 		default: '',
@@ -162,7 +162,7 @@ export const channelFields: INodeProperties[] = [
 		displayOptions: {
 			show: {
 				operation: ['list'],
-				resource: ['channel'],
+				resource: ['source'],
 			},
 		},
 		default: '',
@@ -176,18 +176,11 @@ export const channelFields: INodeProperties[] = [
 		default: {},
 		displayOptions: {
 			show: {
-				resource: ['channel'],
+				resource: ['source'],
 				operation: ['list'],
 			},
 		},
 		options: [
-			{
-				displayName: 'Campaign ID',
-				name: 'campaign_id',
-				type: 'string',
-				default: '',
-				description: 'Filter by campaign ID',
-			},
 			{
 				displayName: 'External Sync Code',
 				name: 'external_sync_code',
@@ -195,18 +188,11 @@ export const channelFields: INodeProperties[] = [
 				default: '',
 				description: 'Filter by external synchronization code',
 			},
-			{
-				displayName: 'Source ID',
-				name: 'source_id',
-				type: 'string',
-				default: '',
-				description: 'Filter by source ID',
-			},
 		],
 	},
 
 	// ----------------------------------
-	//         channel: create / update / patch options
+	//         source: create / update / patch options
 	// ----------------------------------
 	{
 		displayName: 'Fields to Set',
@@ -216,18 +202,11 @@ export const channelFields: INodeProperties[] = [
 		default: {},
 		displayOptions: {
 			show: {
-				resource: ['channel'],
+				resource: ['source'],
 				operation: ['create', 'update', 'patch'],
 			},
 		},
 		options: [
-			{
-				displayName: 'Campaign ID',
-				name: 'campaign_id',
-				type: 'string',
-				default: '',
-				description: 'ID of the campaign to associate this channel with',
-			},
 			{
 				displayName: 'External Sync Code',
 				name: 'external_sync_code',
@@ -245,14 +224,7 @@ export const channelFields: INodeProperties[] = [
 						'/operation': ['patch'],
 					},
 				},
-				description: 'Name of the channel',
-			},
-			{
-				displayName: 'Source ID',
-				name: 'source_id',
-				type: 'string',
-				default: '',
-				description: 'ID of the source to associate this channel with',
+				description: 'Name of the source',
 			},
 		],
 	},

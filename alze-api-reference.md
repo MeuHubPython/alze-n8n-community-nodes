@@ -886,9 +886,12 @@ Cria um(a) novo(a) negociação no workspace autenticado.
 | organization_id | uuid | Não | Empresa associada. |
 | temperature | string (hot|warm|cold) | Não | Temperatura qualitativa do lead. |
 | custom_fields | object | Não | Campos customizados do workspace. |
-| lead_origin_id | uuid | Não | Origem (fonte) do lead. |
-| origin_group_id | uuid | Não | Grupo de origem. |
-| channel_id | uuid | Não | Canal / campanha associada. |
+| source_id | uuid | Não | Fonte (Source) do lead. Modelo atual. |
+| campaign_id | uuid | Não | Campanha associada à negociação. Modelo atual. |
+| channel_v2_id | uuid | Não | Canal (mídia / meio) associado à negociação. Modelo atual. |
+| lead_origin_id | uuid | Não | [Legado] Origem (fonte) do lead. Use `source_id` no novo modelo. |
+| origin_group_id | uuid | Não | [Legado] Grupo de origem. Use `source_id` no novo modelo. |
+| channel_id | uuid | Não | [Legado] Canal. Use `channel_v2_id` no novo modelo. |
 | external_sync_code | string | Não | Código externo de sincronização. Use o identificador do registro no sistema de origem (ex.: ID no RD Station, código no ERP) para evitar duplicidade em integrações. **Único por workspace**: tentativas de criar ou atualizar um registro com um `external_sync_code` já existente retornam erro `409 conflict`. |
 
 **Exemplo de Request Body:**
@@ -953,9 +956,12 @@ Atualiza todos os campos editáveis de um(a) negociação. Campos omitidos serã
 | organization_id | uuid | Não | Empresa associada. |
 | temperature | string (hot|warm|cold) | Não | Temperatura qualitativa do lead. |
 | custom_fields | object | Não | Campos customizados do workspace. |
-| lead_origin_id | uuid | Não | Origem (fonte) do lead. |
-| origin_group_id | uuid | Não | Grupo de origem. |
-| channel_id | uuid | Não | Canal / campanha associada. |
+| source_id | uuid | Não | Fonte (Source) do lead. Modelo atual. |
+| campaign_id | uuid | Não | Campanha associada à negociação. Modelo atual. |
+| channel_v2_id | uuid | Não | Canal (mídia / meio) associado à negociação. Modelo atual. |
+| lead_origin_id | uuid | Não | [Legado] Origem (fonte) do lead. Use `source_id` no novo modelo. |
+| origin_group_id | uuid | Não | [Legado] Grupo de origem. Use `source_id` no novo modelo. |
+| channel_id | uuid | Não | [Legado] Canal. Use `channel_v2_id` no novo modelo. |
 | external_sync_code | string | Não | Código externo de sincronização. Use o identificador do registro no sistema de origem (ex.: ID no RD Station, código no ERP) para evitar duplicidade em integrações. **Único por workspace**: tentativas de criar ou atualizar um registro com um `external_sync_code` já existente retornam erro `409 conflict`. |
 
 **Exemplo de Request Body:**
@@ -1020,9 +1026,12 @@ Atualiza apenas os campos enviados no body. Use para edições incrementais.
 | organization_id | uuid | Não | Empresa associada. |
 | temperature | string (hot|warm|cold) | Não | Temperatura qualitativa do lead. |
 | custom_fields | object | Não | Campos customizados do workspace. |
-| lead_origin_id | uuid | Não | Origem (fonte) do lead. |
-| origin_group_id | uuid | Não | Grupo de origem. |
-| channel_id | uuid | Não | Canal / campanha associada. |
+| source_id | uuid | Não | Fonte (Source) do lead. Modelo atual. |
+| campaign_id | uuid | Não | Campanha associada à negociação. Modelo atual. |
+| channel_v2_id | uuid | Não | Canal (mídia / meio) associado à negociação. Modelo atual. |
+| lead_origin_id | uuid | Não | [Legado] Origem (fonte) do lead. Use `source_id` no novo modelo. |
+| origin_group_id | uuid | Não | [Legado] Grupo de origem. Use `source_id` no novo modelo. |
+| channel_id | uuid | Não | [Legado] Canal. Use `channel_v2_id` no novo modelo. |
 | external_sync_code | string | Não | Código externo de sincronização. Use o identificador do registro no sistema de origem (ex.: ID no RD Station, código no ERP) para evitar duplicidade em integrações. **Único por workspace**: tentativas de criar ou atualizar um registro com um `external_sync_code` já existente retornam erro `409 conflict`. |
 
 **Exemplo de Request Body:**
@@ -3358,221 +3367,17 @@ Move o(a) tag para a lixeira (soft delete). Registros podem ser restaurados em a
 ```
 
 
-## Origens (Fontes)
+## Fontes
 
-Origens (fontes) de leads usadas em negociações para rastreamento de marketing.
+Fontes (Source) do modelo 3-níveis (Fonte → Campanha → Canal). Representam a origem mais ampla de um lead — por exemplo Mídia Paga, Orgânico, Indicação. Substitui o recurso antigo de grupos de origem.
 
-**Tabela:** `crm_lead_origins`
+**Tabela:** `crm_sources`
 
-### Listar origens
+### Listar fontes
 
-`GET` `/lead-origins`
+`GET` `/fontes`
 
-Retorna a lista paginada de origens do workspace autenticado, com suporte a busca, filtros e ordenação.
-
-**Query Parameters**
-
-| Nome | Tipo | Obrigatório | Descrição |
-|------|------|-------------|-----------|
-| page | integer | Não | Número da página (default: 1). |
-| page_size | integer | Não | Registros por página (default: 25, máx: 100). |
-| order_by | string | Não | Campo de ordenação. Ex.: `created_at`. |
-| order_direction | string | Não | Direção da ordenação: `asc` ou `desc` (default: desc). |
-| q | string | Não | Busca textual no campo principal do recurso (geralmente `name` ou `title`). |
-| group_id | uuid | Não | Filtra por grupo de origem. |
-| external_sync_code | string | Não | Filtra pelo código externo de sincronização. É o identificador único do registro no sistema de origem (ex.: ID no RD Station, código no ERP), usado por integrações para evitar duplicidade. Único por workspace. |
-
-**Exemplo de Resposta:**
-
-```json
-{
-  "data": [
-    {
-      "id": "lo00000-0000-0000-0000-000000000001",
-      "name": "Google Ads",
-      "group_id": "og00000-0000-0000-0000-000000000001",
-      "created_at": "2026-01-10T00:00:00Z"
-    }
-  ],
-  "meta": {
-    "total": 142,
-    "page": 1,
-    "page_size": 20,
-    "next": "/lead-origins?page=2",
-    "prev": null
-  }
-}
-```
-
-### Obter origem
-
-`GET` `/lead-origins/{id}`
-
-Retorna o registro de um(a) origem pelo ID.
-
-**Exemplo de Resposta:**
-
-```json
-{
-  "data": {
-    "id": "lo00000-0000-0000-0000-000000000001",
-    "name": "Google Ads",
-    "group_id": "og00000-0000-0000-0000-000000000001",
-    "created_at": "2026-01-10T00:00:00Z"
-  }
-}
-```
-
-**Exemplo de Erro:**
-
-```json
-{
-  "error": "origem não encontrado.",
-  "message": "origem não encontrado.",
-  "code": "not_found",
-  "details": null,
-  "error_object": {
-    "code": "not_found",
-    "message": "origem não encontrado.",
-    "details": null
-  }
-}
-```
-
-### Criar origem
-
-`POST` `/lead-origins`
-
-Cria um(a) novo(a) origem no workspace autenticado.
-
-**Body**
-
-| Nome | Tipo | Obrigatório | Descrição |
-|------|------|-------------|-----------|
-| name | string | Sim | Nome da origem (fonte). |
-| group_id | uuid | Não | Grupo de origem ao qual a fonte pertence. Opcional — pode ser nulo. |
-| external_sync_code | string | Não | Código externo de sincronização. Use o identificador do registro no sistema de origem (ex.: ID no RD Station, código no ERP) para evitar duplicidade em integrações. **Único por workspace**: tentativas de criar ou atualizar um registro com um `external_sync_code` já existente retornam erro `409 conflict`. |
-
-**Exemplo de Request Body:**
-
-```json
-{
-  "name": "Google Ads"
-}
-```
-
-**Exemplo de Resposta:**
-
-```json
-{
-  "data": {
-    "id": "lo00000-0000-0000-0000-000000000001",
-    "name": "Google Ads",
-    "group_id": "og00000-0000-0000-0000-000000000001",
-    "created_at": "2026-01-10T00:00:00Z"
-  }
-}
-```
-
-### Atualizar origem
-
-`PUT` `/lead-origins/{id}`
-
-Atualiza todos os campos editáveis de um(a) origem. Campos omitidos serão limpos.
-
-**Body**
-
-| Nome | Tipo | Obrigatório | Descrição |
-|------|------|-------------|-----------|
-| name | string | Sim | Nome da origem (fonte). |
-| group_id | uuid | Não | Grupo de origem ao qual a fonte pertence. Opcional — pode ser nulo. |
-| external_sync_code | string | Não | Código externo de sincronização. Use o identificador do registro no sistema de origem (ex.: ID no RD Station, código no ERP) para evitar duplicidade em integrações. **Único por workspace**: tentativas de criar ou atualizar um registro com um `external_sync_code` já existente retornam erro `409 conflict`. |
-
-**Exemplo de Request Body:**
-
-```json
-{
-  "name": "Google Ads"
-}
-```
-
-**Exemplo de Resposta:**
-
-```json
-{
-  "data": {
-    "id": "lo00000-0000-0000-0000-000000000001",
-    "name": "Google Ads",
-    "group_id": "og00000-0000-0000-0000-000000000001",
-    "created_at": "2026-01-10T00:00:00Z"
-  }
-}
-```
-
-### Atualização parcial de origem
-
-`PATCH` `/lead-origins/{id}`
-
-Atualiza apenas os campos enviados no body. Use para edições incrementais.
-
-**Body**
-
-| Nome | Tipo | Obrigatório | Descrição |
-|------|------|-------------|-----------|
-| name | string | Não | Nome da origem (fonte). |
-| group_id | uuid | Não | Grupo de origem ao qual a fonte pertence. Opcional — pode ser nulo. |
-| external_sync_code | string | Não | Código externo de sincronização. Use o identificador do registro no sistema de origem (ex.: ID no RD Station, código no ERP) para evitar duplicidade em integrações. **Único por workspace**: tentativas de criar ou atualizar um registro com um `external_sync_code` já existente retornam erro `409 conflict`. |
-
-**Exemplo de Request Body:**
-
-```json
-{
-  "name": "Google Ads"
-}
-```
-
-**Exemplo de Resposta:**
-
-```json
-{
-  "data": {
-    "id": "lo00000-0000-0000-0000-000000000001",
-    "name": "Google Ads",
-    "group_id": "og00000-0000-0000-0000-000000000001",
-    "created_at": "2026-01-10T00:00:00Z"
-  }
-}
-```
-
-### Remover origem
-
-`DELETE` `/lead-origins/{id}`
-
-Move o(a) origem para a lixeira (soft delete). Registros podem ser restaurados em até 60 dias.
-
-**Exemplo de Resposta:**
-
-```json
-{
-  "data": {
-    "id": "lo00000-0000-0000-0000-000000000001",
-    "deleted_at": "2026-05-18T12:00:00Z"
-  }
-}
-```
-
-
-## Grupos de origem
-
-Agrupadores das origens (fontes) de leads. Ex.: Mídia paga, Orgânico, Indicação.
-
-**Tabela:** `crm_origin_groups`
-
-### Listar grupos de origem
-
-`GET` `/origin-groups`
-
-Retorna a lista paginada de grupos de origem do workspace autenticado, com suporte a busca, filtros e ordenação.
+Retorna a lista paginada de fontes do workspace autenticado, com suporte a busca, filtros e ordenação.
 
 **Query Parameters**
 
@@ -3591,8 +3396,8 @@ Retorna a lista paginada de grupos de origem do workspace autenticado, com supor
 {
   "data": [
     {
-      "id": "og00000-0000-0000-0000-000000000001",
-      "name": "Mídia paga",
+      "id": "sr00000-0000-0000-0000-000000000001",
+      "name": "Mídia Paga",
       "created_at": "2026-01-10T00:00:00Z"
     }
   ],
@@ -3600,25 +3405,25 @@ Retorna a lista paginada de grupos de origem do workspace autenticado, com supor
     "total": 142,
     "page": 1,
     "page_size": 20,
-    "next": "/origin-groups?page=2",
+    "next": "/fontes?page=2",
     "prev": null
   }
 }
 ```
 
-### Obter grupo de origem
+### Obter fonte
 
-`GET` `/origin-groups/{id}`
+`GET` `/fontes/{id}`
 
-Retorna o registro de um(a) grupo de origem pelo ID.
+Retorna o registro de um(a) fonte pelo ID.
 
 **Exemplo de Resposta:**
 
 ```json
 {
   "data": {
-    "id": "og00000-0000-0000-0000-000000000001",
-    "name": "Mídia paga",
+    "id": "sr00000-0000-0000-0000-000000000001",
+    "name": "Mídia Paga",
     "created_at": "2026-01-10T00:00:00Z"
   }
 }
@@ -3628,36 +3433,36 @@ Retorna o registro de um(a) grupo de origem pelo ID.
 
 ```json
 {
-  "error": "grupo de origem não encontrado.",
-  "message": "grupo de origem não encontrado.",
+  "error": "fonte não encontrado.",
+  "message": "fonte não encontrado.",
   "code": "not_found",
   "details": null,
   "error_object": {
     "code": "not_found",
-    "message": "grupo de origem não encontrado.",
+    "message": "fonte não encontrado.",
     "details": null
   }
 }
 ```
 
-### Criar grupo de origem
+### Criar fonte
 
-`POST` `/origin-groups`
+`POST` `/fontes`
 
-Cria um(a) novo(a) grupo de origem no workspace autenticado.
+Cria um(a) novo(a) fonte no workspace autenticado.
 
 **Body**
 
 | Nome | Tipo | Obrigatório | Descrição |
 |------|------|-------------|-----------|
-| name | string | Sim | Nome do grupo de origem. |
+| name | string | Sim | Nome da fonte (origem ampla). Ex.: "Mídia Paga", "Orgânico", "Indicação". |
 | external_sync_code | string | Não | Código externo de sincronização. Use o identificador do registro no sistema de origem (ex.: ID no RD Station, código no ERP) para evitar duplicidade em integrações. **Único por workspace**: tentativas de criar ou atualizar um registro com um `external_sync_code` já existente retornam erro `409 conflict`. |
 
 **Exemplo de Request Body:**
 
 ```json
 {
-  "name": "Mídia paga"
+  "name": "Mídia Paga"
 }
 ```
 
@@ -3666,31 +3471,31 @@ Cria um(a) novo(a) grupo de origem no workspace autenticado.
 ```json
 {
   "data": {
-    "id": "og00000-0000-0000-0000-000000000001",
-    "name": "Mídia paga",
+    "id": "sr00000-0000-0000-0000-000000000001",
+    "name": "Mídia Paga",
     "created_at": "2026-01-10T00:00:00Z"
   }
 }
 ```
 
-### Atualizar grupo de origem
+### Atualizar fonte
 
-`PUT` `/origin-groups/{id}`
+`PUT` `/fontes/{id}`
 
-Atualiza todos os campos editáveis de um(a) grupo de origem. Campos omitidos serão limpos.
+Atualiza todos os campos editáveis de um(a) fonte. Campos omitidos serão limpos.
 
 **Body**
 
 | Nome | Tipo | Obrigatório | Descrição |
 |------|------|-------------|-----------|
-| name | string | Sim | Nome do grupo de origem. |
+| name | string | Sim | Nome da fonte (origem ampla). Ex.: "Mídia Paga", "Orgânico", "Indicação". |
 | external_sync_code | string | Não | Código externo de sincronização. Use o identificador do registro no sistema de origem (ex.: ID no RD Station, código no ERP) para evitar duplicidade em integrações. **Único por workspace**: tentativas de criar ou atualizar um registro com um `external_sync_code` já existente retornam erro `409 conflict`. |
 
 **Exemplo de Request Body:**
 
 ```json
 {
-  "name": "Mídia paga"
+  "name": "Mídia Paga"
 }
 ```
 
@@ -3699,16 +3504,16 @@ Atualiza todos os campos editáveis de um(a) grupo de origem. Campos omitidos se
 ```json
 {
   "data": {
-    "id": "og00000-0000-0000-0000-000000000001",
-    "name": "Mídia paga",
+    "id": "sr00000-0000-0000-0000-000000000001",
+    "name": "Mídia Paga",
     "created_at": "2026-01-10T00:00:00Z"
   }
 }
 ```
 
-### Atualização parcial de grupo de origem
+### Atualização parcial de fonte
 
-`PATCH` `/origin-groups/{id}`
+`PATCH` `/fontes/{id}`
 
 Atualiza apenas os campos enviados no body. Use para edições incrementais.
 
@@ -3716,14 +3521,14 @@ Atualiza apenas os campos enviados no body. Use para edições incrementais.
 
 | Nome | Tipo | Obrigatório | Descrição |
 |------|------|-------------|-----------|
-| name | string | Não | Nome do grupo de origem. |
+| name | string | Não | Nome da fonte (origem ampla). Ex.: "Mídia Paga", "Orgânico", "Indicação". |
 | external_sync_code | string | Não | Código externo de sincronização. Use o identificador do registro no sistema de origem (ex.: ID no RD Station, código no ERP) para evitar duplicidade em integrações. **Único por workspace**: tentativas de criar ou atualizar um registro com um `external_sync_code` já existente retornam erro `409 conflict`. |
 
 **Exemplo de Request Body:**
 
 ```json
 {
-  "name": "Mídia paga"
+  "name": "Mídia Paga"
 }
 ```
 
@@ -3732,40 +3537,244 @@ Atualiza apenas os campos enviados no body. Use para edições incrementais.
 ```json
 {
   "data": {
-    "id": "og00000-0000-0000-0000-000000000001",
-    "name": "Mídia paga",
+    "id": "sr00000-0000-0000-0000-000000000001",
+    "name": "Mídia Paga",
     "created_at": "2026-01-10T00:00:00Z"
   }
 }
 ```
 
-### Remover grupo de origem
+### Remover fonte
 
-`DELETE` `/origin-groups/{id}`
+`DELETE` `/fontes/{id}`
 
-Move o(a) grupo de origem para a lixeira (soft delete). Registros podem ser restaurados em até 60 dias.
+Move o(a) fonte para a lixeira (soft delete). Registros podem ser restaurados em até 60 dias.
 
 **Exemplo de Resposta:**
 
 ```json
 {
   "data": {
-    "id": "og00000-0000-0000-0000-000000000001",
+    "id": "sr00000-0000-0000-0000-000000000001",
     "deleted_at": "2026-05-18T12:00:00Z"
   }
 }
 ```
 
 
-## Canais / Campanhas
+## Campanhas
 
-Canais ou campanhas usados como dimensão adicional de rastreio em negociações.
+Campanhas do modelo 3-níveis (Fonte → Campanha → Canal). Uma campanha pode opcionalmente pertencer a uma fonte. Use o `external_sync_code` para sincronizar campanhas vindas de ferramentas externas (Meta Ads, Google Ads, etc.).
 
-**Tabela:** `crm_channels`
+**Tabela:** `crm_campaigns`
+
+### Listar campanhas
+
+`GET` `/campanhas`
+
+Retorna a lista paginada de campanhas do workspace autenticado, com suporte a busca, filtros e ordenação.
+
+**Query Parameters**
+
+| Nome | Tipo | Obrigatório | Descrição |
+|------|------|-------------|-----------|
+| page | integer | Não | Número da página (default: 1). |
+| page_size | integer | Não | Registros por página (default: 25, máx: 100). |
+| order_by | string | Não | Campo de ordenação. Ex.: `created_at`. |
+| order_direction | string | Não | Direção da ordenação: `asc` ou `desc` (default: desc). |
+| q | string | Não | Busca textual no campo principal do recurso (geralmente `name` ou `title`). |
+| source_id | uuid | Não | Filtra por fonte. |
+| external_sync_code | string | Não | Filtra pelo código externo de sincronização. É o identificador único do registro no sistema de origem (ex.: ID no RD Station, código no ERP), usado por integrações para evitar duplicidade. Único por workspace. |
+
+**Exemplo de Resposta:**
+
+```json
+{
+  "data": [
+    {
+      "id": "cp00000-0000-0000-0000-000000000001",
+      "name": "Black Friday 2026",
+      "source_id": "sr00000-0000-0000-0000-000000000001",
+      "created_at": "2026-01-10T00:00:00Z"
+    }
+  ],
+  "meta": {
+    "total": 142,
+    "page": 1,
+    "page_size": 20,
+    "next": "/campanhas?page=2",
+    "prev": null
+  }
+}
+```
+
+### Obter campanha
+
+`GET` `/campanhas/{id}`
+
+Retorna o registro de um(a) campanha pelo ID.
+
+**Exemplo de Resposta:**
+
+```json
+{
+  "data": {
+    "id": "cp00000-0000-0000-0000-000000000001",
+    "name": "Black Friday 2026",
+    "source_id": "sr00000-0000-0000-0000-000000000001",
+    "created_at": "2026-01-10T00:00:00Z"
+  }
+}
+```
+
+**Exemplo de Erro:**
+
+```json
+{
+  "error": "campanha não encontrado.",
+  "message": "campanha não encontrado.",
+  "code": "not_found",
+  "details": null,
+  "error_object": {
+    "code": "not_found",
+    "message": "campanha não encontrado.",
+    "details": null
+  }
+}
+```
+
+### Criar campanha
+
+`POST` `/campanhas`
+
+Cria um(a) novo(a) campanha no workspace autenticado.
+
+**Body**
+
+| Nome | Tipo | Obrigatório | Descrição |
+|------|------|-------------|-----------|
+| name | string | Sim | Nome da campanha. |
+| source_id | uuid | Não | Fonte (Source) à qual a campanha pertence. Opcional. |
+| external_sync_code | string | Não | Código externo de sincronização. Use o identificador do registro no sistema de origem (ex.: ID no RD Station, código no ERP) para evitar duplicidade em integrações. **Único por workspace**: tentativas de criar ou atualizar um registro com um `external_sync_code` já existente retornam erro `409 conflict`. |
+
+**Exemplo de Request Body:**
+
+```json
+{
+  "name": "Black Friday 2026"
+}
+```
+
+**Exemplo de Resposta:**
+
+```json
+{
+  "data": {
+    "id": "cp00000-0000-0000-0000-000000000001",
+    "name": "Black Friday 2026",
+    "source_id": "sr00000-0000-0000-0000-000000000001",
+    "created_at": "2026-01-10T00:00:00Z"
+  }
+}
+```
+
+### Atualizar campanha
+
+`PUT` `/campanhas/{id}`
+
+Atualiza todos os campos editáveis de um(a) campanha. Campos omitidos serão limpos.
+
+**Body**
+
+| Nome | Tipo | Obrigatório | Descrição |
+|------|------|-------------|-----------|
+| name | string | Sim | Nome da campanha. |
+| source_id | uuid | Não | Fonte (Source) à qual a campanha pertence. Opcional. |
+| external_sync_code | string | Não | Código externo de sincronização. Use o identificador do registro no sistema de origem (ex.: ID no RD Station, código no ERP) para evitar duplicidade em integrações. **Único por workspace**: tentativas de criar ou atualizar um registro com um `external_sync_code` já existente retornam erro `409 conflict`. |
+
+**Exemplo de Request Body:**
+
+```json
+{
+  "name": "Black Friday 2026"
+}
+```
+
+**Exemplo de Resposta:**
+
+```json
+{
+  "data": {
+    "id": "cp00000-0000-0000-0000-000000000001",
+    "name": "Black Friday 2026",
+    "source_id": "sr00000-0000-0000-0000-000000000001",
+    "created_at": "2026-01-10T00:00:00Z"
+  }
+}
+```
+
+### Atualização parcial de campanha
+
+`PATCH` `/campanhas/{id}`
+
+Atualiza apenas os campos enviados no body. Use para edições incrementais.
+
+**Body**
+
+| Nome | Tipo | Obrigatório | Descrição |
+|------|------|-------------|-----------|
+| name | string | Não | Nome da campanha. |
+| source_id | uuid | Não | Fonte (Source) à qual a campanha pertence. Opcional. |
+| external_sync_code | string | Não | Código externo de sincronização. Use o identificador do registro no sistema de origem (ex.: ID no RD Station, código no ERP) para evitar duplicidade em integrações. **Único por workspace**: tentativas de criar ou atualizar um registro com um `external_sync_code` já existente retornam erro `409 conflict`. |
+
+**Exemplo de Request Body:**
+
+```json
+{
+  "name": "Black Friday 2026"
+}
+```
+
+**Exemplo de Resposta:**
+
+```json
+{
+  "data": {
+    "id": "cp00000-0000-0000-0000-000000000001",
+    "name": "Black Friday 2026",
+    "source_id": "sr00000-0000-0000-0000-000000000001",
+    "created_at": "2026-01-10T00:00:00Z"
+  }
+}
+```
+
+### Remover campanha
+
+`DELETE` `/campanhas/{id}`
+
+Move o(a) campanha para a lixeira (soft delete). Registros podem ser restaurados em até 60 dias.
+
+**Exemplo de Resposta:**
+
+```json
+{
+  "data": {
+    "id": "cp00000-0000-0000-0000-000000000001",
+    "deleted_at": "2026-05-18T12:00:00Z"
+  }
+}
+```
+
+
+## Canais
+
+Canais (mídia / meio) do modelo 3-níveis (Fonte → Campanha → Canal). Cada canal pode opcionalmente pertencer a uma fonte e/ou campanha. Substitui o recurso antigo de canais.
+
+**Tabela:** `crm_channels_v2`
 
 ### Listar canais
 
-`GET` `/channels`
+`GET` `/canais`
 
 Retorna a lista paginada de canais do workspace autenticado, com suporte a busca, filtros e ordenação.
 
@@ -3778,6 +3787,8 @@ Retorna a lista paginada de canais do workspace autenticado, com suporte a busca
 | order_by | string | Não | Campo de ordenação. Ex.: `created_at`. |
 | order_direction | string | Não | Direção da ordenação: `asc` ou `desc` (default: desc). |
 | q | string | Não | Busca textual no campo principal do recurso (geralmente `name` ou `title`). |
+| source_id | uuid | Não | Filtra por fonte. |
+| campaign_id | uuid | Não | Filtra por campanha. |
 | external_sync_code | string | Não | Filtra pelo código externo de sincronização. É o identificador único do registro no sistema de origem (ex.: ID no RD Station, código no ERP), usado por integrações para evitar duplicidade. Único por workspace. |
 
 **Exemplo de Resposta:**
@@ -3787,7 +3798,9 @@ Retorna a lista paginada de canais do workspace autenticado, com suporte a busca
   "data": [
     {
       "id": "ch00000-0000-0000-0000-000000000001",
-      "name": "Campanha Black Friday",
+      "name": "Instagram Stories",
+      "source_id": "sr00000-0000-0000-0000-000000000001",
+      "campaign_id": "cp00000-0000-0000-0000-000000000001",
       "created_at": "2026-01-10T00:00:00Z"
     }
   ],
@@ -3795,7 +3808,7 @@ Retorna a lista paginada de canais do workspace autenticado, com suporte a busca
     "total": 142,
     "page": 1,
     "page_size": 20,
-    "next": "/channels?page=2",
+    "next": "/canais?page=2",
     "prev": null
   }
 }
@@ -3803,7 +3816,7 @@ Retorna a lista paginada de canais do workspace autenticado, com suporte a busca
 
 ### Obter canal
 
-`GET` `/channels/{id}`
+`GET` `/canais/{id}`
 
 Retorna o registro de um(a) canal pelo ID.
 
@@ -3813,7 +3826,9 @@ Retorna o registro de um(a) canal pelo ID.
 {
   "data": {
     "id": "ch00000-0000-0000-0000-000000000001",
-    "name": "Campanha Black Friday",
+    "name": "Instagram Stories",
+    "source_id": "sr00000-0000-0000-0000-000000000001",
+    "campaign_id": "cp00000-0000-0000-0000-000000000001",
     "created_at": "2026-01-10T00:00:00Z"
   }
 }
@@ -3837,7 +3852,7 @@ Retorna o registro de um(a) canal pelo ID.
 
 ### Criar canal
 
-`POST` `/channels`
+`POST` `/canais`
 
 Cria um(a) novo(a) canal no workspace autenticado.
 
@@ -3845,14 +3860,16 @@ Cria um(a) novo(a) canal no workspace autenticado.
 
 | Nome | Tipo | Obrigatório | Descrição |
 |------|------|-------------|-----------|
-| name | string | Sim | Nome do canal / campanha. |
+| name | string | Sim | Nome do canal (mídia / meio). Ex.: "Instagram Stories", "Google Search", "Indicação". |
+| source_id | uuid | Não | Fonte (Source) à qual o canal pertence. Opcional. |
+| campaign_id | uuid | Não | Campanha à qual o canal pertence. Opcional. |
 | external_sync_code | string | Não | Código externo de sincronização. Use o identificador do registro no sistema de origem (ex.: ID no RD Station, código no ERP) para evitar duplicidade em integrações. **Único por workspace**: tentativas de criar ou atualizar um registro com um `external_sync_code` já existente retornam erro `409 conflict`. |
 
 **Exemplo de Request Body:**
 
 ```json
 {
-  "name": "Campanha Black Friday"
+  "name": "Instagram Stories"
 }
 ```
 
@@ -3862,7 +3879,9 @@ Cria um(a) novo(a) canal no workspace autenticado.
 {
   "data": {
     "id": "ch00000-0000-0000-0000-000000000001",
-    "name": "Campanha Black Friday",
+    "name": "Instagram Stories",
+    "source_id": "sr00000-0000-0000-0000-000000000001",
+    "campaign_id": "cp00000-0000-0000-0000-000000000001",
     "created_at": "2026-01-10T00:00:00Z"
   }
 }
@@ -3870,7 +3889,7 @@ Cria um(a) novo(a) canal no workspace autenticado.
 
 ### Atualizar canal
 
-`PUT` `/channels/{id}`
+`PUT` `/canais/{id}`
 
 Atualiza todos os campos editáveis de um(a) canal. Campos omitidos serão limpos.
 
@@ -3878,14 +3897,16 @@ Atualiza todos os campos editáveis de um(a) canal. Campos omitidos serão limpo
 
 | Nome | Tipo | Obrigatório | Descrição |
 |------|------|-------------|-----------|
-| name | string | Sim | Nome do canal / campanha. |
+| name | string | Sim | Nome do canal (mídia / meio). Ex.: "Instagram Stories", "Google Search", "Indicação". |
+| source_id | uuid | Não | Fonte (Source) à qual o canal pertence. Opcional. |
+| campaign_id | uuid | Não | Campanha à qual o canal pertence. Opcional. |
 | external_sync_code | string | Não | Código externo de sincronização. Use o identificador do registro no sistema de origem (ex.: ID no RD Station, código no ERP) para evitar duplicidade em integrações. **Único por workspace**: tentativas de criar ou atualizar um registro com um `external_sync_code` já existente retornam erro `409 conflict`. |
 
 **Exemplo de Request Body:**
 
 ```json
 {
-  "name": "Campanha Black Friday"
+  "name": "Instagram Stories"
 }
 ```
 
@@ -3895,7 +3916,9 @@ Atualiza todos os campos editáveis de um(a) canal. Campos omitidos serão limpo
 {
   "data": {
     "id": "ch00000-0000-0000-0000-000000000001",
-    "name": "Campanha Black Friday",
+    "name": "Instagram Stories",
+    "source_id": "sr00000-0000-0000-0000-000000000001",
+    "campaign_id": "cp00000-0000-0000-0000-000000000001",
     "created_at": "2026-01-10T00:00:00Z"
   }
 }
@@ -3903,7 +3926,7 @@ Atualiza todos os campos editáveis de um(a) canal. Campos omitidos serão limpo
 
 ### Atualização parcial de canal
 
-`PATCH` `/channels/{id}`
+`PATCH` `/canais/{id}`
 
 Atualiza apenas os campos enviados no body. Use para edições incrementais.
 
@@ -3911,14 +3934,16 @@ Atualiza apenas os campos enviados no body. Use para edições incrementais.
 
 | Nome | Tipo | Obrigatório | Descrição |
 |------|------|-------------|-----------|
-| name | string | Não | Nome do canal / campanha. |
+| name | string | Não | Nome do canal (mídia / meio). Ex.: "Instagram Stories", "Google Search", "Indicação". |
+| source_id | uuid | Não | Fonte (Source) à qual o canal pertence. Opcional. |
+| campaign_id | uuid | Não | Campanha à qual o canal pertence. Opcional. |
 | external_sync_code | string | Não | Código externo de sincronização. Use o identificador do registro no sistema de origem (ex.: ID no RD Station, código no ERP) para evitar duplicidade em integrações. **Único por workspace**: tentativas de criar ou atualizar um registro com um `external_sync_code` já existente retornam erro `409 conflict`. |
 
 **Exemplo de Request Body:**
 
 ```json
 {
-  "name": "Campanha Black Friday"
+  "name": "Instagram Stories"
 }
 ```
 
@@ -3928,7 +3953,9 @@ Atualiza apenas os campos enviados no body. Use para edições incrementais.
 {
   "data": {
     "id": "ch00000-0000-0000-0000-000000000001",
-    "name": "Campanha Black Friday",
+    "name": "Instagram Stories",
+    "source_id": "sr00000-0000-0000-0000-000000000001",
+    "campaign_id": "cp00000-0000-0000-0000-000000000001",
     "created_at": "2026-01-10T00:00:00Z"
   }
 }
@@ -3936,7 +3963,7 @@ Atualiza apenas os campos enviados no body. Use para edições incrementais.
 
 ### Remover canal
 
-`DELETE` `/channels/{id}`
+`DELETE` `/canais/{id}`
 
 Move o(a) canal para a lixeira (soft delete). Registros podem ser restaurados em até 60 dias.
 
@@ -5811,4 +5838,4 @@ Retorna o usuário associado ao token de API utilizado na requisição.
 
 ---
 
-*Documentação gerada automaticamente. Última atualização: 2026-06-11*
+*Documentação gerada automaticamente. Última atualização: 2026-06-16*

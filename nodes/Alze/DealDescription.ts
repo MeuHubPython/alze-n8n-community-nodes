@@ -495,11 +495,18 @@ export const dealFields: INodeProperties[] = [
 		},
 		options: [
 			{
-				displayName: 'Channel ID',
-				name: 'channel_id',
+				displayName: 'Campaign ID',
+				name: 'campaign_id',
 				type: 'string',
 				default: '',
-				description: 'ID of the channel/campaign associated with the deal',
+				description: 'ID of the campaign associated with the deal',
+			},
+			{
+				displayName: 'Channel ID',
+				name: 'channel_v2_id',
+				type: 'string',
+				default: '',
+				description: 'ID of the channel associated with the deal',
 			},
 			{
 				displayName: 'Contact (Person) ID',
@@ -570,25 +577,11 @@ export const dealFields: INodeProperties[] = [
 				description: 'External synchronization code for integration',
 			},
 			{
-				displayName: 'Lead Origin ID',
-				name: 'lead_origin_id',
-				type: 'string',
-				default: '',
-				description: 'ID of the lead origin (source)',
-			},
-			{
 				displayName: 'Organization ID',
 				name: 'organization_id',
 				type: 'string',
 				default: '',
 				description: 'ID of the associated organization',
-			},
-			{
-				displayName: 'Origin Group ID',
-				name: 'origin_group_id',
-				type: 'string',
-				default: '',
-				description: 'ID of the origin group',
 			},
 			{
 				displayName: 'Owner ID',
@@ -608,6 +601,13 @@ export const dealFields: INodeProperties[] = [
 					},
 				},
 				description: 'The pipeline where this deal resides',
+			},
+			{
+				displayName: 'Source ID',
+				name: 'source_id',
+				type: 'string',
+				default: '',
+				description: 'ID of the source associated with the deal',
 			},
 			{
 				displayName: 'Stage ID',
