@@ -1,6 +1,6 @@
 {
 	"name": "n8n-nodes-alze",
-	"version": "1.5.0",
+	"version": "1.5.1",
 	"description": "n8n community nodes for Alze",
 	"license": "MIT",
 	"homepage": "https://github.com/MeuHubPython/alze-n8n-community-nodes",
