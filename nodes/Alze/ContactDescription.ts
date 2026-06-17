@@ -352,13 +352,6 @@ export const contactFields: INodeProperties[] = [
 				description: 'Job title of the contact',
 			},
 			{
-				displayName: 'Mobile Phone',
-				name: 'mobile',
-				type: 'string',
-				default: '',
-				description: 'Mobile phone number of the contact',
-			},
-			{
 				displayName: 'Name',
 				name: 'namePatch',
 				type: 'string',
@@ -385,11 +378,51 @@ export const contactFields: INodeProperties[] = [
 				description: 'ID of the associated organization',
 			},
 			{
-				displayName: 'Phone',
-				name: 'phone',
-				type: 'string',
+				displayName: 'Phones (JSON)',
+				name: 'phonesJson',
+				type: 'json',
 				default: '',
-				description: 'Phone number of the contact',
+				description: 'Phones array as a JSON, e.g. [{"value": "+5511999999999", "type": "mobile"}]',
+			},
+			{
+				displayName: 'Phones (UI)',
+				name: 'phonesUi',
+				placeholder: 'Add Phone',
+				type: 'fixedCollection',
+				typeOptions: {
+					multipleValues: true,
+				},
+				default: {},
+				description: 'Phones of the contact',
+				options: [
+					{
+						name: 'phonesValues',
+						displayName: 'Phone',
+						values: [
+							{
+								displayName: 'Value',
+								name: 'value',
+								type: 'string',
+								default: '',
+								description: 'The phone number',
+							},
+							{
+								displayName: 'Type',
+								name: 'type',
+								type: 'options',
+								options: [
+									{ name: 'Home', value: 'home' },
+									{ name: 'Mobile', value: 'mobile' },
+									{ name: 'Other', value: 'other' },
+									{ name: 'Phone', value: 'phone' },
+									{ name: 'Work', value: 'work' },
+								],
+								default: 'mobile',
+								description: 'The type of phone number',
+							},
+						],
+					},
+				],
 			},
 			{
 				displayName: 'Status',

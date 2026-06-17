@@ -165,6 +165,31 @@ export function handleCustomFields(node: INode, body: IDataObject, properties: I
 }
 
 /**
+ * Helper to process phones input into Alze body format
+ */
+export function handleContactPhones(node: INode, body: IDataObject, properties: IDataObject) {
+	if (properties.phonesUi) {
+		const phones = (properties.phonesUi as IDataObject).phonesValues as IDataObject[] || [];
+		body.phones = phones.map((phone) => ({
+			value: phone.value,
+			type: phone.type,
+		}));
+	} else if (properties.phonesJson) {
+		try {
+			if (typeof properties.phonesJson === 'string') {
+				body.phones = JSON.parse(properties.phonesJson);
+			} else {
+				body.phones = properties.phonesJson;
+			}
+		} catch {
+			throw new NodeOperationError(node, 'Phones JSON is invalid. Please provide a valid JSON array.');
+		}
+	}
+	delete body.phonesUi;
+	delete body.phonesJson;
+}
+
+/**
  * Helper to process batch stages input for pipeline creation
  */
 export function handlePipelineStages(node: INode, body: IDataObject, properties: IDataObject) {

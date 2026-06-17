@@ -12,6 +12,7 @@ import {
 	alzeApiRequestAllItems,
 	handleCustomFields,
 	handlePipelineStages,
+	handleContactPhones,
 } from './GenericFunctions';
 
 import {
@@ -239,6 +240,7 @@ export class Alze implements INodeType {
 						const fields = this.getNodeParameter('fieldsToSet', i) as IDataObject;
 						const body: IDataObject = { name, ...fields };
 						handleCustomFields(this.getNode(), body, fields);
+						handleContactPhones(this.getNode(), body, fields);
 						responseData = await alzeApiRequest.call(this, 'POST', '/contacts', body);
 						responseData = responseData.data;
 					} else if (operation === 'update') {
@@ -247,6 +249,7 @@ export class Alze implements INodeType {
 						const fields = this.getNodeParameter('fieldsToSet', i) as IDataObject;
 						const body: IDataObject = { name, ...fields };
 						handleCustomFields(this.getNode(), body, fields);
+						handleContactPhones(this.getNode(), body, fields);
 						responseData = await alzeApiRequest.call(this, 'PUT', `/contacts/${contactId}`, body);
 						responseData = responseData.data;
 					} else if (operation === 'patch') {
@@ -258,6 +261,7 @@ export class Alze implements INodeType {
 							delete body.namePatch;
 						}
 						handleCustomFields(this.getNode(), body, fields);
+						handleContactPhones(this.getNode(), body, fields);
 						responseData = await alzeApiRequest.call(this, 'PATCH', `/contacts/${contactId}`, body);
 						responseData = responseData.data;
 					} else if (operation === 'list') {
