@@ -41,12 +41,18 @@ export async function alzeApiRequest(
 
 	const fullUrl = uri || `https://hjjqtkdmxpqzjjlsebfv.supabase.co/functions/v1/public-api/api/v1${resource}`;
 
+	const requestHeaders: IDataObject = {
+		'Authorization': `Bearer ${apiKey}`,
+		...headers,
+	};
+
+	// Only add Content-Type for requests that carry a body payload
+	if (method !== 'GET' && method !== 'DELETE') {
+		requestHeaders['Content-Type'] = 'application/json';
+	}
+
 	const options: IHttpRequestOptions = {
-		headers: {
-			'Authorization': `Bearer ${apiKey}`,
-			'Content-Type': 'application/json',
-			...headers,
-		},
+		headers: requestHeaders,
 		method,
 		body: cleanedBody,
 		qs: cleanedQs,
