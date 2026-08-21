@@ -577,6 +577,13 @@ export const dealFields: INodeProperties[] = [
 				description: 'External synchronization code for integration',
 			},
 			{
+				displayName: 'Is On Hold',
+				name: 'is_on_hold',
+				type: 'boolean',
+				default: false,
+				description: 'Whether the deal is on hold / paused at the source. Does not change status.',
+			},
+			{
 				displayName: 'Organization ID',
 				name: 'organization_id',
 				type: 'string',
