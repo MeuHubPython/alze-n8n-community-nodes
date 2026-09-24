@@ -5,6 +5,7 @@ import {
 	INodeTypeDescription,
 	IDataObject,
 	NodeConnectionTypes,
+	NodeOperationError,
 } from 'n8n-workflow';
 
 import {
@@ -220,8 +221,14 @@ export class Alze implements INodeType {
 
 		let responseData;
 
+		// Set before every item: if no branch below matches (an operation that was
+		// removed from the node but is still saved in a workflow), the item fails
+		// instead of silently returning an empty result or the previous item's data.
+		const UNHANDLED = Symbol('unhandled');
+
 		for (let i = 0; i < items.length; i++) {
 			try {
+				responseData = UNHANDLED as unknown;
 				// ==========================================
 				//                 CONTACT
 				// ==========================================
@@ -351,12 +358,11 @@ export class Alze implements INodeType {
 						responseData = deleteResult(responseData, dealId);
 					} else if (operation === 'win') {
 						const dealId = this.getNodeParameter('dealId', i) as string;
-						const additionalFields = this.getNodeParameter('additionalFields', i, {}) as IDataObject;
+						// `value` stays a top-level parameter so saved workflows keep sending it.
+						// 0 (the default) means "not set": sending it would zero the deal value.
+						const value = Number(this.getNodeParameter('value', i, 0));
 						const body: IDataObject = {};
-						// Only send `value` when the user set it: the API overwrites the deal value
-						if (typeof additionalFields.value === 'number' && Number.isFinite(additionalFields.value)) {
-							body.value = additionalFields.value;
-						}
+						if (Number.isFinite(value) && value !== 0) body.value = value;
 						responseData = await alzeApiRequest.call(this, 'PATCH', `/deals/${dealId}/win`, body);
 						responseData = responseData.data;
 					} else if (operation === 'lose') {
@@ -441,12 +447,11 @@ export class Alze implements INodeType {
 						const dealId = this.getNodeParameter('dealId', i) as string;
 						const itemId = this.getNodeParameter('itemIdAdd', i) as number;
 						const quantity = this.getNodeParameter('quantity', i) as number;
-						const additionalFields = this.getNodeParameter('additionalFields', i, {}) as IDataObject;
+						// 0 (the default) means "use the catalog price": the API only falls back
+						// to it when `price` is absent.
+						const price = Number(this.getNodeParameter('price', i, 0));
 						const body: IDataObject = { item_id: itemId, quantity };
-						// Without `price` the API uses the catalog price of the item
-						if (typeof additionalFields.price === 'number' && Number.isFinite(additionalFields.price)) {
-							body.price = additionalFields.price;
-						}
+						if (Number.isFinite(price) && price !== 0) body.price = price;
 						responseData = await alzeApiRequest.call(this, 'POST', `/deals/${dealId}/items`, body);
 						responseData = responseData.data;
 					} else if (operation === 'listNotes') {
@@ -546,6 +551,8 @@ export class Alze implements INodeType {
 						const type = this.getNodeParameter('type', i) as string;
 						const fields = this.getNodeParameter('fieldsToSet', i) as IDataObject;
 						const body: IDataObject = { name, type, ...fields };
+						// category_id 0 is the field's default, not a real category (FK error)
+						if (body.category_id === 0) delete body.category_id;
 						responseData = await alzeApiRequest.call(this, 'POST', '/items', body);
 						responseData = responseData.data;
 					} else if (operation === 'update') {
@@ -554,12 +561,16 @@ export class Alze implements INodeType {
 						const type = this.getNodeParameter('typeUpdate', i) as string;
 						const fields = this.getNodeParameter('fieldsToSet', i) as IDataObject;
 						const body: IDataObject = { name, type, ...fields };
+						// category_id 0 is the field's default, not a real category (FK error)
+						if (body.category_id === 0) delete body.category_id;
 						responseData = await alzeApiRequest.call(this, 'PUT', `/items/${productId}`, body);
 						responseData = responseData.data;
 					} else if (operation === 'patch') {
 						const productId = this.getNodeParameter('productId', i) as string;
 						const fields = this.getNodeParameter('fieldsToSet', i) as IDataObject;
 						const body: IDataObject = { ...fields };
+						// category_id 0 is the field's default, not a real category (FK error)
+						if (body.category_id === 0) delete body.category_id;
 						if (fields.namePatch) {
 							body.name = fields.namePatch;
 							delete body.namePatch;
@@ -1208,6 +1219,14 @@ export class Alze implements INodeType {
 						applyOrderParams(this, i, qs);
 						responseData = await alzeApiRequestAllItems.call(this, 'GET', '/webhooks', {}, qs, i);
 					}
+				}
+
+				if (responseData === UNHANDLED) {
+					throw new NodeOperationError(
+						this.getNode(),
+						`The operation "${operation}" of "${resource}" is no longer supported by the Alze API`,
+						{ itemIndex: i },
+					);
 				}
 
 				const executionData = this.helpers.returnJsonArray(responseData);

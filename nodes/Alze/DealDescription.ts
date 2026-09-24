@@ -163,29 +163,20 @@ export const dealFields: INodeProperties[] = [
 	//         deal: win
 	// ----------------------------------
 	{
-		displayName: 'Additional Fields',
-		name: 'additionalFields',
-		type: 'collection',
-		placeholder: 'Add Field',
-		default: {},
+		displayName: 'Value',
+		name: 'value',
+		type: 'number',
+		typeOptions: {
+			numberPrecision: 2,
+		},
+		default: 0,
 		displayOptions: {
 			show: {
 				resource: ['deal'],
 				operation: ['win'],
 			},
 		},
-		options: [
-			{
-				displayName: 'Value',
-				name: 'value',
-				type: 'number',
-				typeOptions: {
-					numberPrecision: 2,
-				},
-				default: 0,
-				description: 'Final value of the won deal. Leave unset to keep the current deal value.',
-			},
-		],
+		description: 'Final value of the won deal. Leave 0 to keep the current deal value.',
 	},
 
 	// ----------------------------------
@@ -756,29 +747,20 @@ export const dealFields: INodeProperties[] = [
 		description: 'The quantity of the item (whole number)',
 	},
 	{
-		displayName: 'Additional Fields',
-		name: 'additionalFields',
-		type: 'collection',
-		placeholder: 'Add Field',
-		default: {},
+		displayName: 'Price',
+		name: 'price',
+		type: 'number',
+		typeOptions: {
+			numberPrecision: 2,
+		},
+		default: 0,
 		displayOptions: {
 			show: {
 				resource: ['deal'],
 				operation: ['addItem'],
 			},
 		},
-		options: [
-			{
-				displayName: 'Price',
-				name: 'price',
-				type: 'number',
-				typeOptions: {
-					numberPrecision: 2,
-				},
-				default: 0,
-				description: 'Unit price of the item. Leave unset to use the catalog price.',
-			},
-		],
+		description: 'Unit price of the item. Leave 0 to use the catalog price.',
 	},
 	{
 		displayName: 'Note ID',
