@@ -513,6 +513,18 @@ export const dealFields: INodeProperties[] = [
 				description: 'ID of the main contact associated',
 			},
 			{
+				displayName: 'Creation Source Meta (JSON)',
+				name: 'creation_source_meta',
+				type: 'json',
+				default: '',
+				displayOptions: {
+					show: {
+						'/operation': ['create'],
+					},
+				},
+				description: 'Where the lead came from, only on creation. Accepted keys: utm_first (object with utm_source/medium/campaign/term/content), gclid, fbclid, utm_id, session_hash, lp_form_submission_id, landing_page_id, referrer. The API uses it to fill Source and Campaign when they are not sent.',
+			},
+			{
 				displayName: 'Currency',
 				name: 'currency',
 				type: 'string',
@@ -579,6 +591,13 @@ export const dealFields: INodeProperties[] = [
 				type: 'boolean',
 				default: false,
 				description: 'Whether the deal is on hold / paused at the source. Does not change status.',
+			},
+			{
+				displayName: 'On Hold Until',
+				name: 'on_hold_until',
+				type: 'dateTime',
+				default: '',
+				description: 'Optional date to resume an on-hold deal. Only accepted together with Is On Hold = true. Only the date part (YYYY-MM-DD) is sent.',
 			},
 			{
 				displayName: 'Organization ID',

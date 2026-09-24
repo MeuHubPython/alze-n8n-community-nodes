@@ -885,7 +885,7 @@ Cria um(a) novo(a) negociação no workspace autenticado.
 | value | decimal | Não | Valor monetário da negociação. |
 | currency | string (ISO 4217) | Não | Moeda. Default: BRL. |
 | expected_close_date | date (YYYY-MM-DD) | Não | Data prevista de fechamento. |
-| owner_id | uuid | Não | Usuário responsável (preenchido com o dono da chave se omitido). |
+| owner_id | uuid | Não | Usuário responsável. Não é preenchido automaticamente com o dono da chave. |
 | person_id | uuid | Não | Contato principal associado. |
 | organization_id | uuid | Não | Empresa associada. |
 | temperature | string (hot|warm|cold) | Não | Temperatura qualitativa do lead. |
@@ -896,6 +896,9 @@ Cria um(a) novo(a) negociação no workspace autenticado.
 | lead_origin_id | uuid | Não | [Legado] Origem (fonte) do lead. Use `source_id` no novo modelo. |
 | origin_group_id | uuid | Não | [Legado] Grupo de origem. Use `source_id` no novo modelo. |
 | channel_id | uuid | Não | [Legado] Canal. Use `channel_v2_id` no novo modelo. |
+| is_on_hold | boolean | Não | Negociação congelada: continua aberta, fora do foco. Não altera `status`. |
+| on_hold_until | date (YYYY-MM-DD) | Não | Data opcional para retomar a negociação congelada. Só é aceita com `is_on_hold` verdadeiro. |
+| creation_source_meta | object | Não | De onde o lead veio, só na criação. Chaves aceitas: `utm_first` (objeto com utm_source/medium/campaign/term/content), `gclid`, `fbclid`, `utm_id`, `session_hash`, `lp_form_submission_id`, `landing_page_id`, `referrer`; outras são descartadas. A API usa esses dados para preencher `source_id`/`campaign_id` quando não enviados. |
 | external_sync_code | string | Não | Código externo de sincronização. Use o identificador do registro no sistema de origem (ex.: ID no RD Station, código no ERP) para evitar duplicidade em integrações. **Único por workspace**: tentativas de criar ou atualizar um registro com um `external_sync_code` já existente retornam erro `409 conflict`. |
 
 **Exemplo de Request Body:**
@@ -955,7 +958,7 @@ Atualiza todos os campos editáveis de um(a) negociação. Campos omitidos serã
 | value | decimal | Não | Valor monetário da negociação. |
 | currency | string (ISO 4217) | Não | Moeda. Default: BRL. |
 | expected_close_date | date (YYYY-MM-DD) | Não | Data prevista de fechamento. |
-| owner_id | uuid | Não | Usuário responsável (preenchido com o dono da chave se omitido). |
+| owner_id | uuid | Não | Usuário responsável. Não é preenchido automaticamente com o dono da chave. |
 | person_id | uuid | Não | Contato principal associado. |
 | organization_id | uuid | Não | Empresa associada. |
 | temperature | string (hot|warm|cold) | Não | Temperatura qualitativa do lead. |
@@ -966,6 +969,8 @@ Atualiza todos os campos editáveis de um(a) negociação. Campos omitidos serã
 | lead_origin_id | uuid | Não | [Legado] Origem (fonte) do lead. Use `source_id` no novo modelo. |
 | origin_group_id | uuid | Não | [Legado] Grupo de origem. Use `source_id` no novo modelo. |
 | channel_id | uuid | Não | [Legado] Canal. Use `channel_v2_id` no novo modelo. |
+| is_on_hold | boolean | Não | Negociação congelada: continua aberta, fora do foco. Não altera `status`. |
+| on_hold_until | date (YYYY-MM-DD) | Não | Data opcional para retomar a negociação congelada. Só é aceita com `is_on_hold` verdadeiro. |
 | external_sync_code | string | Não | Código externo de sincronização. Use o identificador do registro no sistema de origem (ex.: ID no RD Station, código no ERP) para evitar duplicidade em integrações. **Único por workspace**: tentativas de criar ou atualizar um registro com um `external_sync_code` já existente retornam erro `409 conflict`. |
 
 **Exemplo de Request Body:**
@@ -1025,7 +1030,7 @@ Atualiza apenas os campos enviados no body. Use para edições incrementais.
 | value | decimal | Não | Valor monetário da negociação. |
 | currency | string (ISO 4217) | Não | Moeda. Default: BRL. |
 | expected_close_date | date (YYYY-MM-DD) | Não | Data prevista de fechamento. |
-| owner_id | uuid | Não | Usuário responsável (preenchido com o dono da chave se omitido). |
+| owner_id | uuid | Não | Usuário responsável. Não é preenchido automaticamente com o dono da chave. |
 | person_id | uuid | Não | Contato principal associado. |
 | organization_id | uuid | Não | Empresa associada. |
 | temperature | string (hot|warm|cold) | Não | Temperatura qualitativa do lead. |
@@ -1036,6 +1041,8 @@ Atualiza apenas os campos enviados no body. Use para edições incrementais.
 | lead_origin_id | uuid | Não | [Legado] Origem (fonte) do lead. Use `source_id` no novo modelo. |
 | origin_group_id | uuid | Não | [Legado] Grupo de origem. Use `source_id` no novo modelo. |
 | channel_id | uuid | Não | [Legado] Canal. Use `channel_v2_id` no novo modelo. |
+| is_on_hold | boolean | Não | Negociação congelada: continua aberta, fora do foco. Não altera `status`. |
+| on_hold_until | date (YYYY-MM-DD) | Não | Data opcional para retomar a negociação congelada. Só é aceita com `is_on_hold` verdadeiro. |
 | external_sync_code | string | Não | Código externo de sincronização. Use o identificador do registro no sistema de origem (ex.: ID no RD Station, código no ERP) para evitar duplicidade em integrações. **Único por workspace**: tentativas de criar ou atualizar um registro com um `external_sync_code` já existente retornam erro `409 conflict`. |
 
 **Exemplo de Request Body:**

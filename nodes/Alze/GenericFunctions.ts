@@ -168,6 +168,29 @@ export function toDateOnly(body: IDataObject, keys: string[]) {
 }
 
 /**
+ * Parse a JSON-object parameter (n8n `json` fields arrive as strings) in place.
+ */
+export function parseJsonObjectField(node: INode, body: IDataObject, key: string, label: string) {
+	const value = body[key];
+	if (value === undefined || value === '') {
+		delete body[key];
+		return;
+	}
+	let parsed: unknown = value;
+	if (typeof value === 'string') {
+		try {
+			parsed = JSON.parse(value);
+		} catch {
+			throw new NodeOperationError(node, `${label} is invalid. Please provide a valid JSON object.`);
+		}
+	}
+	if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed)) {
+		throw new NodeOperationError(node, `${label} must be a JSON object.`);
+	}
+	body[key] = parsed as IDataObject;
+}
+
+/**
  * Helper to process custom fields input into Alze body format
  */
 export function handleCustomFields(node: INode, body: IDataObject, properties: IDataObject) {

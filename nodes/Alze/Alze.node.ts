@@ -13,6 +13,7 @@ import {
 	handleCustomFields,
 	handlePipelineStages,
 	handleContactPhones,
+	parseJsonObjectField,
 	toDateOnly,
 } from './GenericFunctions';
 
@@ -378,6 +379,7 @@ export class Alze implements INodeType {
 						const body: IDataObject = { title, pipeline_id: pipelineId, stage_id: stageId, ...fields };
 						handleCustomFields(this.getNode(), body, fields);
 						toDateOnly(body, DEAL_DATE_FIELDS);
+						parseJsonObjectField(this.getNode(), body, 'creation_source_meta', 'Creation Source Meta (JSON)');
 						responseData = await alzeApiRequest.call(this, 'POST', '/deals', body);
 						responseData = responseData.data;
 					} else if (operation === 'update') {
