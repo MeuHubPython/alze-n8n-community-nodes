@@ -48,12 +48,6 @@ export const activityOperations: INodeProperties[] = [
 				description: 'Update an activity (clears omitted fields)',
 				action: 'Update an activity',
 			},
-			{
-				name: 'Update Partial',
-				value: 'patch',
-				description: 'Update an activity partially (incremental edit)',
-				action: 'Update partial activity',
-			},
 		],
 		default: 'list',
 	},
@@ -61,7 +55,7 @@ export const activityOperations: INodeProperties[] = [
 
 export const activityFields: INodeProperties[] = [
 	// ----------------------------------
-	//         activity: get / delete / update / patch / complete
+	//         activity: get / delete / update / complete
 	// ----------------------------------
 	{
 		displayName: 'Activity ID',
@@ -72,7 +66,7 @@ export const activityFields: INodeProperties[] = [
 		displayOptions: {
 			show: {
 				resource: ['activity'],
-				operation: ['get', 'delete', 'update', 'patch', 'complete'],
+				operation: ['get', 'delete', 'update', 'complete'],
 			},
 		},
 		description: 'The ID of the activity',
@@ -262,7 +256,7 @@ export const activityFields: INodeProperties[] = [
 	},
 
 	// ----------------------------------
-	//         activity: create / update / patch options
+	//         activity: create / update options
 	// ----------------------------------
 	{
 		displayName: 'Fields to Set',
@@ -273,7 +267,7 @@ export const activityFields: INodeProperties[] = [
 		displayOptions: {
 			show: {
 				resource: ['activity'],
-				operation: ['create', 'update', 'patch'],
+				operation: ['create', 'update'],
 			},
 		},
 		options: [
@@ -352,7 +346,7 @@ export const activityFields: INodeProperties[] = [
 				default: '',
 				displayOptions: {
 					show: {
-						'/operation': ['update', 'patch'],
+						'/operation': ['update'],
 					},
 				},
 				description: 'Title of the activity',

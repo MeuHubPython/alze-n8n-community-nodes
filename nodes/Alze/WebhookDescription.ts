@@ -42,12 +42,6 @@ export const webhookOperations: INodeProperties[] = [
 				description: 'Update a webhook (clears omitted fields)',
 				action: 'Update a webhook',
 			},
-			{
-				name: 'Update Partial',
-				value: 'patch',
-				description: 'Update a webhook partially (incremental edit)',
-				action: 'Update partial webhook',
-			},
 		],
 		default: 'list',
 	},
@@ -55,7 +49,7 @@ export const webhookOperations: INodeProperties[] = [
 
 export const webhookFields: INodeProperties[] = [
 	// ----------------------------------
-	//         webhook: get / delete / update / patch
+	//         webhook: get / delete / update
 	// ----------------------------------
 	{
 		displayName: 'Webhook ID',
@@ -66,7 +60,7 @@ export const webhookFields: INodeProperties[] = [
 		displayOptions: {
 			show: {
 				resource: ['webhook'],
-				operation: ['get', 'delete', 'update', 'patch'],
+				operation: ['get', 'delete', 'update'],
 			},
 		},
 		description: 'The ID of the webhook',
@@ -219,7 +213,7 @@ export const webhookFields: INodeProperties[] = [
 	},
 
 	// ----------------------------------
-	//         webhook: create / update / patch options
+	//         webhook: create / update options
 	// ----------------------------------
 	{
 		displayName: 'Fields to Set',
@@ -230,7 +224,7 @@ export const webhookFields: INodeProperties[] = [
 		displayOptions: {
 			show: {
 				resource: ['webhook'],
-				operation: ['create', 'update', 'patch'],
+				operation: ['create', 'update'],
 			},
 		},
 		options: [
@@ -242,41 +236,11 @@ export const webhookFields: INodeProperties[] = [
 				description: 'A brief description of this webhook',
 			},
 			{
-				displayName: 'Events',
-				name: 'eventsPatch',
-				type: 'multiOptions',
-				options: [
-					{ name: 'Activity Completed', value: 'activity.completed' },
-					{ name: 'Deal Created', value: 'deal.created' },
-					{ name: 'Deal Lost', value: 'deal.lost' },
-					{ name: 'Deal Won', value: 'deal.won' },
-				],
-				default: [],
-				displayOptions: {
-					show: {
-						'/operation': ['patch'],
-					},
-				},
-				description: 'The list of events to trigger this webhook',
-			},
-			{
 				displayName: 'Is Active',
 				name: 'is_active',
 				type: 'boolean',
 				default: true,
 				description: 'Whether the webhook is active',
-			},
-			{
-				displayName: 'Name',
-				name: 'namePatch',
-				type: 'string',
-				default: '',
-				displayOptions: {
-					show: {
-						'/operation': ['patch'],
-					},
-				},
-				description: 'Name of the webhook',
 			},
 			{
 				displayName: 'Secret',
@@ -287,18 +251,6 @@ export const webhookFields: INodeProperties[] = [
 					password: true,
 				},
 				description: 'HMAC signature secret for payload verification',
-			},
-			{
-				displayName: 'Target URL',
-				name: 'targetUrlPatch',
-				type: 'string',
-				default: '',
-				displayOptions: {
-					show: {
-						'/operation': ['patch'],
-					},
-				},
-				description: 'The HTTPS URL that will receive the webhook payloads',
 			},
 		],
 	},

@@ -24,12 +24,12 @@ This is an n8n community node package that integrates seamlessly with the **Alze
 | **👤 Contacts** | Individual leads or clients. | `Create`, `Get`, `Get Many (List)`, `Update`, `Update Partial (Patch)`, `Delete`, `Merge` |
 | **🏢 Organizations** | Associated businesses or institutions. | `Create`, `Get`, `Get Many (List)`, `Update`, `Update Partial (Patch)`, `Delete` |
 | **💼 Deals** | Sales opportunities and pipeline tickets. | `Create`, `Get`, `Get Many (List)`, `Update`, `Update Partial (Patch)`, `Delete`, `Win`, `Lose`, `Move Stage` |
-| **📅 Activities** | Planned or completed follow-up interactions. | `Create`, `Get`, `Get Many (List)`, `Update`, `Update Partial (Patch)`, `Delete`, `Complete` |
+| **📅 Activities** | Planned or completed follow-up interactions. | `Create`, `Get`, `Get Many (List)`, `Update`, `Delete`, `Complete` |
 | **📦 Products / Items** | Product catalog and pricing entries. | `Create`, `Get`, `Get Many (List)`, `Update`, `Update Partial (Patch)`, `Delete` |
 | **🛣️ Pipelines** | Sales pipeline structures / funnels. | `Create`, `Get`, `Get Many (List)`, `Update`, `Update Partial (Patch)`, `Delete`, `Get Stages` |
 | **📊 Stages** | Dynamic pipeline stages with success probability. | `Create`, `Get`, `Get Many (List)`, `Update`, `Update Partial (Patch)`, `Delete` |
 | **❌ Lost Reasons** | Standardized catalog for rejected deals. | `Create`, `Get`, `Get Many (List)`, `Update`, `Update Partial (Patch)`, `Delete` |
-| **👥 Users** | Workspace administrators, SDRs, and sellers. | `Get`, `Get Authenticated User (Me)`, `Get Many (List)` |
+| **👥 Users** | Workspace administrators, SDRs, and sellers. | `Get Authenticated User (Me)`, `Get Many (List)` |
 
 ---
 

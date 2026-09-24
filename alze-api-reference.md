@@ -5469,53 +5469,6 @@ Atualiza todos os campos editáveis de um(a) webhook. Campos omitidos serão lim
 }
 ```
 
-### Atualização parcial de webhook
-
-`PATCH` `/webhooks/{id}`
-
-Atualiza apenas os campos enviados no body. Use para edições incrementais.
-
-**Body**
-
-| Nome | Tipo | Obrigatório | Descrição |
-|------|------|-------------|-----------|
-| name | string | Não | Nome do webhook. |
-| description | string | Não | Descrição livre. |
-| target_url | string (URL HTTPS) | Não | URL que receberá os eventos. |
-| events | string[] | Não | Lista de eventos. Ex.: deal.created, deal.won, deal.lost, activity.completed. |
-| is_active | boolean | Não | Se o webhook está ativo. |
-| secret | string | Não | Segredo opcional para assinar o payload (HMAC). Retornado apenas no POST de criação. |
-
-**Exemplo de Request Body:**
-
-```json
-{
-  "name": "Sync para data warehouse"
-}
-```
-
-**Exemplo de Resposta:**
-
-```json
-{
-  "data": {
-    "id": "wh00000-0000-0000-0000-000000000001",
-    "name": "Sync para data warehouse",
-    "description": "Envia eventos de negociação para o pipeline interno.",
-    "target_url": "https://hooks.example.com/alze",
-    "events": [
-      "deal.created",
-      "deal.won",
-      "deal.lost"
-    ],
-    "is_active": true,
-    "last_delivery_at": "2026-05-29T11:00:00Z",
-    "last_delivery_status": "success",
-    "created_at": "2026-04-01T08:00:00Z"
-  }
-}
-```
-
 ### Remover webhook
 
 `DELETE` `/webhooks/{id}`
@@ -5578,38 +5531,6 @@ Retorna todos os usuários do workspace autenticado.
     "page_size": 20,
     "next": null,
     "prev": null
-  }
-}
-```
-
-### Obter usuário
-
-`GET` `/users/{id}`
-
-Retorna os dados de um usuário pelo ID.
-
-**Exemplo de Resposta:**
-
-```json
-{
-  "data": {
-    "id": "u123e456-7890-abcd-ef12-345678901234",
-    "name": "João Vendedor",
-    "email": "joao@empresa.com",
-    "role": "sales",
-    "active": true,
-    "created_at": "2026-01-05T00:00:00Z"
-  }
-}
-```
-
-**Exemplo de Erro:**
-
-```json
-{
-  "error": {
-    "code": "not_found",
-    "message": "Usuário não encontrado."
   }
 }
 ```

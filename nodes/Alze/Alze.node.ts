@@ -501,15 +501,6 @@ export class Alze implements INodeType {
 						}
 						responseData = await alzeApiRequest.call(this, 'PUT', `/activities/${activityId}`, body);
 						responseData = responseData.data;
-					} else if (operation === 'patch') {
-						const activityId = this.getNodeParameter('activityId', i) as string;
-						const fields = this.getNodeParameter('fieldsToSet', i) as IDataObject;
-						const body: IDataObject = { ...fields };
-						if (body.due_date && typeof body.due_date === 'string' && body.due_date.includes('T')) {
-							body.due_date = (body.due_date as string).split('T')[0];
-						}
-						responseData = await alzeApiRequest.call(this, 'PATCH', `/activities/${activityId}`, body);
-						responseData = responseData.data;
 					} else if (operation === 'list') {
 						const q = this.getNodeParameter('q', i) as string;
 						const additionalFields = this.getNodeParameter('additionalFields', i) as IDataObject;
@@ -719,11 +710,7 @@ export class Alze implements INodeType {
 				//                  USER
 				// ==========================================
 				else if (resource === 'user') {
-					if (operation === 'get') {
-						const userId = this.getNodeParameter('userId', i) as string;
-						responseData = await alzeApiRequest.call(this, 'GET', `/users/${userId}`);
-						responseData = responseData.data;
-					} else if (operation === 'getMe') {
+					if (operation === 'getMe') {
 						responseData = await alzeApiRequest.call(this, 'GET', '/users/me');
 						responseData = responseData.data;
 					} else if (operation === 'list') {
@@ -1198,24 +1185,6 @@ export class Alze implements INodeType {
 						const fields = this.getNodeParameter('fieldsToSet', i) as IDataObject;
 						const body: IDataObject = { name, target_url, events, ...fields };
 						responseData = await alzeApiRequest.call(this, 'PUT', `/webhooks/${id}`, body);
-						responseData = responseData.data;
-					} else if (operation === 'patch') {
-						const id = this.getNodeParameter('webhookId', i) as string;
-						const fields = this.getNodeParameter('fieldsToSet', i) as IDataObject;
-						const body: IDataObject = { ...fields };
-						if (fields.namePatch) {
-							body.name = fields.namePatch;
-							delete body.namePatch;
-						}
-						if (fields.targetUrlPatch) {
-							body.target_url = fields.targetUrlPatch;
-							delete body.targetUrlPatch;
-						}
-						if (fields.eventsPatch) {
-							body.events = fields.eventsPatch;
-							delete body.eventsPatch;
-						}
-						responseData = await alzeApiRequest.call(this, 'PATCH', `/webhooks/${id}`, body);
 						responseData = responseData.data;
 					} else if (operation === 'list') {
 						const q = this.getNodeParameter('q', i) as string;
