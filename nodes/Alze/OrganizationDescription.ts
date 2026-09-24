@@ -138,7 +138,7 @@ export const organizationFields: INodeProperties[] = [
 		displayOptions: {
 			show: {
 				resource: ['organization'],
-				operation: ['list'],
+				operation: ['list', 'listActivities', 'listContacts', 'listDeals'],
 			},
 		},
 	},
@@ -154,7 +154,7 @@ export const organizationFields: INodeProperties[] = [
 		displayOptions: {
 			show: {
 				resource: ['organization'],
-				operation: ['list'],
+				operation: ['list', 'listActivities', 'listContacts', 'listDeals'],
 				returnAll: [false],
 			},
 		},

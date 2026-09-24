@@ -112,8 +112,16 @@ export async function alzeApiRequest(
 }
 
 
+// The API caps `page_size` at 100 on every list route.
+const MAX_PAGE_SIZE = 100;
+
 /**
- * Handle Alze CRM API request with automatic page pagination if "Return All" is selected.
+ * List request with page pagination.
+ *
+ * "Return All" follows `meta.next` until the last page. Otherwise pages are
+ * fetched until "Limit" items are collected, since the API never returns
+ * more than 100 per page. Operations without these parameters return all
+ * items.
  */
 export async function alzeApiRequestAllItems(
 	this: IExecuteFunctions,
@@ -121,39 +129,29 @@ export async function alzeApiRequestAllItems(
 	endpoint: string,
 	body: IDataObject = {},
 	qs: IDataObject = {},
+	itemIndex = 0,
 ): Promise<any[]> { // eslint-disable-line @typescript-eslint/no-explicit-any
 	const returnData: any[] = []; // eslint-disable-line @typescript-eslint/no-explicit-any
-	let responseData;
-	qs.page = qs.page || 1;
-	qs.page_size = qs.page_size || 100; // Fetch max page size for efficiency
 
-	const returnAll = this.getNodeParameter('returnAll', 0) as boolean;
+	const returnAll = this.getNodeParameter('returnAll', itemIndex, true) as boolean;
+	const limit = returnAll
+		? Infinity
+		: Math.max(1, Number(this.getNodeParameter('limit', itemIndex, 50)) || 50);
 
-	if (returnAll) {
-		let hasMore = true;
-		do {
-			responseData = await alzeApiRequest.call(this, method, endpoint, body, qs);
-			const items = responseData.data;
-			if (items && Array.isArray(items)) {
-				returnData.push(...items);
-			}
-			if (responseData.meta && responseData.meta.next) {
-				qs.page = (qs.page as number) + 1;
-			} else {
-				hasMore = false;
-			}
-		} while (hasMore);
+	// The page size must stay the same across pages, or offsets shift.
+	qs.page = 1;
+	qs.page_size = Math.min(MAX_PAGE_SIZE, limit);
 
-		return returnData;
-	} else {
-		qs.page_size = this.getNodeParameter('limit', 0) as number || 20;
-		responseData = await alzeApiRequest.call(this, method, endpoint, body, qs);
-		const items = responseData.data;
-		if (items && Array.isArray(items)) {
-			return items.slice(0, qs.page_size);
-		}
-		return [];
+	while (returnData.length < limit) {
+		const responseData = await alzeApiRequest.call(this, method, endpoint, body, qs);
+		const items = responseData?.data;
+		if (!Array.isArray(items) || items.length === 0) break;
+		returnData.push(...items);
+		if (!responseData.meta?.next) break;
+		qs.page = (qs.page as number) + 1;
 	}
+
+	return returnAll ? returnData : returnData.slice(0, limit);
 }
 
 /**

@@ -132,7 +132,7 @@ export const contactFields: INodeProperties[] = [
 		displayOptions: {
 			show: {
 				resource: ['contact'],
-				operation: ['list'],
+				operation: ['list', 'listActivities', 'listDeals'],
 			},
 		},
 	},
@@ -148,7 +148,7 @@ export const contactFields: INodeProperties[] = [
 		displayOptions: {
 			show: {
 				resource: ['contact'],
-				operation: ['list'],
+				operation: ['list', 'listActivities', 'listDeals'],
 				returnAll: [false],
 			},
 		},

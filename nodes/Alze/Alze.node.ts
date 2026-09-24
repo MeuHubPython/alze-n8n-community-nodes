@@ -235,10 +235,10 @@ export class Alze implements INodeType {
 						responseData = deleteResult(responseData, contactId);
 					} else if (operation === 'listDeals') {
 						const contactId = this.getNodeParameter('contactId', i) as string;
-						responseData = await alzeApiRequestAllItems.call(this, 'GET', `/contacts/${contactId}/deals`);
+						responseData = await alzeApiRequestAllItems.call(this, 'GET', `/contacts/${contactId}/deals`, {}, {}, i);
 					} else if (operation === 'listActivities') {
 						const contactId = this.getNodeParameter('contactId', i) as string;
-						responseData = await alzeApiRequestAllItems.call(this, 'GET', `/contacts/${contactId}/activities`);
+						responseData = await alzeApiRequestAllItems.call(this, 'GET', `/contacts/${contactId}/activities`, {}, {}, i);
 					} else if (operation === 'create') {
 						const name = this.getNodeParameter('name', i) as string;
 						const fields = this.getNodeParameter('fieldsToSet', i) as IDataObject;
@@ -274,7 +274,7 @@ export class Alze implements INodeType {
 						const qs: IDataObject = { ...additionalFields };
 						if (q) qs.q = q;
 						applyOrderParams(this, i, qs);
-						responseData = await alzeApiRequestAllItems.call(this, 'GET', '/contacts', {}, qs);
+						responseData = await alzeApiRequestAllItems.call(this, 'GET', '/contacts', {}, qs, i);
 					}
 				}
 
@@ -322,16 +322,16 @@ export class Alze implements INodeType {
 						const qs: IDataObject = { ...additionalFields };
 						if (q) qs.q = q;
 						applyOrderParams(this, i, qs);
-						responseData = await alzeApiRequestAllItems.call(this, 'GET', '/organizations', {}, qs);
+						responseData = await alzeApiRequestAllItems.call(this, 'GET', '/organizations', {}, qs, i);
 					} else if (operation === 'listContacts') {
 						const organizationId = this.getNodeParameter('organizationId', i) as string;
-						responseData = await alzeApiRequestAllItems.call(this, 'GET', `/organizations/${organizationId}/contacts`);
+						responseData = await alzeApiRequestAllItems.call(this, 'GET', `/organizations/${organizationId}/contacts`, {}, {}, i);
 					} else if (operation === 'listDeals') {
 						const organizationId = this.getNodeParameter('organizationId', i) as string;
-						responseData = await alzeApiRequestAllItems.call(this, 'GET', `/organizations/${organizationId}/deals`);
+						responseData = await alzeApiRequestAllItems.call(this, 'GET', `/organizations/${organizationId}/deals`, {}, {}, i);
 					} else if (operation === 'listActivities') {
 						const organizationId = this.getNodeParameter('organizationId', i) as string;
-						responseData = await alzeApiRequestAllItems.call(this, 'GET', `/organizations/${organizationId}/activities`);
+						responseData = await alzeApiRequestAllItems.call(this, 'GET', `/organizations/${organizationId}/activities`, {}, {}, i);
 					}
 				}
 
@@ -417,10 +417,10 @@ export class Alze implements INodeType {
 						const qs: IDataObject = { ...additionalFields };
 						if (q) qs.q = q;
 						applyOrderParams(this, i, qs);
-						responseData = await alzeApiRequestAllItems.call(this, 'GET', '/deals', {}, qs);
+						responseData = await alzeApiRequestAllItems.call(this, 'GET', '/deals', {}, qs, i);
 					} else if (operation === 'listContacts') {
 						const dealId = this.getNodeParameter('dealId', i) as string;
-						responseData = await alzeApiRequestAllItems.call(this, 'GET', `/deals/${dealId}/contacts`);
+						responseData = await alzeApiRequestAllItems.call(this, 'GET', `/deals/${dealId}/contacts`, {}, {}, i);
 					} else if (operation === 'addContact') {
 						const dealId = this.getNodeParameter('dealId', i) as string;
 						const personId = this.getNodeParameter('personIdAdd', i) as string;
@@ -433,7 +433,7 @@ export class Alze implements INodeType {
 						responseData = deleteResult(responseData, personId);
 					} else if (operation === 'listItems') {
 						const dealId = this.getNodeParameter('dealId', i) as string;
-						responseData = await alzeApiRequestAllItems.call(this, 'GET', `/deals/${dealId}/items`);
+						responseData = await alzeApiRequestAllItems.call(this, 'GET', `/deals/${dealId}/items`, {}, {}, i);
 					} else if (operation === 'addItem') {
 						const dealId = this.getNodeParameter('dealId', i) as string;
 						const itemId = this.getNodeParameter('itemIdAdd', i) as number;
@@ -450,7 +450,7 @@ export class Alze implements INodeType {
 						const dealId = this.getNodeParameter('dealId', i) as string;
 						const additionalFields = this.getNodeParameter('additionalFields', i, {}) as IDataObject;
 						const qs: IDataObject = { ...additionalFields };
-						responseData = await alzeApiRequestAllItems.call(this, 'GET', `/deals/${dealId}/notes`, {}, qs);
+						responseData = await alzeApiRequestAllItems.call(this, 'GET', `/deals/${dealId}/notes`, {}, qs, i);
 					} else if (operation === 'addNote') {
 						const dealId = this.getNodeParameter('dealId', i) as string;
 						const content = this.getNodeParameter('content', i) as string;
@@ -522,7 +522,7 @@ export class Alze implements INodeType {
 						const qs: IDataObject = { ...additionalFields };
 						if (q) qs.q = q;
 						applyOrderParams(this, i, qs);
-						responseData = await alzeApiRequestAllItems.call(this, 'GET', '/activities', {}, qs);
+						responseData = await alzeApiRequestAllItems.call(this, 'GET', '/activities', {}, qs, i);
 					}
 				}
 
@@ -577,7 +577,7 @@ export class Alze implements INodeType {
 						const qs: IDataObject = { ...additionalFields };
 						if (q) qs.q = q;
 						applyOrderParams(this, i, qs);
-						responseData = await alzeApiRequestAllItems.call(this, 'GET', '/items', {}, qs);
+						responseData = await alzeApiRequestAllItems.call(this, 'GET', '/items', {}, qs, i);
 					}
 				}
 
@@ -625,7 +625,7 @@ export class Alze implements INodeType {
 						const qs: IDataObject = { ...additionalFields };
 						if (q) qs.q = q;
 						applyOrderParams(this, i, qs);
-						responseData = await alzeApiRequestAllItems.call(this, 'GET', '/pipelines', {}, qs);
+						responseData = await alzeApiRequestAllItems.call(this, 'GET', '/pipelines', {}, qs, i);
 					}
 				}
 
@@ -672,7 +672,7 @@ export class Alze implements INodeType {
 						const qs: IDataObject = { pipeline_id: pipelineId, ...additionalFields };
 						if (q) qs.q = q;
 						applyOrderParams(this, i, qs);
-						responseData = await alzeApiRequestAllItems.call(this, 'GET', '/stages', {}, qs);
+						responseData = await alzeApiRequestAllItems.call(this, 'GET', '/stages', {}, qs, i);
 					}
 				}
 
@@ -717,7 +717,7 @@ export class Alze implements INodeType {
 						const qs: IDataObject = { ...additionalFields };
 						if (q) qs.q = q;
 						applyOrderParams(this, i, qs);
-						responseData = await alzeApiRequestAllItems.call(this, 'GET', '/loss-reasons', {}, qs);
+						responseData = await alzeApiRequestAllItems.call(this, 'GET', '/loss-reasons', {}, qs, i);
 					}
 				}
 
@@ -734,7 +734,7 @@ export class Alze implements INodeType {
 						const qs: IDataObject = { ...additionalFields };
 						if (q) qs.q = q;
 						applyOrderParams(this, i, qs);
-						responseData = await alzeApiRequestAllItems.call(this, 'GET', '/users', {}, qs);
+						responseData = await alzeApiRequestAllItems.call(this, 'GET', '/users', {}, qs, i);
 					}
 				}
 
@@ -819,7 +819,7 @@ export class Alze implements INodeType {
 						const qs: IDataObject = { ...additionalFields };
 						if (q) qs.q = q;
 						applyOrderParams(this, i, qs);
-						responseData = await alzeApiRequestAllItems.call(this, 'GET', '/custom-fields', {}, qs);
+						responseData = await alzeApiRequestAllItems.call(this, 'GET', '/custom-fields', {}, qs, i);
 					}
 				}
 
@@ -864,7 +864,7 @@ export class Alze implements INodeType {
 						const qs: IDataObject = { ...additionalFields };
 						if (q) qs.q = q;
 						applyOrderParams(this, i, qs);
-						responseData = await alzeApiRequestAllItems.call(this, 'GET', '/fontes', {}, qs);
+						responseData = await alzeApiRequestAllItems.call(this, 'GET', '/fontes', {}, qs, i);
 					}
 				}
 
@@ -909,7 +909,7 @@ export class Alze implements INodeType {
 						const qs: IDataObject = { ...additionalFields };
 						if (q) qs.q = q;
 						applyOrderParams(this, i, qs);
-						responseData = await alzeApiRequestAllItems.call(this, 'GET', '/campanhas', {}, qs);
+						responseData = await alzeApiRequestAllItems.call(this, 'GET', '/campanhas', {}, qs, i);
 					}
 				}
 
@@ -954,7 +954,7 @@ export class Alze implements INodeType {
 						const qs: IDataObject = { ...additionalFields };
 						if (q) qs.q = q;
 						applyOrderParams(this, i, qs);
-						responseData = await alzeApiRequestAllItems.call(this, 'GET', '/canais', {}, qs);
+						responseData = await alzeApiRequestAllItems.call(this, 'GET', '/canais', {}, qs, i);
 					}
 				}
 
@@ -999,7 +999,7 @@ export class Alze implements INodeType {
 						const qs: IDataObject = { ...additionalFields };
 						if (q) qs.q = q;
 						applyOrderParams(this, i, qs);
-						responseData = await alzeApiRequestAllItems.call(this, 'GET', '/item-categories', {}, qs);
+						responseData = await alzeApiRequestAllItems.call(this, 'GET', '/item-categories', {}, qs, i);
 					}
 				}
 
@@ -1044,7 +1044,7 @@ export class Alze implements INodeType {
 						const qs: IDataObject = { ...additionalFields };
 						if (q) qs.q = q;
 						applyOrderParams(this, i, qs);
-						responseData = await alzeApiRequestAllItems.call(this, 'GET', '/activity-types', {}, qs);
+						responseData = await alzeApiRequestAllItems.call(this, 'GET', '/activity-types', {}, qs, i);
 					}
 				}
 
@@ -1089,7 +1089,7 @@ export class Alze implements INodeType {
 						const qs: IDataObject = { ...additionalFields };
 						if (q) qs.q = q;
 						applyOrderParams(this, i, qs);
-						responseData = await alzeApiRequestAllItems.call(this, 'GET', '/tags', {}, qs);
+						responseData = await alzeApiRequestAllItems.call(this, 'GET', '/tags', {}, qs, i);
 					}
 				}
 
@@ -1164,7 +1164,7 @@ export class Alze implements INodeType {
 						const qs: IDataObject = { ...additionalFields };
 						if (q) qs.q = q;
 						applyOrderParams(this, i, qs);
-						responseData = await alzeApiRequestAllItems.call(this, 'GET', '/distribution-rules', {}, qs);
+						responseData = await alzeApiRequestAllItems.call(this, 'GET', '/distribution-rules', {}, qs, i);
 					}
 				}
 
@@ -1203,7 +1203,7 @@ export class Alze implements INodeType {
 						const qs: IDataObject = { ...additionalFields };
 						if (q) qs.q = q;
 						applyOrderParams(this, i, qs);
-						responseData = await alzeApiRequestAllItems.call(this, 'GET', '/webhooks', {}, qs);
+						responseData = await alzeApiRequestAllItems.call(this, 'GET', '/webhooks', {}, qs, i);
 					}
 				}
 

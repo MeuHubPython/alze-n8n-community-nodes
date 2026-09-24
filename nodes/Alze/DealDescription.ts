@@ -328,7 +328,7 @@ export const dealFields: INodeProperties[] = [
 		displayOptions: {
 			show: {
 				resource: ['deal'],
-				operation: ['list'],
+				operation: ['list', 'listContacts', 'listItems', 'listNotes'],
 			},
 		},
 	},
@@ -344,7 +344,7 @@ export const dealFields: INodeProperties[] = [
 		displayOptions: {
 			show: {
 				resource: ['deal'],
-				operation: ['list'],
+				operation: ['list', 'listContacts', 'listItems', 'listNotes'],
 				returnAll: [false],
 			},
 		},
