@@ -4031,8 +4031,8 @@ Retorna a lista paginada de campos personalizados do workspace autenticado, com 
 | order_by | string | Não | Campo de ordenação. Ex.: `created_at`. |
 | order_direction | string | Não | Direção da ordenação: `asc` ou `desc` (default: desc). |
 | q | string | Não | Busca textual no campo principal do recurso (geralmente `name` ou `title`). |
-| entity | string | Não | Filtra por entidade alvo. |
-| type | string | Não | Filtra por tipo. |
+| entity | string (persons|organizations|deals) | Não | Filtra por entidade alvo. |
+| type | string (text|number|date|select|multiselect) | Não | Filtra por tipo. |
 | external_sync_code | string | Não | Filtra pelo código externo de sincronização. É o identificador único do registro no sistema de origem (ex.: ID no RD Station, código no ERP), usado por integrações para evitar duplicidade. Único por workspace. |
 
 **Exemplo de Resposta:**
@@ -4169,14 +4169,13 @@ Cria um(a) novo(a) campo personalizado no workspace autenticado.
 
 `PUT` `/custom-fields/{id}`
 
-Atualiza todos os campos editáveis de um(a) campo personalizado. Campos omitidos serão limpos.
+Atualiza os campos enviados de um campo personalizado; os omitidos são mantidos. `entity` não pode ser alterado depois da criação.
 
 **Body**
 
 | Nome | Tipo | Obrigatório | Descrição |
 |------|------|-------------|-----------|
 | name | string | Sim | Rótulo do campo personalizado. |
-| entity | string (persons|organizations|deals) | Sim | Entidade alvo do campo. |
 | type | string (text|number|date|select|multiselect) | Sim | Tipo do dado. |
 | options | string[] | Não | Opções (obrigatório para select/multiselect). |
 | position | integer | Não | Ordem de exibição. |
@@ -4190,7 +4189,6 @@ Atualiza todos os campos editáveis de um(a) campo personalizado. Campos omitido
 ```json
 {
   "name": "Plano contratado",
-  "entity": "deals",
   "type": "select"
 }
 ```
@@ -4229,7 +4227,6 @@ Atualiza apenas os campos enviados no body. Use para edições incrementais.
 | Nome | Tipo | Obrigatório | Descrição |
 |------|------|-------------|-----------|
 | name | string | Não | Rótulo do campo personalizado. |
-| entity | string (persons|organizations|deals) | Não | Entidade alvo do campo. |
 | type | string (text|number|date|select|multiselect) | Não | Tipo do dado. |
 | options | string[] | Não | Opções (obrigatório para select/multiselect). |
 | position | integer | Não | Ordem de exibição. |

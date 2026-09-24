@@ -113,18 +113,18 @@ export const customFieldFields: INodeProperties[] = [
 		type: 'options',
 		required: true,
 		options: [
+			{ name: 'Contacts (Persons)', value: 'persons' },
 			{ name: 'Deals', value: 'deals' },
 			{ name: 'Organizations', value: 'organizations' },
-			{ name: 'Persons', value: 'persons' },
 		],
 		default: 'persons',
 		displayOptions: {
 			show: {
 				resource: ['customField'],
-				operation: ['create', 'update'],
+				operation: ['create'],
 			},
 		},
-		description: 'The target entity for this custom field',
+		description: 'The target entity for this custom field. It cannot be changed after creation.',
 	},
 	{
 		displayName: 'Type',
@@ -132,7 +132,6 @@ export const customFieldFields: INodeProperties[] = [
 		type: 'options',
 		required: true,
 		options: [
-			{ name: 'Boolean', value: 'boolean' },
 			{ name: 'Date', value: 'date' },
 			{ name: 'Multiselect', value: 'multiselect' },
 			{ name: 'Number', value: 'number' },
@@ -227,11 +226,11 @@ export const customFieldFields: INodeProperties[] = [
 				name: 'entity',
 				type: 'options',
 				options: [
-					{ name: 'Contacts', value: 'contacts' },
-					{ name: 'Organizations', value: 'organizations' },
+					{ name: 'Contacts (Persons)', value: 'persons' },
 					{ name: 'Deals', value: 'deals' },
+					{ name: 'Organizations', value: 'organizations' },
 				],
-				default: 'contacts',
+				default: 'persons',
 				description: 'Filter by entity target',
 			},
 			{
@@ -246,8 +245,8 @@ export const customFieldFields: INodeProperties[] = [
 				name: 'type',
 				type: 'options',
 				options: [
-					{ name: 'Boolean', value: 'boolean' },
 					{ name: 'Date', value: 'date' },
+					{ name: 'Multiselect', value: 'multiselect' },
 					{ name: 'Number', value: 'number' },
 					{ name: 'Select', value: 'select' },
 					{ name: 'Text', value: 'text' },
@@ -274,23 +273,6 @@ export const customFieldFields: INodeProperties[] = [
 			},
 		},
 		options: [
-			{
-				displayName: 'Entity',
-				name: 'entityPatch',
-				type: 'options',
-				options: [
-					{ name: 'Deals', value: 'deals' },
-					{ name: 'Organizations', value: 'organizations' },
-					{ name: 'Persons', value: 'persons' },
-				],
-				default: 'persons',
-				displayOptions: {
-					show: {
-						'/operation': ['patch'],
-					},
-				},
-				description: 'The target entity for this custom field',
-			},
 			{
 				displayName: 'External Sync Code',
 				name: 'external_sync_code',
@@ -350,7 +332,6 @@ export const customFieldFields: INodeProperties[] = [
 				name: 'typePatch',
 				type: 'options',
 				options: [
-					{ name: 'Boolean', value: 'boolean' },
 					{ name: 'Date', value: 'date' },
 					{ name: 'Multiselect', value: 'multiselect' },
 					{ name: 'Number', value: 'number' },

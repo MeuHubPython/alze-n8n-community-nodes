@@ -781,10 +781,10 @@ export class Alze implements INodeType {
 					} else if (operation === 'update') {
 						const id = this.getNodeParameter('customFieldId', i) as string;
 						const name = this.getNodeParameter('nameUpdate', i) as string;
-						const entity = this.getNodeParameter('entity', i) as string;
 						const type = this.getNodeParameter('type', i) as string;
 						const fields = this.getNodeParameter('fieldsToSet', i) as IDataObject;
-						const body: IDataObject = { name, entity, type, ...fields };
+						// `entity` is fixed at creation: the API does not accept it on update
+						const body: IDataObject = { name, type, ...fields };
 						if (body.options && typeof body.options === 'string') {
 							body.options = (body.options as string).split(',').map(s => s.trim()).filter(Boolean);
 						}
@@ -800,10 +800,6 @@ export class Alze implements INodeType {
 						if (fields.namePatch) {
 							body.name = fields.namePatch;
 							delete body.namePatch;
-						}
-						if (fields.entityPatch) {
-							body.entity = fields.entityPatch;
-							delete body.entityPatch;
 						}
 						if (fields.typePatch) {
 							body.type = fields.typePatch;
