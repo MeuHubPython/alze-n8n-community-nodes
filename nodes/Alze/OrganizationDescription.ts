@@ -191,16 +191,17 @@ export const organizationFields: INodeProperties[] = [
 		type: 'options',
 		options: [
 			{ name: 'Ascending', value: 'asc' },
+			{ name: 'Default', value: '' },
 			{ name: 'Descending', value: 'desc' },
 		],
-		default: 'desc',
+		default: '',
 		displayOptions: {
 			show: {
 				resource: ['organization'],
 				operation: ['list'],
 			},
 		},
-		description: 'Sort direction (asc or desc)',
+		description: 'Sort direction. Default keeps the natural order of the resource.',
 	},
 	{
 		displayName: 'Additional Fields',

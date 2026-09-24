@@ -117,7 +117,7 @@ Retorna a lista paginada de contatos do workspace autenticado, com suporte a bus
 | page | integer | Não | Número da página (default: 1). |
 | page_size | integer | Não | Registros por página (default: 25, máx: 100). |
 | order_by | string | Não | Campo de ordenação. Ex.: `created_at`. |
-| order_direction | string | Não | Direção da ordenação: `asc` ou `desc` (default: desc). |
+| order_direction | string | Não | Direção da ordenação: `asc` ou `desc`. Sem ele, vale a ordem padrão do recurso (`created_at` desc). |
 | q | string | Não | Busca textual no campo principal do recurso (geralmente `name` ou `title`). |
 | status | string | Não | Filtra por status (active|inactive). |
 | email | string | Não | Filtra por e-mail exato (case-insensitive). |
@@ -444,7 +444,7 @@ Retorna a lista paginada de empresas do workspace autenticado, com suporte a bus
 | page | integer | Não | Número da página (default: 1). |
 | page_size | integer | Não | Registros por página (default: 25, máx: 100). |
 | order_by | string | Não | Campo de ordenação. Ex.: `created_at`. |
-| order_direction | string | Não | Direção da ordenação: `asc` ou `desc` (default: desc). |
+| order_direction | string | Não | Direção da ordenação: `asc` ou `desc`. Sem ele, vale a ordem padrão do recurso (`created_at` desc). |
 | q | string | Não | Busca textual no campo principal do recurso (geralmente `name` ou `title`). |
 | status | string | Não | Filtra por status (active|inactive). |
 | external_sync_code | string | Não | Filtra pelo código externo de sincronização. É o identificador único do registro no sistema de origem (ex.: ID no RD Station, código no ERP), usado por integrações para evitar duplicidade. Único por workspace. |
@@ -766,7 +766,7 @@ Retorna a lista paginada de negociações do workspace autenticado, com suporte 
 | page | integer | Não | Número da página (default: 1). |
 | page_size | integer | Não | Registros por página (default: 25, máx: 100). |
 | order_by | string | Não | Campo de ordenação. Ex.: `created_at`. |
-| order_direction | string | Não | Direção da ordenação: `asc` ou `desc` (default: desc). |
+| order_direction | string | Não | Direção da ordenação: `asc` ou `desc`. Sem ele, vale a ordem padrão do recurso (`created_at` desc). |
 | q | string | Não | Busca textual no campo principal do recurso (geralmente `name` ou `title`). |
 | pipeline_id | uuid | Não | Filtra por funil. |
 | stage_id | uuid | Não | Filtra por etapa. |
@@ -1769,7 +1769,7 @@ Retorna a lista paginada de produtos do workspace autenticado, com suporte a bus
 | page | integer | Não | Número da página (default: 1). |
 | page_size | integer | Não | Registros por página (default: 25, máx: 100). |
 | order_by | string | Não | Campo de ordenação. Ex.: `created_at`. |
-| order_direction | string | Não | Direção da ordenação: `asc` ou `desc` (default: desc). |
+| order_direction | string | Não | Direção da ordenação: `asc` ou `desc`. Sem ele, vale a ordem padrão do recurso (`created_at` desc). |
 | q | string | Não | Busca textual no campo principal do recurso (geralmente `name` ou `title`). |
 | category_id | integer | Não | Filtra por categoria. |
 | type | string | Não | Filtra por tipo (product|service). |
@@ -2000,7 +2000,7 @@ Retorna a lista paginada de categorias de produto do workspace autenticado, com 
 | page | integer | Não | Número da página (default: 1). |
 | page_size | integer | Não | Registros por página (default: 25, máx: 100). |
 | order_by | string | Não | Campo de ordenação. Ex.: `created_at`. |
-| order_direction | string | Não | Direção da ordenação: `asc` ou `desc` (default: desc). |
+| order_direction | string | Não | Direção da ordenação: `asc` ou `desc`. Sem ele, vale a ordem padrão do recurso (`name` asc). |
 | q | string | Não | Busca textual no campo principal do recurso (geralmente `name` ou `title`). |
 
 **Exemplo de Resposta:**
@@ -2191,7 +2191,7 @@ Retorna a lista paginada de funis do workspace autenticado, com suporte a busca,
 | page | integer | Não | Número da página (default: 1). |
 | page_size | integer | Não | Registros por página (default: 25, máx: 100). |
 | order_by | string | Não | Campo de ordenação. Ex.: `created_at`. |
-| order_direction | string | Não | Direção da ordenação: `asc` ou `desc` (default: desc). |
+| order_direction | string | Não | Direção da ordenação: `asc` ou `desc`. Sem ele, vale a ordem padrão do recurso (`position` asc). |
 | q | string | Não | Busca textual no campo principal do recurso (geralmente `name` ou `title`). |
 | external_sync_code | string | Não | Filtra pelo código externo de sincronização. É o identificador único do registro no sistema de origem (ex.: ID no RD Station, código no ERP), usado por integrações para evitar duplicidade. Único por workspace. |
 
@@ -2793,7 +2793,7 @@ Retorna a lista paginada de motivos de perda do workspace autenticado, com supor
 | page | integer | Não | Número da página (default: 1). |
 | page_size | integer | Não | Registros por página (default: 25, máx: 100). |
 | order_by | string | Não | Campo de ordenação. Ex.: `created_at`. |
-| order_direction | string | Não | Direção da ordenação: `asc` ou `desc` (default: desc). |
+| order_direction | string | Não | Direção da ordenação: `asc` ou `desc`. Sem ele, vale a ordem padrão do recurso (`name` asc). |
 | q | string | Não | Busca textual no campo principal do recurso (geralmente `name` ou `title`). |
 | external_sync_code | string | Não | Filtra pelo código externo de sincronização. É o identificador único do registro no sistema de origem (ex.: ID no RD Station, código no ERP), usado por integrações para evitar duplicidade. Único por workspace. |
 
@@ -2991,7 +2991,7 @@ Retorna a lista paginada de tags do workspace autenticado, com suporte a busca, 
 | page | integer | Não | Número da página (default: 1). |
 | page_size | integer | Não | Registros por página (default: 25, máx: 100). |
 | order_by | string | Não | Campo de ordenação. Ex.: `created_at`. |
-| order_direction | string | Não | Direção da ordenação: `asc` ou `desc` (default: desc). |
+| order_direction | string | Não | Direção da ordenação: `asc` ou `desc`. Sem ele, vale a ordem padrão do recurso (`name` asc). |
 | q | string | Não | Busca textual no campo principal do recurso (geralmente `name` ou `title`). |
 
 **Exemplo de Resposta:**
@@ -3190,7 +3190,7 @@ Retorna a lista paginada de fontes do workspace autenticado, com suporte a busca
 | page | integer | Não | Número da página (default: 1). |
 | page_size | integer | Não | Registros por página (default: 25, máx: 100). |
 | order_by | string | Não | Campo de ordenação. Ex.: `created_at`. |
-| order_direction | string | Não | Direção da ordenação: `asc` ou `desc` (default: desc). |
+| order_direction | string | Não | Direção da ordenação: `asc` ou `desc`. Sem ele, vale a ordem padrão do recurso (`name` asc). |
 | q | string | Não | Busca textual no campo principal do recurso (geralmente `name` ou `title`). |
 | external_sync_code | string | Não | Filtra pelo código externo de sincronização. É o identificador único do registro no sistema de origem (ex.: ID no RD Station, código no ERP), usado por integrações para evitar duplicidade. Único por workspace. |
 
@@ -3385,7 +3385,7 @@ Retorna a lista paginada de campanhas do workspace autenticado, com suporte a bu
 | page | integer | Não | Número da página (default: 1). |
 | page_size | integer | Não | Registros por página (default: 25, máx: 100). |
 | order_by | string | Não | Campo de ordenação. Ex.: `created_at`. |
-| order_direction | string | Não | Direção da ordenação: `asc` ou `desc` (default: desc). |
+| order_direction | string | Não | Direção da ordenação: `asc` ou `desc`. Sem ele, vale a ordem padrão do recurso (`name` asc). |
 | q | string | Não | Busca textual no campo principal do recurso (geralmente `name` ou `title`). |
 | source_id | uuid | Não | Filtra por fonte. |
 | external_sync_code | string | Não | Filtra pelo código externo de sincronização. É o identificador único do registro no sistema de origem (ex.: ID no RD Station, código no ERP), usado por integrações para evitar duplicidade. Único por workspace. |
@@ -3589,7 +3589,7 @@ Retorna a lista paginada de canais do workspace autenticado, com suporte a busca
 | page | integer | Não | Número da página (default: 1). |
 | page_size | integer | Não | Registros por página (default: 25, máx: 100). |
 | order_by | string | Não | Campo de ordenação. Ex.: `created_at`. |
-| order_direction | string | Não | Direção da ordenação: `asc` ou `desc` (default: desc). |
+| order_direction | string | Não | Direção da ordenação: `asc` ou `desc`. Sem ele, vale a ordem padrão do recurso (`name` asc). |
 | q | string | Não | Busca textual no campo principal do recurso (geralmente `name` ou `title`). |
 | source_id | uuid | Não | Filtra por fonte. |
 | campaign_id | uuid | Não | Filtra por campanha. |
@@ -3802,7 +3802,7 @@ Retorna a lista paginada de tipos de atividade do workspace autenticado, com sup
 | page | integer | Não | Número da página (default: 1). |
 | page_size | integer | Não | Registros por página (default: 25, máx: 100). |
 | order_by | string | Não | Campo de ordenação. Ex.: `created_at`. |
-| order_direction | string | Não | Direção da ordenação: `asc` ou `desc` (default: desc). |
+| order_direction | string | Não | Direção da ordenação: `asc` ou `desc`. Sem ele, vale a ordem padrão do recurso (`position` asc). |
 | q | string | Não | Busca textual no campo principal do recurso (geralmente `name` ou `title`). |
 | external_sync_code | string | Não | Filtra pelo código externo de sincronização. É o identificador único do registro no sistema de origem (ex.: ID no RD Station, código no ERP), usado por integrações para evitar duplicidade. Único por workspace. |
 
@@ -4029,7 +4029,7 @@ Retorna a lista paginada de campos personalizados do workspace autenticado, com 
 | page | integer | Não | Número da página (default: 1). |
 | page_size | integer | Não | Registros por página (default: 25, máx: 100). |
 | order_by | string | Não | Campo de ordenação. Ex.: `created_at`. |
-| order_direction | string | Não | Direção da ordenação: `asc` ou `desc` (default: desc). |
+| order_direction | string | Não | Direção da ordenação: `asc` ou `desc`. Sem ele, vale a ordem padrão do recurso (`position` asc). |
 | q | string | Não | Busca textual no campo principal do recurso (geralmente `name` ou `title`). |
 | entity | string (persons|organizations|deals) | Não | Filtra por entidade alvo. |
 | type | string (text|number|date|select|multiselect) | Não | Filtra por tipo. |
@@ -4303,7 +4303,7 @@ Retorna a lista paginada de templates de e-mail do workspace autenticado, com su
 | page | integer | Não | Número da página (default: 1). |
 | page_size | integer | Não | Registros por página (default: 25, máx: 100). |
 | order_by | string | Não | Campo de ordenação. Ex.: `created_at`. |
-| order_direction | string | Não | Direção da ordenação: `asc` ou `desc` (default: desc). |
+| order_direction | string | Não | Direção da ordenação: `asc` ou `desc`. Sem ele, vale a ordem padrão do recurso (`name` asc). |
 | q | string | Não | Busca textual no campo principal do recurso (geralmente `name` ou `title`). |
 | category | string | Não | Filtra por categoria. |
 
@@ -4531,7 +4531,7 @@ Retorna a lista paginada de automações do workspace autenticado, com suporte a
 | page | integer | Não | Número da página (default: 1). |
 | page_size | integer | Não | Registros por página (default: 25, máx: 100). |
 | order_by | string | Não | Campo de ordenação. Ex.: `created_at`. |
-| order_direction | string | Não | Direção da ordenação: `asc` ou `desc` (default: desc). |
+| order_direction | string | Não | Direção da ordenação: `asc` ou `desc`. Sem ele, vale a ordem padrão do recurso (`run_order` asc). |
 | q | string | Não | Busca textual no campo principal do recurso (geralmente `name` ou `title`). |
 | is_active | boolean | Não | Filtra apenas ativas/inativas. |
 | trigger_type | string | Não | Filtra por tipo de gatilho. |
@@ -4808,7 +4808,7 @@ Retorna a lista paginada de regras de lead scoring do workspace autenticado, com
 | page | integer | Não | Número da página (default: 1). |
 | page_size | integer | Não | Registros por página (default: 25, máx: 100). |
 | order_by | string | Não | Campo de ordenação. Ex.: `created_at`. |
-| order_direction | string | Não | Direção da ordenação: `asc` ou `desc` (default: desc). |
+| order_direction | string | Não | Direção da ordenação: `asc` ou `desc`. Sem ele, vale a ordem padrão do recurso (`name` asc). |
 | q | string | Não | Busca textual no campo principal do recurso (geralmente `name` ou `title`). |
 | is_active | boolean | Não | Filtra por ativas/inativas. |
 | field | string | Não | Filtra por campo avaliado. |
@@ -5057,7 +5057,7 @@ Retorna a lista paginada de regras de distribuição do workspace autenticado, c
 | page | integer | Não | Número da página (default: 1). |
 | page_size | integer | Não | Registros por página (default: 25, máx: 100). |
 | order_by | string | Não | Campo de ordenação. Ex.: `created_at`. |
-| order_direction | string | Não | Direção da ordenação: `asc` ou `desc` (default: desc). |
+| order_direction | string | Não | Direção da ordenação: `asc` ou `desc`. Sem ele, vale a ordem padrão do recurso (`name` asc). |
 | q | string | Não | Busca textual no campo principal do recurso (geralmente `name` ou `title`). |
 | is_active | boolean | Não | Filtra por ativas/inativas. |
 | mode | string | Não | Filtra por modo (round_robin|by_origin). |
@@ -5283,8 +5283,6 @@ Retorna a lista paginada de webhooks do workspace autenticado, com suporte a bus
 |------|------|-------------|-----------|
 | page | integer | Não | Número da página (default: 1). |
 | page_size | integer | Não | Registros por página (default: 25, máx: 100). |
-| order_by | string | Não | Campo de ordenação. Ex.: `created_at`. |
-| order_direction | string | Não | Direção da ordenação: `asc` ou `desc` (default: desc). |
 | q | string | Não | Busca textual no campo principal do recurso (geralmente `name` ou `title`). |
 | is_active | boolean | Não | Filtra por ativos/inativos. |
 
@@ -5505,8 +5503,6 @@ Retorna todos os usuários do workspace autenticado.
 |------|------|-------------|-----------|
 | page | integer | Não | Número da página (default: 1). |
 | page_size | integer | Não | Registros por página (default: 25, máx: 100). |
-| order_by | string | Não | Campo de ordenação. Ex.: `created_at`. |
-| order_direction | string | Não | Direção da ordenação: `asc` ou `desc` (default: desc). |
 | q | string | Não | Busca textual no campo principal do recurso (geralmente `name` ou `title`). |
 | role | string | Não | Filtra por papel (admin, sales, sdr...). |
 | active | boolean | Não | Filtra apenas usuários ativos. |

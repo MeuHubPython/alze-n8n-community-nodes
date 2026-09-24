@@ -191,16 +191,17 @@ export const stageFields: INodeProperties[] = [
 		type: 'options',
 		options: [
 			{ name: 'Ascending', value: 'asc' },
+			{ name: 'Default', value: '' },
 			{ name: 'Descending', value: 'desc' },
 		],
-		default: 'desc',
+		default: '',
 		displayOptions: {
 			show: {
 				resource: ['stage'],
 				operation: ['list'],
 			},
 		},
-		description: 'Sort direction (asc or desc)',
+		description: 'Sort direction. Default keeps the natural order of the resource.',
 	},
 	{
 		displayName: 'Additional Fields',
