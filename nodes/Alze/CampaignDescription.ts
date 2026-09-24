@@ -39,7 +39,7 @@ export const campaignOperations: INodeProperties[] = [
 			{
 				name: 'Update',
 				value: 'update',
-				description: 'Update a campaign (clears omitted fields)',
+				description: 'Update a campaign. Only the fields sent are changed.',
 				action: 'Update a campaign',
 			},
 			{

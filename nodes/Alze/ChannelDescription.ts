@@ -39,7 +39,7 @@ export const channelOperations: INodeProperties[] = [
 			{
 				name: 'Update',
 				value: 'update',
-				description: 'Update a channel (clears omitted fields)',
+				description: 'Update a channel. Only the fields sent are changed.',
 				action: 'Update a channel',
 			},
 			{

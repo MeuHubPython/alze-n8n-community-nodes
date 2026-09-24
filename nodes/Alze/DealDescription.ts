@@ -99,7 +99,7 @@ export const dealOperations: INodeProperties[] = [
 			{
 				name: 'Update',
 				value: 'update',
-				description: 'Update a deal (clears omitted fields)',
+				description: 'Update a deal. Only the fields sent are changed.',
 				action: 'Update a deal',
 			},
 			{
@@ -163,19 +163,6 @@ export const dealFields: INodeProperties[] = [
 	//         deal: win
 	// ----------------------------------
 	{
-		displayName: 'Won Reason ID',
-		name: 'wonReasonId',
-		type: 'number',
-		default: 0,
-		displayOptions: {
-			show: {
-				resource: ['deal'],
-				operation: ['win'],
-			},
-		},
-		description: 'ID of the won reason from the won reasons catalogue',
-	},
-	{
 		displayName: 'Value',
 		name: 'value',
 		type: 'number',
@@ -189,7 +176,7 @@ export const dealFields: INodeProperties[] = [
 				operation: ['win'],
 			},
 		},
-		description: 'The final value of the won deal',
+		description: 'Final value of the won deal. Leave 0 to keep the current deal value.',
 	},
 
 	// ----------------------------------
@@ -332,7 +319,7 @@ export const dealFields: INodeProperties[] = [
 		displayOptions: {
 			show: {
 				resource: ['deal'],
-				operation: ['list'],
+				operation: ['list', 'listContacts', 'listItems', 'listNotes'],
 			},
 		},
 	},
@@ -348,7 +335,7 @@ export const dealFields: INodeProperties[] = [
 		displayOptions: {
 			show: {
 				resource: ['deal'],
-				operation: ['list'],
+				operation: ['list', 'listContacts', 'listItems', 'listNotes'],
 				returnAll: [false],
 			},
 		},
@@ -385,16 +372,17 @@ export const dealFields: INodeProperties[] = [
 		type: 'options',
 		options: [
 			{ name: 'Ascending', value: 'asc' },
+			{ name: 'Default', value: '' },
 			{ name: 'Descending', value: 'desc' },
 		],
-		default: 'desc',
+		default: '',
 		displayOptions: {
 			show: {
 				resource: ['deal'],
 				operation: ['list'],
 			},
 		},
-		description: 'Sort direction (asc or desc)',
+		description: 'Sort direction. Default keeps the natural order of the resource.',
 	},
 	{
 		displayName: 'Additional Fields',
@@ -516,6 +504,18 @@ export const dealFields: INodeProperties[] = [
 				description: 'ID of the main contact associated',
 			},
 			{
+				displayName: 'Creation Source Meta (JSON)',
+				name: 'creation_source_meta',
+				type: 'json',
+				default: '',
+				displayOptions: {
+					show: {
+						'/operation': ['create'],
+					},
+				},
+				description: 'Where the lead came from, only on creation. Accepted keys: utm_first (object with utm_source/medium/campaign/term/content), gclid, fbclid, utm_id, session_hash, lp_form_submission_id, landing_page_id, referrer. The API uses it to fill Source and Campaign when they are not sent.',
+			},
+			{
 				displayName: 'Currency',
 				name: 'currency',
 				type: 'string',
@@ -567,7 +567,7 @@ export const dealFields: INodeProperties[] = [
 				name: 'expected_close_date',
 				type: 'dateTime',
 				default: '',
-				description: 'Planned or expected close date of the deal',
+				description: 'Planned or expected close date of the deal. Only the date part (YYYY-MM-DD) is sent.',
 			},
 			{
 				displayName: 'External Sync Code',
@@ -582,6 +582,13 @@ export const dealFields: INodeProperties[] = [
 				type: 'boolean',
 				default: false,
 				description: 'Whether the deal is on hold / paused at the source. Does not change status.',
+			},
+			{
+				displayName: 'On Hold Until',
+				name: 'on_hold_until',
+				type: 'dateTime',
+				default: '',
+				description: 'Optional date to resume an on-hold deal. Only accepted together with Is On Hold = true. Only the date part (YYYY-MM-DD) is sent.',
 			},
 			{
 				displayName: 'Organization ID',
@@ -726,6 +733,10 @@ export const dealFields: INodeProperties[] = [
 		displayName: 'Quantity',
 		name: 'quantity',
 		type: 'number',
+		typeOptions: {
+			minValue: 1,
+			numberPrecision: 0,
+		},
 		default: 1,
 		displayOptions: {
 			show: {
@@ -733,7 +744,7 @@ export const dealFields: INodeProperties[] = [
 				operation: ['addItem'],
 			},
 		},
-		description: 'The quantity of the item',
+		description: 'The quantity of the item (whole number)',
 	},
 	{
 		displayName: 'Price',
@@ -749,7 +760,7 @@ export const dealFields: INodeProperties[] = [
 				operation: ['addItem'],
 			},
 		},
-		description: 'The price of the item (leave 0 to use the catalog price)',
+		description: 'Unit price of the item. Leave 0 to use the catalog price.',
 	},
 	{
 		displayName: 'Note ID',

@@ -108,7 +108,7 @@ Pessoas físicas no CRM. Podem ser vinculadas a uma empresa e a múltiplas negoc
 
 `GET` `/contacts`
 
-Retorna a lista paginada de contatos do workspace autenticado, com suporte a busca, filtros e ordenação.
+Retorna a lista paginada de contatos do workspace autenticado, com suporte a busca, filtros e ordenação. Os telefones vêm só em `phones[]`; as colunas `phone`/`mobile` não aparecem na resposta.
 
 **Query Parameters**
 
@@ -117,12 +117,12 @@ Retorna a lista paginada de contatos do workspace autenticado, com suporte a bus
 | page | integer | Não | Número da página (default: 1). |
 | page_size | integer | Não | Registros por página (default: 25, máx: 100). |
 | order_by | string | Não | Campo de ordenação. Ex.: `created_at`. |
-| order_direction | string | Não | Direção da ordenação: `asc` ou `desc` (default: desc). |
-| q | string | Não | Busca textual no campo principal do recurso (geralmente `name` ou `title`). |
+| order_direction | string | Não | Direção da ordenação: `asc` ou `desc`. Sem ele, vale a ordem padrão do recurso (`created_at` desc). |
+| q | string | Não | Busca parcial (case-insensitive) no nome do contato. Não busca em e-mail nem telefone. |
 | status | string | Não | Filtra por status (active|inactive). |
-| email | string | Não | Filtra por e-mail exato (case-insensitive). |
-| phone | string | Não | Filtra por telefone (ignora formatação). |
-| mobile | string | Não | Filtra por celular (ignora formatação). |
+| email | string | Não | Filtra por e-mail exato. |
+| phone | string | Não | Filtra pela coluna de telefone fixo: compara só os dígitos, na ordem, tolerando qualquer formatação entre eles (busca parcial, não exata). |
+| mobile | string | Não | Filtra pela coluna de celular: compara só os dígitos, na ordem, tolerando qualquer formatação entre eles (busca parcial, não exata). |
 | phone_match | string | Não | Telefone em qualquer formato. Casa os 8 últimos dígitos (tolera máscara, +55 e a falta ou sobra do nono dígito) e, quando os dois números têm DDD, exige o mesmo DDD. Olha celular, telefone e a lista de telefones do contato. Vazio devolve nenhum contato. |
 | organization_id | uuid | Não | Filtra contatos de uma empresa específica. |
 | external_sync_code | string | Não | Filtra pelo código externo de sincronização. É o identificador único do registro no sistema de origem (ex.: ID no RD Station, código no ERP), usado por integrações para evitar duplicidade. Único por workspace. |
@@ -136,8 +136,9 @@ Retorna a lista paginada de contatos do workspace autenticado, com suporte a bus
       "id": "c1a2b3d4-e5f6-7890-abcd-ef1234567890",
       "name": "Mariana Souza",
       "email": "mariana@exemplo.com",
-      "phone": "+55 11 3333-3333",
-      "mobile": "+55 11 99999-9999",
+      "phones": [
+        { "id": "f0e1d2c3-b4a5-6789-0123-456789abcdef", "value": "+55 11 99999-9999", "type": "mobile", "label": null, "is_primary": true, "position": 0 }
+      ],
       "cpf": "123.456.789-00",
       "job_title": "Diretora de Marketing",
       "organization_id": "9f8e7d6c-5b4a-3210-fedc-ba9876543210",
@@ -175,8 +176,9 @@ Retorna o registro de um(a) contato pelo ID.
     "id": "c1a2b3d4-e5f6-7890-abcd-ef1234567890",
     "name": "Mariana Souza",
     "email": "mariana@exemplo.com",
-    "phone": "+55 11 3333-3333",
-    "mobile": "+55 11 99999-9999",
+    "phones": [
+      { "id": "f0e1d2c3-b4a5-6789-0123-456789abcdef", "value": "+55 11 99999-9999", "type": "mobile", "label": null, "is_primary": true, "position": 0 }
+    ],
     "cpf": "123.456.789-00",
     "job_title": "Diretora de Marketing",
     "organization_id": "9f8e7d6c-5b4a-3210-fedc-ba9876543210",
@@ -222,6 +224,7 @@ Cria um(a) novo(a) contato no workspace autenticado.
 | email | string | Não | E-mail principal. |
 | phone | string | Não | Telefone fixo. |
 | mobile | string | Não | Telefone celular. |
+| phones | array | Não | Lista de telefones `{ value, type, label?, is_primary? }`. `type` deve ser `mobile`, `fixed`, `whatsapp`, `work` ou `other`. Quando enviada, substitui a lista inteira. |
 | cpf | string | Não | CPF do contato. |
 | job_title | string | Não | Cargo / função. |
 | organization_id | uuid | Não | ID da empresa associada. |
@@ -229,6 +232,7 @@ Cria um(a) novo(a) contato no workspace autenticado.
 | status | string (active|inactive) | Não | Status do contato. |
 | observation | string | Não | Observações livres em texto. |
 | custom_fields | object | Não | Pares chave/valor para campos customizados do workspace. |
+| creation_source_meta | object | Não | De onde o lead veio, só na criação. Mesmas chaves de `creation_source_meta` em negociações. O conteúdo é gravado em `custom_fields`. |
 | external_sync_code | string | Não | Código externo de sincronização. Use o identificador do registro no sistema de origem (ex.: ID no RD Station, código no ERP) para evitar duplicidade em integrações. **Único por workspace**: tentativas de criar ou atualizar um registro com um `external_sync_code` já existente retornam erro `409 conflict`. |
 
 **Exemplo de Request Body:**
@@ -247,8 +251,11 @@ Cria um(a) novo(a) contato no workspace autenticado.
     "id": "c1a2b3d4-e5f6-7890-abcd-ef1234567890",
     "name": "Mariana Souza",
     "email": "mariana@exemplo.com",
-    "phone": "+55 11 3333-3333",
+    "phone": null,
     "mobile": "+55 11 99999-9999",
+    "phones": [
+      { "id": "f0e1d2c3-b4a5-6789-0123-456789abcdef", "value": "+55 11 99999-9999", "type": "mobile", "label": null, "is_primary": true, "position": 0 }
+    ],
     "cpf": "123.456.789-00",
     "job_title": "Diretora de Marketing",
     "organization_id": "9f8e7d6c-5b4a-3210-fedc-ba9876543210",
@@ -268,7 +275,7 @@ Cria um(a) novo(a) contato no workspace autenticado.
 
 `PUT` `/contacts/{id}`
 
-Atualiza todos os campos editáveis de um(a) contato. Campos omitidos serão limpos.
+Atualiza um(a) contato. Como no PATCH, só os campos enviados mudam; os omitidos são mantidos.
 
 **Body**
 
@@ -278,6 +285,7 @@ Atualiza todos os campos editáveis de um(a) contato. Campos omitidos serão lim
 | email | string | Não | E-mail principal. |
 | phone | string | Não | Telefone fixo. |
 | mobile | string | Não | Telefone celular. |
+| phones | array | Não | Lista de telefones `{ value, type, label?, is_primary? }`. `type` deve ser `mobile`, `fixed`, `whatsapp`, `work` ou `other`. Quando enviada, substitui a lista inteira. |
 | cpf | string | Não | CPF do contato. |
 | job_title | string | Não | Cargo / função. |
 | organization_id | uuid | Não | ID da empresa associada. |
@@ -303,8 +311,11 @@ Atualiza todos os campos editáveis de um(a) contato. Campos omitidos serão lim
     "id": "c1a2b3d4-e5f6-7890-abcd-ef1234567890",
     "name": "Mariana Souza",
     "email": "mariana@exemplo.com",
-    "phone": "+55 11 3333-3333",
+    "phone": null,
     "mobile": "+55 11 99999-9999",
+    "phones": [
+      { "id": "f0e1d2c3-b4a5-6789-0123-456789abcdef", "value": "+55 11 99999-9999", "type": "mobile", "label": null, "is_primary": true, "position": 0 }
+    ],
     "cpf": "123.456.789-00",
     "job_title": "Diretora de Marketing",
     "organization_id": "9f8e7d6c-5b4a-3210-fedc-ba9876543210",
@@ -334,6 +345,7 @@ Atualiza apenas os campos enviados no body. Use para edições incrementais.
 | email | string | Não | E-mail principal. |
 | phone | string | Não | Telefone fixo. |
 | mobile | string | Não | Telefone celular. |
+| phones | array | Não | Lista de telefones `{ value, type, label?, is_primary? }`. `type` deve ser `mobile`, `fixed`, `whatsapp`, `work` ou `other`. Quando enviada, substitui a lista inteira. |
 | cpf | string | Não | CPF do contato. |
 | job_title | string | Não | Cargo / função. |
 | organization_id | uuid | Não | ID da empresa associada. |
@@ -359,8 +371,11 @@ Atualiza apenas os campos enviados no body. Use para edições incrementais.
     "id": "c1a2b3d4-e5f6-7890-abcd-ef1234567890",
     "name": "Mariana Souza",
     "email": "mariana@exemplo.com",
-    "phone": "+55 11 3333-3333",
+    "phone": null,
     "mobile": "+55 11 99999-9999",
+    "phones": [
+      { "id": "f0e1d2c3-b4a5-6789-0123-456789abcdef", "value": "+55 11 99999-9999", "type": "mobile", "label": null, "is_primary": true, "position": 0 }
+    ],
     "cpf": "123.456.789-00",
     "job_title": "Diretora de Marketing",
     "organization_id": "9f8e7d6c-5b4a-3210-fedc-ba9876543210",
@@ -441,7 +456,7 @@ Retorna a lista paginada de empresas do workspace autenticado, com suporte a bus
 | page | integer | Não | Número da página (default: 1). |
 | page_size | integer | Não | Registros por página (default: 25, máx: 100). |
 | order_by | string | Não | Campo de ordenação. Ex.: `created_at`. |
-| order_direction | string | Não | Direção da ordenação: `asc` ou `desc` (default: desc). |
+| order_direction | string | Não | Direção da ordenação: `asc` ou `desc`. Sem ele, vale a ordem padrão do recurso (`created_at` desc). |
 | q | string | Não | Busca textual no campo principal do recurso (geralmente `name` ou `title`). |
 | status | string | Não | Filtra por status (active|inactive). |
 | external_sync_code | string | Não | Filtra pelo código externo de sincronização. É o identificador único do registro no sistema de origem (ex.: ID no RD Station, código no ERP), usado por integrações para evitar duplicidade. Único por workspace. |
@@ -582,7 +597,7 @@ Cria um(a) novo(a) empresa no workspace autenticado.
 
 `PUT` `/organizations/{id}`
 
-Atualiza todos os campos editáveis de um(a) empresa. Campos omitidos serão limpos.
+Atualiza um(a) empresa. Como no PATCH, só os campos enviados mudam; os omitidos são mantidos.
 
 **Body**
 
@@ -763,7 +778,7 @@ Retorna a lista paginada de negociações do workspace autenticado, com suporte 
 | page | integer | Não | Número da página (default: 1). |
 | page_size | integer | Não | Registros por página (default: 25, máx: 100). |
 | order_by | string | Não | Campo de ordenação. Ex.: `created_at`. |
-| order_direction | string | Não | Direção da ordenação: `asc` ou `desc` (default: desc). |
+| order_direction | string | Não | Direção da ordenação: `asc` ou `desc`. Sem ele, vale a ordem padrão do recurso (`created_at` desc). |
 | q | string | Não | Busca textual no campo principal do recurso (geralmente `name` ou `title`). |
 | pipeline_id | uuid | Não | Filtra por funil. |
 | stage_id | uuid | Não | Filtra por etapa. |
@@ -882,7 +897,7 @@ Cria um(a) novo(a) negociação no workspace autenticado.
 | value | decimal | Não | Valor monetário da negociação. |
 | currency | string (ISO 4217) | Não | Moeda. Default: BRL. |
 | expected_close_date | date (YYYY-MM-DD) | Não | Data prevista de fechamento. |
-| owner_id | uuid | Não | Usuário responsável (preenchido com o dono da chave se omitido). |
+| owner_id | uuid | Não | Usuário responsável. Não é preenchido automaticamente com o dono da chave. |
 | person_id | uuid | Não | Contato principal associado. |
 | organization_id | uuid | Não | Empresa associada. |
 | temperature | string (hot|warm|cold) | Não | Temperatura qualitativa do lead. |
@@ -893,6 +908,9 @@ Cria um(a) novo(a) negociação no workspace autenticado.
 | lead_origin_id | uuid | Não | [Legado] Origem (fonte) do lead. Use `source_id` no novo modelo. |
 | origin_group_id | uuid | Não | [Legado] Grupo de origem. Use `source_id` no novo modelo. |
 | channel_id | uuid | Não | [Legado] Canal. Use `channel_v2_id` no novo modelo. |
+| is_on_hold | boolean | Não | Negociação congelada: continua aberta, fora do foco. Não altera `status`. |
+| on_hold_until | date (YYYY-MM-DD) | Não | Data opcional para retomar a negociação congelada. Só é aceita com `is_on_hold` verdadeiro. |
+| creation_source_meta | object | Não | De onde o lead veio, só na criação. Chaves aceitas: `utm_first` (objeto com utm_source/medium/campaign/term/content), `gclid`, `fbclid`, `utm_id`, `session_hash`, `lp_form_submission_id`, `landing_page_id`, `referrer`; outras são descartadas. A API usa esses dados para preencher `source_id`/`campaign_id` quando não enviados. |
 | external_sync_code | string | Não | Código externo de sincronização. Use o identificador do registro no sistema de origem (ex.: ID no RD Station, código no ERP) para evitar duplicidade em integrações. **Único por workspace**: tentativas de criar ou atualizar um registro com um `external_sync_code` já existente retornam erro `409 conflict`. |
 
 **Exemplo de Request Body:**
@@ -939,7 +957,7 @@ Cria um(a) novo(a) negociação no workspace autenticado.
 
 `PUT` `/deals/{id}`
 
-Atualiza todos os campos editáveis de um(a) negociação. Campos omitidos serão limpos.
+Atualiza um(a) negociação. Como no PATCH, só os campos enviados mudam; os omitidos são mantidos.
 
 **Body**
 
@@ -952,7 +970,7 @@ Atualiza todos os campos editáveis de um(a) negociação. Campos omitidos serã
 | value | decimal | Não | Valor monetário da negociação. |
 | currency | string (ISO 4217) | Não | Moeda. Default: BRL. |
 | expected_close_date | date (YYYY-MM-DD) | Não | Data prevista de fechamento. |
-| owner_id | uuid | Não | Usuário responsável (preenchido com o dono da chave se omitido). |
+| owner_id | uuid | Não | Usuário responsável. Não é preenchido automaticamente com o dono da chave. |
 | person_id | uuid | Não | Contato principal associado. |
 | organization_id | uuid | Não | Empresa associada. |
 | temperature | string (hot|warm|cold) | Não | Temperatura qualitativa do lead. |
@@ -963,6 +981,8 @@ Atualiza todos os campos editáveis de um(a) negociação. Campos omitidos serã
 | lead_origin_id | uuid | Não | [Legado] Origem (fonte) do lead. Use `source_id` no novo modelo. |
 | origin_group_id | uuid | Não | [Legado] Grupo de origem. Use `source_id` no novo modelo. |
 | channel_id | uuid | Não | [Legado] Canal. Use `channel_v2_id` no novo modelo. |
+| is_on_hold | boolean | Não | Negociação congelada: continua aberta, fora do foco. Não altera `status`. |
+| on_hold_until | date (YYYY-MM-DD) | Não | Data opcional para retomar a negociação congelada. Só é aceita com `is_on_hold` verdadeiro. |
 | external_sync_code | string | Não | Código externo de sincronização. Use o identificador do registro no sistema de origem (ex.: ID no RD Station, código no ERP) para evitar duplicidade em integrações. **Único por workspace**: tentativas de criar ou atualizar um registro com um `external_sync_code` já existente retornam erro `409 conflict`. |
 
 **Exemplo de Request Body:**
@@ -1022,7 +1042,7 @@ Atualiza apenas os campos enviados no body. Use para edições incrementais.
 | value | decimal | Não | Valor monetário da negociação. |
 | currency | string (ISO 4217) | Não | Moeda. Default: BRL. |
 | expected_close_date | date (YYYY-MM-DD) | Não | Data prevista de fechamento. |
-| owner_id | uuid | Não | Usuário responsável (preenchido com o dono da chave se omitido). |
+| owner_id | uuid | Não | Usuário responsável. Não é preenchido automaticamente com o dono da chave. |
 | person_id | uuid | Não | Contato principal associado. |
 | organization_id | uuid | Não | Empresa associada. |
 | temperature | string (hot|warm|cold) | Não | Temperatura qualitativa do lead. |
@@ -1033,6 +1053,8 @@ Atualiza apenas os campos enviados no body. Use para edições incrementais.
 | lead_origin_id | uuid | Não | [Legado] Origem (fonte) do lead. Use `source_id` no novo modelo. |
 | origin_group_id | uuid | Não | [Legado] Grupo de origem. Use `source_id` no novo modelo. |
 | channel_id | uuid | Não | [Legado] Canal. Use `channel_v2_id` no novo modelo. |
+| is_on_hold | boolean | Não | Negociação congelada: continua aberta, fora do foco. Não altera `status`. |
+| on_hold_until | date (YYYY-MM-DD) | Não | Data opcional para retomar a negociação congelada. Só é aceita com `is_on_hold` verdadeiro. |
 | external_sync_code | string | Não | Código externo de sincronização. Use o identificador do registro no sistema de origem (ex.: ID no RD Station, código no ERP) para evitar duplicidade em integrações. **Único por workspace**: tentativas de criar ou atualizar um registro com um `external_sync_code` já existente retornam erro `409 conflict`. |
 
 **Exemplo de Request Body:**
@@ -1094,20 +1116,18 @@ Move o(a) negociação para a lixeira (soft delete). Registros podem ser restaur
 
 `PATCH` `/deals/{id}/win`
 
-Move a negociação para status `won` e registra `won_at`/`closed_at`. O `won_reason_id` é opcional.
+Move a negociação para status `won` e registra `won_at`/`closed_at`. O único campo aceito é `value`; sem ele, o valor atual da negociação é mantido.
 
 **Body**
 
 | Nome | Tipo | Obrigatório | Descrição |
 |------|------|-------------|-----------|
-| won_reason_id | integer | Não | ID do motivo de ganho. |
 | value | decimal | Não | Sobrescreve o valor final da negociação. |
 
 **Exemplo de Request Body:**
 
 ```json
 {
-  "won_reason_id": 3,
   "value": 48500
 }
 ```
@@ -1526,7 +1546,7 @@ Lista paginada de atividades de CRM do workspace, com filtros por negociação, 
 | deal_id | uuid | Não | Filtra atividades de uma negociação. |
 | person_id | uuid | Não | Filtra por contato vinculado. |
 | organization_id | uuid | Não | Filtra por empresa vinculada. |
-| status | string | Não | Filtra por status (open|done|canceled). |
+| status | string | Não | Filtra por status (todo|in_progress|done|closed). Os apelidos legados `open` (= todo) e `canceled` (= closed) também são aceitos. |
 | external_sync_code | string | Não | Filtra pelo código externo de sincronização. É o identificador único do registro no sistema de origem (ex.: ID no RD Station, código no ERP), usado por integrações para evitar duplicidade. Único por workspace. |
 
 **Exemplo de Resposta:**
@@ -1538,7 +1558,7 @@ Lista paginada de atividades de CRM do workspace, com filtros por negociação, 
       "id": "a1111111-2222-3333-4444-555555555555",
       "title": "Ligar para Mariana — apresentar proposta",
       "description": "Confirmar escopo do plano Enterprise.",
-      "status": "open",
+      "status": "todo",
       "due_date": "2026-05-20",
       "due_time": "14:00:00",
       "activity_type_id": "at000000-0000-0000-0000-000000000001",
@@ -1574,7 +1594,7 @@ Retorna uma atividade pelo ID.
     "id": "a1111111-2222-3333-4444-555555555555",
     "title": "Ligar para Mariana — apresentar proposta",
     "description": "Confirmar escopo do plano Enterprise.",
-    "status": "open",
+    "status": "todo",
     "due_date": "2026-05-20",
     "due_time": "14:00:00",
     "activity_type_id": "at000000-0000-0000-0000-000000000001",
@@ -1617,7 +1637,7 @@ Cria uma nova atividade de CRM. O tipo de tarefa (`task_type_id`) padrão do wor
 | activity_type_id | uuid | Não | Tipo da atividade (ver `/activity-types`). |
 | person_id | uuid | Não | Contato vinculado. |
 | organization_id | uuid | Não | Empresa vinculada. |
-| status | string (open|done|canceled) | Não | Status atual (default: open). |
+| status | string (todo|in_progress|done|closed) | Não | Status atual (default: todo). Os apelidos legados `open` e `canceled` são aceitos e gravados como `todo` e `closed`. |
 | external_sync_code | string | Não | Código externo de sincronização. Use o identificador do registro no sistema de origem (ex.: ID no RD Station, código no ERP) para evitar duplicidade em integrações. **Único por workspace**: tentativas de criar ou atualizar um registro com um `external_sync_code` já existente retornam erro `409 conflict`. |
 
 **Exemplo de Request Body:**
@@ -1638,7 +1658,7 @@ Cria uma nova atividade de CRM. O tipo de tarefa (`task_type_id`) padrão do wor
     "id": "a1111111-2222-3333-4444-555555555555",
     "title": "Ligar para Mariana — apresentar proposta",
     "description": "Confirmar escopo do plano Enterprise.",
-    "status": "open",
+    "status": "todo",
     "due_date": "2026-05-20",
     "due_time": "14:00:00",
     "activity_type_id": "at000000-0000-0000-0000-000000000001",
@@ -1656,7 +1676,7 @@ Cria uma nova atividade de CRM. O tipo de tarefa (`task_type_id`) padrão do wor
 
 `PUT` `/activities/{id}`
 
-Atualiza os campos editáveis de uma atividade.
+Atualiza uma atividade. Só os campos enviados mudam; os omitidos são mantidos (não há PATCH para atividades além de `/complete`).
 
 **Body**
 
@@ -1670,7 +1690,7 @@ Atualiza os campos editáveis de uma atividade.
 | activity_type_id | uuid | Não | Tipo da atividade (ver `/activity-types`). |
 | person_id | uuid | Não | Contato vinculado. |
 | organization_id | uuid | Não | Empresa vinculada. |
-| status | string (open|done|canceled) | Não | Status atual (default: open). |
+| status | string (todo|in_progress|done|closed) | Não | Status atual (default: todo). Os apelidos legados `open` e `canceled` são aceitos e gravados como `todo` e `closed`. |
 | external_sync_code | string | Não | Código externo de sincronização. Use o identificador do registro no sistema de origem (ex.: ID no RD Station, código no ERP) para evitar duplicidade em integrações. **Único por workspace**: tentativas de criar ou atualizar um registro com um `external_sync_code` já existente retornam erro `409 conflict`. |
 
 **Exemplo de Request Body:**
@@ -1768,7 +1788,7 @@ Retorna a lista paginada de produtos do workspace autenticado, com suporte a bus
 | page | integer | Não | Número da página (default: 1). |
 | page_size | integer | Não | Registros por página (default: 25, máx: 100). |
 | order_by | string | Não | Campo de ordenação. Ex.: `created_at`. |
-| order_direction | string | Não | Direção da ordenação: `asc` ou `desc` (default: desc). |
+| order_direction | string | Não | Direção da ordenação: `asc` ou `desc`. Sem ele, vale a ordem padrão do recurso (`created_at` desc). |
 | q | string | Não | Busca textual no campo principal do recurso (geralmente `name` ou `title`). |
 | category_id | integer | Não | Filtra por categoria. |
 | type | string | Não | Filtra por tipo (product|service). |
@@ -1883,7 +1903,7 @@ Cria um(a) novo(a) produto no workspace autenticado.
 
 `PUT` `/items/{id}`
 
-Atualiza todos os campos editáveis de um(a) produto. Campos omitidos serão limpos.
+Atualiza um(a) produto. Como no PATCH, só os campos enviados mudam; os omitidos são mantidos.
 
 **Body**
 
@@ -1999,7 +2019,7 @@ Retorna a lista paginada de categorias de produto do workspace autenticado, com 
 | page | integer | Não | Número da página (default: 1). |
 | page_size | integer | Não | Registros por página (default: 25, máx: 100). |
 | order_by | string | Não | Campo de ordenação. Ex.: `created_at`. |
-| order_direction | string | Não | Direção da ordenação: `asc` ou `desc` (default: desc). |
+| order_direction | string | Não | Direção da ordenação: `asc` ou `desc`. Sem ele, vale a ordem padrão do recurso (`name` asc). |
 | q | string | Não | Busca textual no campo principal do recurso (geralmente `name` ou `title`). |
 
 **Exemplo de Resposta:**
@@ -2093,7 +2113,7 @@ Cria um(a) novo(a) categoria de produto no workspace autenticado.
 
 `PUT` `/item-categories/{id}`
 
-Atualiza todos os campos editáveis de um(a) categoria de produto. Campos omitidos serão limpos.
+Atualiza um(a) categoria de produto. Como no PATCH, só os campos enviados mudam; os omitidos são mantidos.
 
 **Body**
 
@@ -2190,7 +2210,7 @@ Retorna a lista paginada de funis do workspace autenticado, com suporte a busca,
 | page | integer | Não | Número da página (default: 1). |
 | page_size | integer | Não | Registros por página (default: 25, máx: 100). |
 | order_by | string | Não | Campo de ordenação. Ex.: `created_at`. |
-| order_direction | string | Não | Direção da ordenação: `asc` ou `desc` (default: desc). |
+| order_direction | string | Não | Direção da ordenação: `asc` ou `desc`. Sem ele, vale a ordem padrão do recurso (`position` asc). |
 | q | string | Não | Busca textual no campo principal do recurso (geralmente `name` ou `title`). |
 | external_sync_code | string | Não | Filtra pelo código externo de sincronização. É o identificador único do registro no sistema de origem (ex.: ID no RD Station, código no ERP), usado por integrações para evitar duplicidade. Único por workspace. |
 
@@ -2418,7 +2438,7 @@ Cria um(a) novo(a) funil no workspace autenticado.
 
 `PUT` `/pipelines/{id}`
 
-Atualiza todos os campos editáveis de um(a) funil. Campos omitidos serão limpos.
+Atualiza um(a) funil. Como no PATCH, só os campos enviados mudam; os omitidos são mantidos.
 
 **Body**
 
@@ -2652,7 +2672,7 @@ Cria uma nova etapa em um funil existente. Valida que `pipeline_id` pertence ao 
 
 `PUT` `/stages/{id}`
 
-Atualiza todos os campos editáveis. Reordene etapas alterando `position` — as demais não são deslocadas automaticamente, então gerencie posições no cliente se precisar de ordem contígua.
+Atualiza a etapa (`name` é obrigatório no PUT; os demais campos omitidos são mantidos). Reordene etapas alterando `position` — as demais não são deslocadas automaticamente, então gerencie posições no cliente se precisar de ordem contígua.
 
 **Body**
 
@@ -2792,7 +2812,7 @@ Retorna a lista paginada de motivos de perda do workspace autenticado, com supor
 | page | integer | Não | Número da página (default: 1). |
 | page_size | integer | Não | Registros por página (default: 25, máx: 100). |
 | order_by | string | Não | Campo de ordenação. Ex.: `created_at`. |
-| order_direction | string | Não | Direção da ordenação: `asc` ou `desc` (default: desc). |
+| order_direction | string | Não | Direção da ordenação: `asc` ou `desc`. Sem ele, vale a ordem padrão do recurso (`name` asc). |
 | q | string | Não | Busca textual no campo principal do recurso (geralmente `name` ou `title`). |
 | external_sync_code | string | Não | Filtra pelo código externo de sincronização. É o identificador único do registro no sistema de origem (ex.: ID no RD Station, código no ERP), usado por integrações para evitar duplicidade. Único por workspace. |
 
@@ -2889,7 +2909,7 @@ Cria um(a) novo(a) motivo de perda no workspace autenticado.
 
 `PUT` `/loss-reasons/{id}`
 
-Atualiza todos os campos editáveis de um(a) motivo de perda. Campos omitidos serão limpos.
+Atualiza um(a) motivo de perda. Como no PATCH, só os campos enviados mudam; os omitidos são mantidos.
 
 **Body**
 
@@ -2971,204 +2991,6 @@ Move o(a) motivo de perda para a lixeira (soft delete). Registros podem ser rest
 ```
 
 
-## Motivos de ganho
-
-Catálogo de motivos de ganho usado ao marcar uma negociação como ganha.
-
-**Tabela:** `won_reasons`
-
-### Listar motivos de ganho
-
-`GET` `/win-reasons`
-
-Retorna a lista paginada de motivos de ganho do workspace autenticado, com suporte a busca, filtros e ordenação.
-
-**Query Parameters**
-
-| Nome | Tipo | Obrigatório | Descrição |
-|------|------|-------------|-----------|
-| page | integer | Não | Número da página (default: 1). |
-| page_size | integer | Não | Registros por página (default: 25, máx: 100). |
-| order_by | string | Não | Campo de ordenação. Ex.: `created_at`. |
-| order_direction | string | Não | Direção da ordenação: `asc` ou `desc` (default: desc). |
-| q | string | Não | Busca textual no campo principal do recurso (geralmente `name` ou `title`). |
-| external_sync_code | string | Não | Filtra pelo código externo de sincronização. É o identificador único do registro no sistema de origem (ex.: ID no RD Station, código no ERP), usado por integrações para evitar duplicidade. Único por workspace. |
-
-**Exemplo de Resposta:**
-
-```json
-{
-  "data": [
-    {
-      "id": 3,
-      "name": "Melhor preço",
-      "is_default": false
-    }
-  ],
-  "meta": {
-    "total": 142,
-    "page": 1,
-    "page_size": 20,
-    "next": "/win-reasons?page=2",
-    "prev": null
-  }
-}
-```
-
-### Obter motivo de ganho
-
-`GET` `/win-reasons/{id}`
-
-Retorna o registro de um(a) motivo de ganho pelo ID.
-
-**Exemplo de Resposta:**
-
-```json
-{
-  "data": {
-    "id": 3,
-    "name": "Melhor preço",
-    "is_default": false
-  }
-}
-```
-
-**Exemplo de Erro:**
-
-```json
-{
-  "error": "motivo de ganho não encontrado.",
-  "message": "motivo de ganho não encontrado.",
-  "code": "not_found",
-  "details": null,
-  "error_object": {
-    "code": "not_found",
-    "message": "motivo de ganho não encontrado.",
-    "details": null
-  }
-}
-```
-
-### Criar motivo de ganho
-
-`POST` `/win-reasons`
-
-Cria um(a) novo(a) motivo de ganho no workspace autenticado.
-
-**Body**
-
-| Nome | Tipo | Obrigatório | Descrição |
-|------|------|-------------|-----------|
-| name | string | Sim | Descrição do motivo de ganho. |
-| is_default | boolean | Não | Marca como motivo padrão do workspace. |
-| external_sync_code | string | Não | Código externo de sincronização. Use o identificador do registro no sistema de origem (ex.: ID no RD Station, código no ERP) para evitar duplicidade em integrações. **Único por workspace**: tentativas de criar ou atualizar um registro com um `external_sync_code` já existente retornam erro `409 conflict`. |
-
-**Exemplo de Request Body:**
-
-```json
-{
-  "name": "Melhor preço"
-}
-```
-
-**Exemplo de Resposta:**
-
-```json
-{
-  "data": {
-    "id": 3,
-    "name": "Melhor preço",
-    "is_default": false
-  }
-}
-```
-
-### Atualizar motivo de ganho
-
-`PUT` `/win-reasons/{id}`
-
-Atualiza todos os campos editáveis de um(a) motivo de ganho. Campos omitidos serão limpos.
-
-**Body**
-
-| Nome | Tipo | Obrigatório | Descrição |
-|------|------|-------------|-----------|
-| name | string | Sim | Descrição do motivo de ganho. |
-| is_default | boolean | Não | Marca como motivo padrão do workspace. |
-| external_sync_code | string | Não | Código externo de sincronização. Use o identificador do registro no sistema de origem (ex.: ID no RD Station, código no ERP) para evitar duplicidade em integrações. **Único por workspace**: tentativas de criar ou atualizar um registro com um `external_sync_code` já existente retornam erro `409 conflict`. |
-
-**Exemplo de Request Body:**
-
-```json
-{
-  "name": "Melhor preço"
-}
-```
-
-**Exemplo de Resposta:**
-
-```json
-{
-  "data": {
-    "id": 3,
-    "name": "Melhor preço",
-    "is_default": false
-  }
-}
-```
-
-### Atualização parcial de motivo de ganho
-
-`PATCH` `/win-reasons/{id}`
-
-Atualiza apenas os campos enviados no body. Use para edições incrementais.
-
-**Body**
-
-| Nome | Tipo | Obrigatório | Descrição |
-|------|------|-------------|-----------|
-| name | string | Não | Descrição do motivo de ganho. |
-| is_default | boolean | Não | Marca como motivo padrão do workspace. |
-| external_sync_code | string | Não | Código externo de sincronização. Use o identificador do registro no sistema de origem (ex.: ID no RD Station, código no ERP) para evitar duplicidade em integrações. **Único por workspace**: tentativas de criar ou atualizar um registro com um `external_sync_code` já existente retornam erro `409 conflict`. |
-
-**Exemplo de Request Body:**
-
-```json
-{
-  "name": "Melhor preço"
-}
-```
-
-**Exemplo de Resposta:**
-
-```json
-{
-  "data": {
-    "id": 3,
-    "name": "Melhor preço",
-    "is_default": false
-  }
-}
-```
-
-### Remover motivo de ganho
-
-`DELETE` `/win-reasons/{id}`
-
-Move o(a) motivo de ganho para a lixeira (soft delete). Registros podem ser restaurados em até 60 dias.
-
-**Exemplo de Resposta:**
-
-```json
-{
-  "data": {
-    "id": 3,
-    "deleted_at": "2026-05-18T12:00:00Z"
-  }
-}
-```
-
-
 ## Tags
 
 Tags do workspace, usadas para classificar contatos, empresas e negociações.
@@ -3188,7 +3010,7 @@ Retorna a lista paginada de tags do workspace autenticado, com suporte a busca, 
 | page | integer | Não | Número da página (default: 1). |
 | page_size | integer | Não | Registros por página (default: 25, máx: 100). |
 | order_by | string | Não | Campo de ordenação. Ex.: `created_at`. |
-| order_direction | string | Não | Direção da ordenação: `asc` ou `desc` (default: desc). |
+| order_direction | string | Não | Direção da ordenação: `asc` ou `desc`. Sem ele, vale a ordem padrão do recurso (`name` asc). |
 | q | string | Não | Busca textual no campo principal do recurso (geralmente `name` ou `title`). |
 
 **Exemplo de Resposta:**
@@ -3286,7 +3108,7 @@ Cria um(a) novo(a) tag no workspace autenticado.
 
 `PUT` `/tags/{id}`
 
-Atualiza todos os campos editáveis de um(a) tag. Campos omitidos serão limpos.
+Atualiza um(a) tag. Como no PATCH, só os campos enviados mudam; os omitidos são mantidos.
 
 **Body**
 
@@ -3387,7 +3209,7 @@ Retorna a lista paginada de fontes do workspace autenticado, com suporte a busca
 | page | integer | Não | Número da página (default: 1). |
 | page_size | integer | Não | Registros por página (default: 25, máx: 100). |
 | order_by | string | Não | Campo de ordenação. Ex.: `created_at`. |
-| order_direction | string | Não | Direção da ordenação: `asc` ou `desc` (default: desc). |
+| order_direction | string | Não | Direção da ordenação: `asc` ou `desc`. Sem ele, vale a ordem padrão do recurso (`name` asc). |
 | q | string | Não | Busca textual no campo principal do recurso (geralmente `name` ou `title`). |
 | external_sync_code | string | Não | Filtra pelo código externo de sincronização. É o identificador único do registro no sistema de origem (ex.: ID no RD Station, código no ERP), usado por integrações para evitar duplicidade. Único por workspace. |
 
@@ -3483,7 +3305,7 @@ Cria um(a) novo(a) fonte no workspace autenticado.
 
 `PUT` `/fontes/{id}`
 
-Atualiza todos os campos editáveis de um(a) fonte. Campos omitidos serão limpos.
+Atualiza um(a) fonte. Como no PATCH, só os campos enviados mudam; os omitidos são mantidos.
 
 **Body**
 
@@ -3582,7 +3404,7 @@ Retorna a lista paginada de campanhas do workspace autenticado, com suporte a bu
 | page | integer | Não | Número da página (default: 1). |
 | page_size | integer | Não | Registros por página (default: 25, máx: 100). |
 | order_by | string | Não | Campo de ordenação. Ex.: `created_at`. |
-| order_direction | string | Não | Direção da ordenação: `asc` ou `desc` (default: desc). |
+| order_direction | string | Não | Direção da ordenação: `asc` ou `desc`. Sem ele, vale a ordem padrão do recurso (`name` asc). |
 | q | string | Não | Busca textual no campo principal do recurso (geralmente `name` ou `title`). |
 | source_id | uuid | Não | Filtra por fonte. |
 | external_sync_code | string | Não | Filtra pelo código externo de sincronização. É o identificador único do registro no sistema de origem (ex.: ID no RD Station, código no ERP), usado por integrações para evitar duplicidade. Único por workspace. |
@@ -3683,7 +3505,7 @@ Cria um(a) novo(a) campanha no workspace autenticado.
 
 `PUT` `/campanhas/{id}`
 
-Atualiza todos os campos editáveis de um(a) campanha. Campos omitidos serão limpos.
+Atualiza um(a) campanha. Como no PATCH, só os campos enviados mudam; os omitidos são mantidos.
 
 **Body**
 
@@ -3786,7 +3608,7 @@ Retorna a lista paginada de canais do workspace autenticado, com suporte a busca
 | page | integer | Não | Número da página (default: 1). |
 | page_size | integer | Não | Registros por página (default: 25, máx: 100). |
 | order_by | string | Não | Campo de ordenação. Ex.: `created_at`. |
-| order_direction | string | Não | Direção da ordenação: `asc` ou `desc` (default: desc). |
+| order_direction | string | Não | Direção da ordenação: `asc` ou `desc`. Sem ele, vale a ordem padrão do recurso (`name` asc). |
 | q | string | Não | Busca textual no campo principal do recurso (geralmente `name` ou `title`). |
 | source_id | uuid | Não | Filtra por fonte. |
 | campaign_id | uuid | Não | Filtra por campanha. |
@@ -3892,7 +3714,7 @@ Cria um(a) novo(a) canal no workspace autenticado.
 
 `PUT` `/canais/{id}`
 
-Atualiza todos os campos editáveis de um(a) canal. Campos omitidos serão limpos.
+Atualiza um(a) canal. Como no PATCH, só os campos enviados mudam; os omitidos são mantidos.
 
 **Body**
 
@@ -3999,7 +3821,7 @@ Retorna a lista paginada de tipos de atividade do workspace autenticado, com sup
 | page | integer | Não | Número da página (default: 1). |
 | page_size | integer | Não | Registros por página (default: 25, máx: 100). |
 | order_by | string | Não | Campo de ordenação. Ex.: `created_at`. |
-| order_direction | string | Não | Direção da ordenação: `asc` ou `desc` (default: desc). |
+| order_direction | string | Não | Direção da ordenação: `asc` ou `desc`. Sem ele, vale a ordem padrão do recurso (`position` asc). |
 | q | string | Não | Busca textual no campo principal do recurso (geralmente `name` ou `title`). |
 | external_sync_code | string | Não | Filtra pelo código externo de sincronização. É o identificador único do registro no sistema de origem (ex.: ID no RD Station, código no ERP), usado por integrações para evitar duplicidade. Único por workspace. |
 
@@ -4111,7 +3933,7 @@ Cria um(a) novo(a) tipo de atividade no workspace autenticado.
 
 `PUT` `/activity-types/{id}`
 
-Atualiza todos os campos editáveis de um(a) tipo de atividade. Campos omitidos serão limpos.
+Atualiza um(a) tipo de atividade. Como no PATCH, só os campos enviados mudam; os omitidos são mantidos.
 
 **Body**
 
@@ -4226,10 +4048,10 @@ Retorna a lista paginada de campos personalizados do workspace autenticado, com 
 | page | integer | Não | Número da página (default: 1). |
 | page_size | integer | Não | Registros por página (default: 25, máx: 100). |
 | order_by | string | Não | Campo de ordenação. Ex.: `created_at`. |
-| order_direction | string | Não | Direção da ordenação: `asc` ou `desc` (default: desc). |
+| order_direction | string | Não | Direção da ordenação: `asc` ou `desc`. Sem ele, vale a ordem padrão do recurso (`position` asc). |
 | q | string | Não | Busca textual no campo principal do recurso (geralmente `name` ou `title`). |
-| entity | string | Não | Filtra por entidade alvo. |
-| type | string | Não | Filtra por tipo. |
+| entity | string (persons|organizations|deals) | Não | Filtra por entidade alvo. |
+| type | string (text|number|date|select|multiselect) | Não | Filtra por tipo. |
 | external_sync_code | string | Não | Filtra pelo código externo de sincronização. É o identificador único do registro no sistema de origem (ex.: ID no RD Station, código no ERP), usado por integrações para evitar duplicidade. Único por workspace. |
 
 **Exemplo de Resposta:**
@@ -4366,14 +4188,13 @@ Cria um(a) novo(a) campo personalizado no workspace autenticado.
 
 `PUT` `/custom-fields/{id}`
 
-Atualiza todos os campos editáveis de um(a) campo personalizado. Campos omitidos serão limpos.
+Atualiza os campos enviados de um campo personalizado; os omitidos são mantidos. `entity` não pode ser alterado depois da criação.
 
 **Body**
 
 | Nome | Tipo | Obrigatório | Descrição |
 |------|------|-------------|-----------|
 | name | string | Sim | Rótulo do campo personalizado. |
-| entity | string (persons|organizations|deals) | Sim | Entidade alvo do campo. |
 | type | string (text|number|date|select|multiselect) | Sim | Tipo do dado. |
 | options | string[] | Não | Opções (obrigatório para select/multiselect). |
 | position | integer | Não | Ordem de exibição. |
@@ -4387,7 +4208,6 @@ Atualiza todos os campos editáveis de um(a) campo personalizado. Campos omitido
 ```json
 {
   "name": "Plano contratado",
-  "entity": "deals",
   "type": "select"
 }
 ```
@@ -4426,7 +4246,6 @@ Atualiza apenas os campos enviados no body. Use para edições incrementais.
 | Nome | Tipo | Obrigatório | Descrição |
 |------|------|-------------|-----------|
 | name | string | Não | Rótulo do campo personalizado. |
-| entity | string (persons|organizations|deals) | Não | Entidade alvo do campo. |
 | type | string (text|number|date|select|multiselect) | Não | Tipo do dado. |
 | options | string[] | Não | Opções (obrigatório para select/multiselect). |
 | position | integer | Não | Ordem de exibição. |
@@ -4503,7 +4322,7 @@ Retorna a lista paginada de templates de e-mail do workspace autenticado, com su
 | page | integer | Não | Número da página (default: 1). |
 | page_size | integer | Não | Registros por página (default: 25, máx: 100). |
 | order_by | string | Não | Campo de ordenação. Ex.: `created_at`. |
-| order_direction | string | Não | Direção da ordenação: `asc` ou `desc` (default: desc). |
+| order_direction | string | Não | Direção da ordenação: `asc` ou `desc`. Sem ele, vale a ordem padrão do recurso (`name` asc). |
 | q | string | Não | Busca textual no campo principal do recurso (geralmente `name` ou `title`). |
 | category | string | Não | Filtra por categoria. |
 
@@ -4616,7 +4435,7 @@ Cria um(a) novo(a) template de e-mail no workspace autenticado.
 
 `PUT` `/email-templates/{id}`
 
-Atualiza todos os campos editáveis de um(a) template de e-mail. Campos omitidos serão limpos.
+Atualiza um(a) template de e-mail. Como no PATCH, só os campos enviados mudam; os omitidos são mantidos.
 
 **Body**
 
@@ -4731,7 +4550,7 @@ Retorna a lista paginada de automações do workspace autenticado, com suporte a
 | page | integer | Não | Número da página (default: 1). |
 | page_size | integer | Não | Registros por página (default: 25, máx: 100). |
 | order_by | string | Não | Campo de ordenação. Ex.: `created_at`. |
-| order_direction | string | Não | Direção da ordenação: `asc` ou `desc` (default: desc). |
+| order_direction | string | Não | Direção da ordenação: `asc` ou `desc`. Sem ele, vale a ordem padrão do recurso (`run_order` asc). |
 | q | string | Não | Busca textual no campo principal do recurso (geralmente `name` ou `title`). |
 | is_active | boolean | Não | Filtra apenas ativas/inativas. |
 | trigger_type | string | Não | Filtra por tipo de gatilho. |
@@ -4870,7 +4689,7 @@ Cria um(a) novo(a) automação no workspace autenticado.
 
 `PUT` `/automations/{id}`
 
-Atualiza todos os campos editáveis de um(a) automação. Campos omitidos serão limpos.
+Atualiza um(a) automação. Como no PATCH, só os campos enviados mudam; os omitidos são mantidos.
 
 **Body**
 
@@ -5008,7 +4827,7 @@ Retorna a lista paginada de regras de lead scoring do workspace autenticado, com
 | page | integer | Não | Número da página (default: 1). |
 | page_size | integer | Não | Registros por página (default: 25, máx: 100). |
 | order_by | string | Não | Campo de ordenação. Ex.: `created_at`. |
-| order_direction | string | Não | Direção da ordenação: `asc` ou `desc` (default: desc). |
+| order_direction | string | Não | Direção da ordenação: `asc` ou `desc`. Sem ele, vale a ordem padrão do recurso (`name` asc). |
 | q | string | Não | Busca textual no campo principal do recurso (geralmente `name` ou `title`). |
 | is_active | boolean | Não | Filtra por ativas/inativas. |
 | field | string | Não | Filtra por campo avaliado. |
@@ -5133,7 +4952,7 @@ Cria um(a) novo(a) regra de lead scoring no workspace autenticado.
 
 `PUT` `/lead-scoring-rules/{id}`
 
-Atualiza todos os campos editáveis de um(a) regra de lead scoring. Campos omitidos serão limpos.
+Atualiza um(a) regra de lead scoring. Como no PATCH, só os campos enviados mudam; os omitidos são mantidos.
 
 **Body**
 
@@ -5257,7 +5076,7 @@ Retorna a lista paginada de regras de distribuição do workspace autenticado, c
 | page | integer | Não | Número da página (default: 1). |
 | page_size | integer | Não | Registros por página (default: 25, máx: 100). |
 | order_by | string | Não | Campo de ordenação. Ex.: `created_at`. |
-| order_direction | string | Não | Direção da ordenação: `asc` ou `desc` (default: desc). |
+| order_direction | string | Não | Direção da ordenação: `asc` ou `desc`. Sem ele, vale a ordem padrão do recurso (`name` asc). |
 | q | string | Não | Busca textual no campo principal do recurso (geralmente `name` ou `title`). |
 | is_active | boolean | Não | Filtra por ativas/inativas. |
 | mode | string | Não | Filtra por modo (round_robin|by_origin). |
@@ -5370,7 +5189,7 @@ Cria um(a) novo(a) regra de distribuição no workspace autenticado.
 
 `PUT` `/distribution-rules/{id}`
 
-Atualiza todos os campos editáveis de um(a) regra de distribuição. Campos omitidos serão limpos.
+Atualiza um(a) regra de distribuição. Como no PATCH, só os campos enviados mudam; os omitidos são mantidos.
 
 **Body**
 
@@ -5475,7 +5294,7 @@ Endpoints externos que recebem eventos do CRM em tempo real.
 
 `GET` `/webhooks`
 
-Retorna a lista paginada de webhooks do workspace autenticado, com suporte a busca, filtros e ordenação.
+Retorna a lista paginada de webhooks do workspace autenticado, filtrável por `is_active`. Ordem fixa: mais recentes primeiro.
 
 **Query Parameters**
 
@@ -5483,9 +5302,6 @@ Retorna a lista paginada de webhooks do workspace autenticado, com suporte a bus
 |------|------|-------------|-----------|
 | page | integer | Não | Número da página (default: 1). |
 | page_size | integer | Não | Registros por página (default: 25, máx: 100). |
-| order_by | string | Não | Campo de ordenação. Ex.: `created_at`. |
-| order_direction | string | Não | Direção da ordenação: `asc` ou `desc` (default: desc). |
-| q | string | Não | Busca textual no campo principal do recurso (geralmente `name` ou `title`). |
 | is_active | boolean | Não | Filtra por ativos/inativos. |
 
 **Exemplo de Resposta:**
@@ -5576,7 +5392,7 @@ Cria um(a) novo(a) webhook no workspace autenticado.
 | name | string | Sim | Nome do webhook. |
 | description | string | Não | Descrição livre. |
 | target_url | string (URL HTTPS) | Sim | URL que receberá os eventos. |
-| events | string[] | Sim | Lista de eventos. Ex.: deal.created, deal.won, deal.lost, activity.completed. |
+| events | string[] | Sim | Lista de eventos. Os que o CRM emite: `contact.created`, `contact.updated`, `contact.deleted`, `organization.created`, `organization.updated`, `organization.deleted`, `deal.created`, `deal.updated`, `deal.deleted`, `deal.stage_changed`, `deal.won`, `deal.lost`, `activity.created`, `activity.updated`, `activity.completed`, `activity.deleted`, `deal_item.created`, `deal_item.updated`, `deal_item.deleted`, `note.created`, `note.updated`, `note.deleted`, `tag.added`, `tag.removed`. A API não valida os nomes. |
 | is_active | boolean | Não | Se o webhook está ativo. |
 | secret | string | Não | Segredo opcional para assinar o payload (HMAC). Retornado apenas no POST de criação. |
 
@@ -5620,7 +5436,7 @@ Cria um(a) novo(a) webhook no workspace autenticado.
 
 `PUT` `/webhooks/{id}`
 
-Atualiza todos os campos editáveis de um(a) webhook. Campos omitidos serão limpos.
+Atualiza um webhook. Só os campos enviados mudam; os omitidos são mantidos (não há PATCH para webhooks).
 
 **Body**
 
@@ -5629,7 +5445,7 @@ Atualiza todos os campos editáveis de um(a) webhook. Campos omitidos serão lim
 | name | string | Sim | Nome do webhook. |
 | description | string | Não | Descrição livre. |
 | target_url | string (URL HTTPS) | Sim | URL que receberá os eventos. |
-| events | string[] | Sim | Lista de eventos. Ex.: deal.created, deal.won, deal.lost, activity.completed. |
+| events | string[] | Sim | Lista de eventos. Os que o CRM emite: `contact.created`, `contact.updated`, `contact.deleted`, `organization.created`, `organization.updated`, `organization.deleted`, `deal.created`, `deal.updated`, `deal.deleted`, `deal.stage_changed`, `deal.won`, `deal.lost`, `activity.created`, `activity.updated`, `activity.completed`, `activity.deleted`, `deal_item.created`, `deal_item.updated`, `deal_item.deleted`, `note.created`, `note.updated`, `note.deleted`, `tag.added`, `tag.removed`. A API não valida os nomes. |
 | is_active | boolean | Não | Se o webhook está ativo. |
 | secret | string | Não | Segredo opcional para assinar o payload (HMAC). Retornado apenas no POST de criação. |
 
@@ -5644,53 +5460,6 @@ Atualiza todos os campos editáveis de um(a) webhook. Campos omitidos serão lim
     "deal.won",
     "deal.lost"
   ]
-}
-```
-
-**Exemplo de Resposta:**
-
-```json
-{
-  "data": {
-    "id": "wh00000-0000-0000-0000-000000000001",
-    "name": "Sync para data warehouse",
-    "description": "Envia eventos de negociação para o pipeline interno.",
-    "target_url": "https://hooks.example.com/alze",
-    "events": [
-      "deal.created",
-      "deal.won",
-      "deal.lost"
-    ],
-    "is_active": true,
-    "last_delivery_at": "2026-05-29T11:00:00Z",
-    "last_delivery_status": "success",
-    "created_at": "2026-04-01T08:00:00Z"
-  }
-}
-```
-
-### Atualização parcial de webhook
-
-`PATCH` `/webhooks/{id}`
-
-Atualiza apenas os campos enviados no body. Use para edições incrementais.
-
-**Body**
-
-| Nome | Tipo | Obrigatório | Descrição |
-|------|------|-------------|-----------|
-| name | string | Não | Nome do webhook. |
-| description | string | Não | Descrição livre. |
-| target_url | string (URL HTTPS) | Não | URL que receberá os eventos. |
-| events | string[] | Não | Lista de eventos. Ex.: deal.created, deal.won, deal.lost, activity.completed. |
-| is_active | boolean | Não | Se o webhook está ativo. |
-| secret | string | Não | Segredo opcional para assinar o payload (HMAC). Retornado apenas no POST de criação. |
-
-**Exemplo de Request Body:**
-
-```json
-{
-  "name": "Sync para data warehouse"
 }
 ```
 
@@ -5752,8 +5521,6 @@ Retorna todos os usuários do workspace autenticado.
 |------|------|-------------|-----------|
 | page | integer | Não | Número da página (default: 1). |
 | page_size | integer | Não | Registros por página (default: 25, máx: 100). |
-| order_by | string | Não | Campo de ordenação. Ex.: `created_at`. |
-| order_direction | string | Não | Direção da ordenação: `asc` ou `desc` (default: desc). |
 | q | string | Não | Busca textual no campo principal do recurso (geralmente `name` ou `title`). |
 | role | string | Não | Filtra por papel (admin, sales, sdr...). |
 | active | boolean | Não | Filtra apenas usuários ativos. |
@@ -5778,38 +5545,6 @@ Retorna todos os usuários do workspace autenticado.
     "page_size": 20,
     "next": null,
     "prev": null
-  }
-}
-```
-
-### Obter usuário
-
-`GET` `/users/{id}`
-
-Retorna os dados de um usuário pelo ID.
-
-**Exemplo de Resposta:**
-
-```json
-{
-  "data": {
-    "id": "u123e456-7890-abcd-ef12-345678901234",
-    "name": "João Vendedor",
-    "email": "joao@empresa.com",
-    "role": "sales",
-    "active": true,
-    "created_at": "2026-01-05T00:00:00Z"
-  }
-}
-```
-
-**Exemplo de Erro:**
-
-```json
-{
-  "error": {
-    "code": "not_found",
-    "message": "Usuário não encontrado."
   }
 }
 ```

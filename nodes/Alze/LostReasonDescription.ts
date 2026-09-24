@@ -39,7 +39,7 @@ export const lostReasonOperations: INodeProperties[] = [
 			{
 				name: 'Update',
 				value: 'update',
-				description: 'Update a lost reason (clears omitted fields)',
+				description: 'Update a lost reason. Only the fields sent are changed.',
 				action: 'Update a lost reason',
 			},
 			{
@@ -173,16 +173,17 @@ export const lostReasonFields: INodeProperties[] = [
 		type: 'options',
 		options: [
 			{ name: 'Ascending', value: 'asc' },
+			{ name: 'Default', value: '' },
 			{ name: 'Descending', value: 'desc' },
 		],
-		default: 'desc',
+		default: '',
 		displayOptions: {
 			show: {
 				resource: ['lostReason'],
 				operation: ['list'],
 			},
 		},
-		description: 'Sort direction (asc or desc)',
+		description: 'Sort direction. Default keeps the natural order of the resource.',
 	},
 	{
 		displayName: 'Additional Fields',

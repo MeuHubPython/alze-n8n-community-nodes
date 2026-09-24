@@ -51,7 +51,7 @@ export const contactOperations: INodeProperties[] = [
 			{
 				name: 'Update',
 				value: 'update',
-				description: 'Update a contact (clears omitted fields)',
+				description: 'Update a contact. Only the fields sent are changed.',
 				action: 'Update a contact',
 			},
 			{
@@ -132,7 +132,7 @@ export const contactFields: INodeProperties[] = [
 		displayOptions: {
 			show: {
 				resource: ['contact'],
-				operation: ['list'],
+				operation: ['list', 'listActivities', 'listDeals'],
 			},
 		},
 	},
@@ -148,7 +148,7 @@ export const contactFields: INodeProperties[] = [
 		displayOptions: {
 			show: {
 				resource: ['contact'],
-				operation: ['list'],
+				operation: ['list', 'listActivities', 'listDeals'],
 				returnAll: [false],
 			},
 		},
@@ -164,7 +164,7 @@ export const contactFields: INodeProperties[] = [
 				operation: ['list'],
 			},
 		},
-		description: 'Text search in name, email, or title',
+		description: 'Text search in the contact name (partial, case-insensitive). Use the filters below for email or phone.',
 	},
 	{
 		displayName: 'Order By',
@@ -185,16 +185,17 @@ export const contactFields: INodeProperties[] = [
 		type: 'options',
 		options: [
 			{ name: 'Ascending', value: 'asc' },
+			{ name: 'Default', value: '' },
 			{ name: 'Descending', value: 'desc' },
 		],
-		default: 'desc',
+		default: '',
 		displayOptions: {
 			show: {
 				resource: ['contact'],
 				operation: ['list'],
 			},
 		},
-		description: 'Sort direction (asc or desc)',
+		description: 'Sort direction. Default keeps the natural order of the resource.',
 	},
 	{
 		displayName: 'Additional Fields',
@@ -229,7 +230,7 @@ export const contactFields: INodeProperties[] = [
 				name: 'mobile',
 				type: 'string',
 				default: '',
-				description: 'Filter by exact mobile phone',
+				description: 'Filter by mobile phone. Only the digits are compared and they may appear with any formatting in between (partial match). For a phone lookup prefer Phone Match.',
 			},
 			{
 				displayName: 'Organization ID',
@@ -243,7 +244,7 @@ export const contactFields: INodeProperties[] = [
 				name: 'phone',
 				type: 'string',
 				default: '',
-				description: 'Filter by exact telephone',
+				description: 'Filter by landline phone. Only the digits are compared and they may appear with any formatting in between (partial match). For a phone lookup prefer Phone Match.',
 			},
 			{
 				displayName: 'Phone Match',
@@ -297,6 +298,18 @@ export const contactFields: INodeProperties[] = [
 				type: 'string',
 				default: '',
 				description: 'CPF of the contact',
+			},
+			{
+				displayName: 'Creation Source Meta (JSON)',
+				name: 'creation_source_meta',
+				type: 'json',
+				default: '',
+				displayOptions: {
+					show: {
+						'/operation': ['create'],
+					},
+				},
+				description: 'Where the lead came from, only on creation. Accepted keys: utm_first, gclid, fbclid, utm_id, session_hash, lp_form_submission_id, landing_page_id, referrer. Stored in the contact custom fields.',
 			},
 			{
 				displayName: 'Custom Fields (JSON)',
@@ -391,7 +404,7 @@ export const contactFields: INodeProperties[] = [
 				name: 'phonesJson',
 				type: 'json',
 				default: '',
-				description: 'Phones array as a JSON, e.g. [{"value": "+5511999999999", "type": "mobile"}]',
+				description: 'Phones array as a JSON, e.g. [{"value": "+5511999999999", "type": "mobile"}]. Type must be one of mobile, fixed, whatsapp, work, other.',
 			},
 			{
 				displayName: 'Phones (UI)',
@@ -420,10 +433,10 @@ export const contactFields: INodeProperties[] = [
 								name: 'type',
 								type: 'options',
 								options: [
-									{ name: 'Home', value: 'home' },
+									{ name: 'Fixed', value: 'fixed' },
 									{ name: 'Mobile', value: 'mobile' },
 									{ name: 'Other', value: 'other' },
-									{ name: 'Phone', value: 'phone' },
+									{ name: 'WhatsApp', value: 'whatsapp' },
 									{ name: 'Work', value: 'work' },
 								],
 								default: 'mobile',

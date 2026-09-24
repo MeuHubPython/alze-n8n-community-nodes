@@ -39,7 +39,7 @@ export const sourceOperations: INodeProperties[] = [
 			{
 				name: 'Update',
 				value: 'update',
-				description: 'Update a source (clears omitted fields)',
+				description: 'Update a source. Only the fields sent are changed.',
 				action: 'Update a source',
 			},
 			{

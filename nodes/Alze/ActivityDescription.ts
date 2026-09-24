@@ -45,14 +45,8 @@ export const activityOperations: INodeProperties[] = [
 			{
 				name: 'Update',
 				value: 'update',
-				description: 'Update an activity (clears omitted fields)',
+				description: 'Update an activity. Only the fields sent are changed.',
 				action: 'Update an activity',
-			},
-			{
-				name: 'Update Partial',
-				value: 'patch',
-				description: 'Update an activity partially (incremental edit)',
-				action: 'Update partial activity',
 			},
 		],
 		default: 'list',
@@ -61,7 +55,7 @@ export const activityOperations: INodeProperties[] = [
 
 export const activityFields: INodeProperties[] = [
 	// ----------------------------------
-	//         activity: get / delete / update / patch / complete
+	//         activity: get / delete / update / complete
 	// ----------------------------------
 	{
 		displayName: 'Activity ID',
@@ -72,7 +66,7 @@ export const activityFields: INodeProperties[] = [
 		displayOptions: {
 			show: {
 				resource: ['activity'],
-				operation: ['get', 'delete', 'update', 'patch', 'complete'],
+				operation: ['get', 'delete', 'update', 'complete'],
 			},
 		},
 		description: 'The ID of the activity',
@@ -194,16 +188,17 @@ export const activityFields: INodeProperties[] = [
 		type: 'options',
 		options: [
 			{ name: 'Ascending', value: 'asc' },
+			{ name: 'Default', value: '' },
 			{ name: 'Descending', value: 'desc' },
 		],
-		default: 'desc',
+		default: '',
 		displayOptions: {
 			show: {
 				resource: ['activity'],
 				operation: ['list'],
 			},
 		},
-		description: 'Sort direction (asc or desc)',
+		description: 'Sort direction. Default keeps the natural order of the resource.',
 	},
 	{
 		displayName: 'Additional Fields',
@@ -251,18 +246,19 @@ export const activityFields: INodeProperties[] = [
 				name: 'status',
 				type: 'options',
 				options: [
-					{ name: 'Open', value: 'open' },
+					{ name: 'Closed', value: 'closed' },
 					{ name: 'Done', value: 'done' },
-					{ name: 'Canceled', value: 'canceled' },
+					{ name: 'In Progress', value: 'in_progress' },
+					{ name: 'To Do', value: 'todo' },
 				],
-				default: 'open',
+				default: 'todo',
 				description: 'Filter by activity status',
 			},
 		],
 	},
 
 	// ----------------------------------
-	//         activity: create / update / patch options
+	//         activity: create / update options
 	// ----------------------------------
 	{
 		displayName: 'Fields to Set',
@@ -273,7 +269,7 @@ export const activityFields: INodeProperties[] = [
 		displayOptions: {
 			show: {
 				resource: ['activity'],
-				operation: ['create', 'update', 'patch'],
+				operation: ['create', 'update'],
 			},
 		},
 		options: [
@@ -338,11 +334,12 @@ export const activityFields: INodeProperties[] = [
 				name: 'status',
 				type: 'options',
 				options: [
-					{ name: 'Open', value: 'open' },
+					{ name: 'Closed', value: 'closed' },
 					{ name: 'Done', value: 'done' },
-					{ name: 'Canceled', value: 'canceled' },
+					{ name: 'In Progress', value: 'in_progress' },
+					{ name: 'To Do', value: 'todo' },
 				],
-				default: 'open',
+				default: 'todo',
 				description: 'Status of the activity',
 			},
 			{
@@ -352,7 +349,7 @@ export const activityFields: INodeProperties[] = [
 				default: '',
 				displayOptions: {
 					show: {
-						'/operation': ['update', 'patch'],
+						'/operation': ['update'],
 					},
 				},
 				description: 'Title of the activity',

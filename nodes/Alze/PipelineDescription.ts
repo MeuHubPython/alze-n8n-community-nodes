@@ -40,7 +40,7 @@ export const pipelineOperations: INodeProperties[] = [
 			{
 				name: 'Update',
 				value: 'update',
-				description: 'Update a pipeline (clears omitted fields)',
+				description: 'Update a pipeline. Only the fields sent are changed.',
 				action: 'Update a pipeline',
 			},
 			{
@@ -174,16 +174,17 @@ export const pipelineFields: INodeProperties[] = [
 		type: 'options',
 		options: [
 			{ name: 'Ascending', value: 'asc' },
+			{ name: 'Default', value: '' },
 			{ name: 'Descending', value: 'desc' },
 		],
-		default: 'desc',
+		default: '',
 		displayOptions: {
 			show: {
 				resource: ['pipeline'],
 				operation: ['list'],
 			},
 		},
-		description: 'Sort direction (asc or desc)',
+		description: 'Sort direction. Default keeps the natural order of the resource.',
 	},
 	{
 		displayName: 'Additional Fields',
@@ -336,7 +337,7 @@ export const pipelineFields: INodeProperties[] = [
 									minValue: 0,
 								},
 								default: 0,
-								description: 'Display position/order of this stage (0 = first)',
+								description: 'Display position/order of this stage (0 = first). Leave 0 on every stage to use the order of the list.',
 							},
 							{
 								displayName: 'SLA Days',

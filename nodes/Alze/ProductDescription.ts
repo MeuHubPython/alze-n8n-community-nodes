@@ -39,7 +39,7 @@ export const productOperations: INodeProperties[] = [
 			{
 				name: 'Update',
 				value: 'update',
-				description: 'Update a product (clears omitted fields)',
+				description: 'Update a product. Only the fields sent are changed.',
 				action: 'Update a product',
 			},
 			{
@@ -211,16 +211,17 @@ export const productFields: INodeProperties[] = [
 		type: 'options',
 		options: [
 			{ name: 'Ascending', value: 'asc' },
+			{ name: 'Default', value: '' },
 			{ name: 'Descending', value: 'desc' },
 		],
-		default: 'desc',
+		default: '',
 		displayOptions: {
 			show: {
 				resource: ['product'],
 				operation: ['list'],
 			},
 		},
-		description: 'Sort direction (asc or desc)',
+		description: 'Sort direction. Default keeps the natural order of the resource.',
 	},
 	{
 		displayName: 'Additional Fields',
@@ -279,6 +280,16 @@ export const productFields: INodeProperties[] = [
 			},
 		},
 		options: [
+			{
+				displayName: 'Category ID',
+				name: 'category_id',
+				type: 'number',
+				typeOptions: {
+					numberPrecision: 0,
+				},
+				default: 0,
+				description: 'ID of the item category',
+			},
 			{
 				displayName: 'Currency',
 				name: 'currency',

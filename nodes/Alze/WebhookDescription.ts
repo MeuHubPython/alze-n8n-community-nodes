@@ -39,14 +39,8 @@ export const webhookOperations: INodeProperties[] = [
 			{
 				name: 'Update',
 				value: 'update',
-				description: 'Update a webhook (clears omitted fields)',
+				description: 'Update a webhook. Only the fields sent are changed.',
 				action: 'Update a webhook',
-			},
-			{
-				name: 'Update Partial',
-				value: 'patch',
-				description: 'Update a webhook partially (incremental edit)',
-				action: 'Update partial webhook',
 			},
 		],
 		default: 'list',
@@ -55,7 +49,7 @@ export const webhookOperations: INodeProperties[] = [
 
 export const webhookFields: INodeProperties[] = [
 	// ----------------------------------
-	//         webhook: get / delete / update / patch
+	//         webhook: get / delete / update
 	// ----------------------------------
 	{
 		displayName: 'Webhook ID',
@@ -66,7 +60,7 @@ export const webhookFields: INodeProperties[] = [
 		displayOptions: {
 			show: {
 				resource: ['webhook'],
-				operation: ['get', 'delete', 'update', 'patch'],
+				operation: ['get', 'delete', 'update'],
 			},
 		},
 		description: 'The ID of the webhook',
@@ -129,9 +123,29 @@ export const webhookFields: INodeProperties[] = [
 		required: true,
 		options: [
 			{ name: 'Activity Completed', value: 'activity.completed' },
+			{ name: 'Activity Created', value: 'activity.created' },
+			{ name: 'Activity Deleted', value: 'activity.deleted' },
+			{ name: 'Activity Updated', value: 'activity.updated' },
+			{ name: 'Contact Created', value: 'contact.created' },
+			{ name: 'Contact Deleted', value: 'contact.deleted' },
+			{ name: 'Contact Updated', value: 'contact.updated' },
 			{ name: 'Deal Created', value: 'deal.created' },
+			{ name: 'Deal Deleted', value: 'deal.deleted' },
+			{ name: 'Deal Item Created', value: 'deal_item.created' },
+			{ name: 'Deal Item Deleted', value: 'deal_item.deleted' },
+			{ name: 'Deal Item Updated', value: 'deal_item.updated' },
 			{ name: 'Deal Lost', value: 'deal.lost' },
+			{ name: 'Deal Stage Changed', value: 'deal.stage_changed' },
+			{ name: 'Deal Updated', value: 'deal.updated' },
 			{ name: 'Deal Won', value: 'deal.won' },
+			{ name: 'Note Created', value: 'note.created' },
+			{ name: 'Note Deleted', value: 'note.deleted' },
+			{ name: 'Note Updated', value: 'note.updated' },
+			{ name: 'Organization Created', value: 'organization.created' },
+			{ name: 'Organization Deleted', value: 'organization.deleted' },
+			{ name: 'Organization Updated', value: 'organization.updated' },
+			{ name: 'Tag Added', value: 'tag.added' },
+			{ name: 'Tag Removed', value: 'tag.removed' },
 		],
 		default: [],
 		displayOptions: {
@@ -215,11 +229,19 @@ export const webhookFields: INodeProperties[] = [
 				operation: ['list'],
 			},
 		},
-		options: [],
+		options: [
+			{
+				displayName: 'Is Active',
+				name: 'is_active',
+				type: 'boolean',
+				default: true,
+				description: 'Whether to return only active (true) or only inactive (false) webhooks',
+			},
+		],
 	},
 
 	// ----------------------------------
-	//         webhook: create / update / patch options
+	//         webhook: create / update options
 	// ----------------------------------
 	{
 		displayName: 'Fields to Set',
@@ -230,7 +252,7 @@ export const webhookFields: INodeProperties[] = [
 		displayOptions: {
 			show: {
 				resource: ['webhook'],
-				operation: ['create', 'update', 'patch'],
+				operation: ['create', 'update'],
 			},
 		},
 		options: [
@@ -242,41 +264,11 @@ export const webhookFields: INodeProperties[] = [
 				description: 'A brief description of this webhook',
 			},
 			{
-				displayName: 'Events',
-				name: 'eventsPatch',
-				type: 'multiOptions',
-				options: [
-					{ name: 'Activity Completed', value: 'activity.completed' },
-					{ name: 'Deal Created', value: 'deal.created' },
-					{ name: 'Deal Lost', value: 'deal.lost' },
-					{ name: 'Deal Won', value: 'deal.won' },
-				],
-				default: [],
-				displayOptions: {
-					show: {
-						'/operation': ['patch'],
-					},
-				},
-				description: 'The list of events to trigger this webhook',
-			},
-			{
 				displayName: 'Is Active',
 				name: 'is_active',
 				type: 'boolean',
 				default: true,
 				description: 'Whether the webhook is active',
-			},
-			{
-				displayName: 'Name',
-				name: 'namePatch',
-				type: 'string',
-				default: '',
-				displayOptions: {
-					show: {
-						'/operation': ['patch'],
-					},
-				},
-				description: 'Name of the webhook',
 			},
 			{
 				displayName: 'Secret',
@@ -287,18 +279,6 @@ export const webhookFields: INodeProperties[] = [
 					password: true,
 				},
 				description: 'HMAC signature secret for payload verification',
-			},
-			{
-				displayName: 'Target URL',
-				name: 'targetUrlPatch',
-				type: 'string',
-				default: '',
-				displayOptions: {
-					show: {
-						'/operation': ['patch'],
-					},
-				},
-				description: 'The HTTPS URL that will receive the webhook payloads',
 			},
 		],
 	},

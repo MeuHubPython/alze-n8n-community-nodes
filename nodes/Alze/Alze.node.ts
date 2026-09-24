@@ -5,6 +5,7 @@ import {
 	INodeTypeDescription,
 	IDataObject,
 	NodeConnectionTypes,
+	NodeOperationError,
 } from 'n8n-workflow';
 
 import {
@@ -13,6 +14,8 @@ import {
 	handleCustomFields,
 	handlePipelineStages,
 	handleContactPhones,
+	parseJsonObjectField,
+	toDateOnly,
 } from './GenericFunctions';
 
 import {
@@ -56,11 +59,6 @@ import {
 } from './LostReasonDescription';
 
 import {
-	wonReasonOperations,
-	wonReasonFields,
-} from './WonReasonDescription';
-
-import {
 	userOperations,
 	userFields,
 } from './UserDescription';
@@ -75,6 +73,17 @@ import { activityTypeOperations, activityTypeFields } from './ActivityTypeDescri
 import { tagOperations, tagFields } from './TagDescription';
 import { distributionRuleOperations, distributionRuleFields } from './DistributionRuleDescription';
 import { webhookOperations, webhookFields } from './WebhookDescription';
+
+// Most DELETE routes answer 204 with no body, so there is no `data` to return.
+function deleteResult(responseData: IDataObject | string | undefined, id: string): IDataObject {
+	if (responseData && typeof responseData === 'object' && responseData.data && typeof responseData.data === 'object') {
+		return responseData.data as IDataObject;
+	}
+	return { success: true, id };
+}
+
+// Deal fields the API validates as `YYYY-MM-DD`
+const DEAL_DATE_FIELDS = ['expected_close_date', 'on_hold_until'];
 
 function applyOrderParams(execFuncs: IExecuteFunctions, i: number, qs: IDataObject) {
 	let sort: string | undefined;
@@ -159,7 +168,6 @@ export class Alze implements INodeType {
 					{ name: 'Tag', value: 'tag' },
 					{ name: 'User', value: 'user' },
 					{ name: 'Webhook', value: 'webhook' },
-					{ name: 'Won Reason', value: 'wonReason' },
 				],
 				default: 'contact',
 			},
@@ -179,8 +187,6 @@ export class Alze implements INodeType {
 			...stageFields,
 			...lostReasonOperations,
 			...lostReasonFields,
-			...wonReasonOperations,
-			...wonReasonFields,
 			...userOperations,
 			...userFields,
 			...metaOperations,
@@ -215,8 +221,14 @@ export class Alze implements INodeType {
 
 		let responseData;
 
+		// Set before every item: if no branch below matches (an operation that was
+		// removed from the node but is still saved in a workflow), the item fails
+		// instead of silently returning an empty result or the previous item's data.
+		const UNHANDLED = Symbol('unhandled');
+
 		for (let i = 0; i < items.length; i++) {
 			try {
+				responseData = UNHANDLED as unknown;
 				// ==========================================
 				//                 CONTACT
 				// ==========================================
@@ -228,19 +240,20 @@ export class Alze implements INodeType {
 					} else if (operation === 'delete') {
 						const contactId = this.getNodeParameter('contactId', i) as string;
 						responseData = await alzeApiRequest.call(this, 'DELETE', `/contacts/${contactId}`);
-						responseData = responseData.data;
+						responseData = deleteResult(responseData, contactId);
 					} else if (operation === 'listDeals') {
 						const contactId = this.getNodeParameter('contactId', i) as string;
-						responseData = await alzeApiRequestAllItems.call(this, 'GET', `/contacts/${contactId}/deals`);
+						responseData = await alzeApiRequestAllItems.call(this, 'GET', `/contacts/${contactId}/deals`, {}, {}, i);
 					} else if (operation === 'listActivities') {
 						const contactId = this.getNodeParameter('contactId', i) as string;
-						responseData = await alzeApiRequestAllItems.call(this, 'GET', `/contacts/${contactId}/activities`);
+						responseData = await alzeApiRequestAllItems.call(this, 'GET', `/contacts/${contactId}/activities`, {}, {}, i);
 					} else if (operation === 'create') {
 						const name = this.getNodeParameter('name', i) as string;
 						const fields = this.getNodeParameter('fieldsToSet', i) as IDataObject;
 						const body: IDataObject = { name, ...fields };
 						handleCustomFields(this.getNode(), body, fields);
 						handleContactPhones(this.getNode(), body, fields);
+						parseJsonObjectField(this.getNode(), body, 'creation_source_meta', 'Creation Source Meta (JSON)');
 						responseData = await alzeApiRequest.call(this, 'POST', '/contacts', body);
 						responseData = responseData.data;
 					} else if (operation === 'update') {
@@ -270,7 +283,7 @@ export class Alze implements INodeType {
 						const qs: IDataObject = { ...additionalFields };
 						if (q) qs.q = q;
 						applyOrderParams(this, i, qs);
-						responseData = await alzeApiRequestAllItems.call(this, 'GET', '/contacts', {}, qs);
+						responseData = await alzeApiRequestAllItems.call(this, 'GET', '/contacts', {}, qs, i);
 					}
 				}
 
@@ -285,7 +298,7 @@ export class Alze implements INodeType {
 					} else if (operation === 'delete') {
 						const organizationId = this.getNodeParameter('organizationId', i) as string;
 						responseData = await alzeApiRequest.call(this, 'DELETE', `/organizations/${organizationId}`);
-						responseData = responseData.data;
+						responseData = deleteResult(responseData, organizationId);
 					} else if (operation === 'create') {
 						const name = this.getNodeParameter('name', i) as string;
 						const fields = this.getNodeParameter('fieldsToSet', i) as IDataObject;
@@ -318,16 +331,16 @@ export class Alze implements INodeType {
 						const qs: IDataObject = { ...additionalFields };
 						if (q) qs.q = q;
 						applyOrderParams(this, i, qs);
-						responseData = await alzeApiRequestAllItems.call(this, 'GET', '/organizations', {}, qs);
+						responseData = await alzeApiRequestAllItems.call(this, 'GET', '/organizations', {}, qs, i);
 					} else if (operation === 'listContacts') {
 						const organizationId = this.getNodeParameter('organizationId', i) as string;
-						responseData = await alzeApiRequestAllItems.call(this, 'GET', `/organizations/${organizationId}/contacts`);
+						responseData = await alzeApiRequestAllItems.call(this, 'GET', `/organizations/${organizationId}/contacts`, {}, {}, i);
 					} else if (operation === 'listDeals') {
 						const organizationId = this.getNodeParameter('organizationId', i) as string;
-						responseData = await alzeApiRequestAllItems.call(this, 'GET', `/organizations/${organizationId}/deals`);
+						responseData = await alzeApiRequestAllItems.call(this, 'GET', `/organizations/${organizationId}/deals`, {}, {}, i);
 					} else if (operation === 'listActivities') {
 						const organizationId = this.getNodeParameter('organizationId', i) as string;
-						responseData = await alzeApiRequestAllItems.call(this, 'GET', `/organizations/${organizationId}/activities`);
+						responseData = await alzeApiRequestAllItems.call(this, 'GET', `/organizations/${organizationId}/activities`, {}, {}, i);
 					}
 				}
 
@@ -342,14 +355,14 @@ export class Alze implements INodeType {
 					} else if (operation === 'delete') {
 						const dealId = this.getNodeParameter('dealId', i) as string;
 						responseData = await alzeApiRequest.call(this, 'DELETE', `/deals/${dealId}`);
-						responseData = responseData.data;
+						responseData = deleteResult(responseData, dealId);
 					} else if (operation === 'win') {
 						const dealId = this.getNodeParameter('dealId', i) as string;
-						const wonReasonId = this.getNodeParameter('wonReasonId', i) as number;
-						const value = this.getNodeParameter('value', i) as number;
+						// `value` stays a top-level parameter so saved workflows keep sending it.
+						// 0 (the default) means "not set": sending it would zero the deal value.
+						const value = Number(this.getNodeParameter('value', i, 0));
 						const body: IDataObject = {};
-						if (wonReasonId) body.won_reason_id = wonReasonId;
-						if (value !== undefined) body.value = value;
+						if (Number.isFinite(value) && value !== 0) body.value = value;
 						responseData = await alzeApiRequest.call(this, 'PATCH', `/deals/${dealId}/win`, body);
 						responseData = responseData.data;
 					} else if (operation === 'lose') {
@@ -372,6 +385,8 @@ export class Alze implements INodeType {
 						const fields = this.getNodeParameter('fieldsToSet', i) as IDataObject;
 						const body: IDataObject = { title, pipeline_id: pipelineId, stage_id: stageId, ...fields };
 						handleCustomFields(this.getNode(), body, fields);
+						toDateOnly(body, DEAL_DATE_FIELDS);
+						parseJsonObjectField(this.getNode(), body, 'creation_source_meta', 'Creation Source Meta (JSON)');
 						responseData = await alzeApiRequest.call(this, 'POST', '/deals', body);
 						responseData = responseData.data;
 					} else if (operation === 'update') {
@@ -382,6 +397,7 @@ export class Alze implements INodeType {
 						const fields = this.getNodeParameter('fieldsToSet', i) as IDataObject;
 						const body: IDataObject = { title, pipeline_id: pipelineId, stage_id: stageId, ...fields };
 						handleCustomFields(this.getNode(), body, fields);
+						toDateOnly(body, DEAL_DATE_FIELDS);
 						responseData = await alzeApiRequest.call(this, 'PUT', `/deals/${dealId}`, body);
 						responseData = responseData.data;
 					} else if (operation === 'patch') {
@@ -401,6 +417,7 @@ export class Alze implements INodeType {
 							delete body.stageIdPatch;
 						}
 						handleCustomFields(this.getNode(), body, fields);
+						toDateOnly(body, DEAL_DATE_FIELDS);
 						responseData = await alzeApiRequest.call(this, 'PATCH', `/deals/${dealId}`, body);
 						responseData = responseData.data;
 					} else if (operation === 'list') {
@@ -409,10 +426,10 @@ export class Alze implements INodeType {
 						const qs: IDataObject = { ...additionalFields };
 						if (q) qs.q = q;
 						applyOrderParams(this, i, qs);
-						responseData = await alzeApiRequestAllItems.call(this, 'GET', '/deals', {}, qs);
+						responseData = await alzeApiRequestAllItems.call(this, 'GET', '/deals', {}, qs, i);
 					} else if (operation === 'listContacts') {
 						const dealId = this.getNodeParameter('dealId', i) as string;
-						responseData = await alzeApiRequestAllItems.call(this, 'GET', `/deals/${dealId}/contacts`);
+						responseData = await alzeApiRequestAllItems.call(this, 'GET', `/deals/${dealId}/contacts`, {}, {}, i);
 					} else if (operation === 'addContact') {
 						const dealId = this.getNodeParameter('dealId', i) as string;
 						const personId = this.getNodeParameter('personIdAdd', i) as string;
@@ -422,22 +439,26 @@ export class Alze implements INodeType {
 						const dealId = this.getNodeParameter('dealId', i) as string;
 						const personId = this.getNodeParameter('personIdRemove', i) as string;
 						responseData = await alzeApiRequest.call(this, 'DELETE', `/deals/${dealId}/contacts/${personId}`);
-						responseData = responseData.data;
+						responseData = deleteResult(responseData, personId);
 					} else if (operation === 'listItems') {
 						const dealId = this.getNodeParameter('dealId', i) as string;
-						responseData = await alzeApiRequestAllItems.call(this, 'GET', `/deals/${dealId}/items`);
+						responseData = await alzeApiRequestAllItems.call(this, 'GET', `/deals/${dealId}/items`, {}, {}, i);
 					} else if (operation === 'addItem') {
 						const dealId = this.getNodeParameter('dealId', i) as string;
 						const itemId = this.getNodeParameter('itemIdAdd', i) as number;
 						const quantity = this.getNodeParameter('quantity', i) as number;
-						const price = this.getNodeParameter('price', i) as number;
-						responseData = await alzeApiRequest.call(this, 'POST', `/deals/${dealId}/items`, { item_id: itemId, quantity, price });
+						// 0 (the default) means "use the catalog price": the API only falls back
+						// to it when `price` is absent.
+						const price = Number(this.getNodeParameter('price', i, 0));
+						const body: IDataObject = { item_id: itemId, quantity };
+						if (Number.isFinite(price) && price !== 0) body.price = price;
+						responseData = await alzeApiRequest.call(this, 'POST', `/deals/${dealId}/items`, body);
 						responseData = responseData.data;
 					} else if (operation === 'listNotes') {
 						const dealId = this.getNodeParameter('dealId', i) as string;
 						const additionalFields = this.getNodeParameter('additionalFields', i, {}) as IDataObject;
 						const qs: IDataObject = { ...additionalFields };
-						responseData = await alzeApiRequestAllItems.call(this, 'GET', `/deals/${dealId}/notes`, {}, qs);
+						responseData = await alzeApiRequestAllItems.call(this, 'GET', `/deals/${dealId}/notes`, {}, qs, i);
 					} else if (operation === 'addNote') {
 						const dealId = this.getNodeParameter('dealId', i) as string;
 						const content = this.getNodeParameter('content', i) as string;
@@ -459,7 +480,7 @@ export class Alze implements INodeType {
 					} else if (operation === 'deleteNote') {
 						const noteId = this.getNodeParameter('noteId', i) as string;
 						responseData = await alzeApiRequest.call(this, 'DELETE', `/deal-notes/${noteId}`);
-						responseData = responseData.data;
+						responseData = deleteResult(responseData, noteId);
 					}
 				}
 
@@ -474,7 +495,7 @@ export class Alze implements INodeType {
 					} else if (operation === 'delete') {
 						const activityId = this.getNodeParameter('activityId', i) as string;
 						responseData = await alzeApiRequest.call(this, 'DELETE', `/activities/${activityId}`);
-						responseData = responseData.data;
+						responseData = deleteResult(responseData, activityId);
 					} else if (operation === 'complete') {
 						const activityId = this.getNodeParameter('activityId', i) as string;
 						responseData = await alzeApiRequest.call(this, 'PATCH', `/activities/${activityId}/complete`, {});
@@ -503,22 +524,13 @@ export class Alze implements INodeType {
 						}
 						responseData = await alzeApiRequest.call(this, 'PUT', `/activities/${activityId}`, body);
 						responseData = responseData.data;
-					} else if (operation === 'patch') {
-						const activityId = this.getNodeParameter('activityId', i) as string;
-						const fields = this.getNodeParameter('fieldsToSet', i) as IDataObject;
-						const body: IDataObject = { ...fields };
-						if (body.due_date && typeof body.due_date === 'string' && body.due_date.includes('T')) {
-							body.due_date = (body.due_date as string).split('T')[0];
-						}
-						responseData = await alzeApiRequest.call(this, 'PATCH', `/activities/${activityId}`, body);
-						responseData = responseData.data;
 					} else if (operation === 'list') {
 						const q = this.getNodeParameter('q', i) as string;
 						const additionalFields = this.getNodeParameter('additionalFields', i) as IDataObject;
 						const qs: IDataObject = { ...additionalFields };
 						if (q) qs.q = q;
 						applyOrderParams(this, i, qs);
-						responseData = await alzeApiRequestAllItems.call(this, 'GET', '/activities', {}, qs);
+						responseData = await alzeApiRequestAllItems.call(this, 'GET', '/activities', {}, qs, i);
 					}
 				}
 
@@ -533,12 +545,14 @@ export class Alze implements INodeType {
 					} else if (operation === 'delete') {
 						const productId = this.getNodeParameter('productId', i) as string;
 						responseData = await alzeApiRequest.call(this, 'DELETE', `/items/${productId}`);
-						responseData = responseData.data;
+						responseData = deleteResult(responseData, productId);
 					} else if (operation === 'create') {
 						const name = this.getNodeParameter('name', i) as string;
 						const type = this.getNodeParameter('type', i) as string;
 						const fields = this.getNodeParameter('fieldsToSet', i) as IDataObject;
 						const body: IDataObject = { name, type, ...fields };
+						// category_id 0 is the field's default, not a real category (FK error)
+						if (body.category_id === 0) delete body.category_id;
 						responseData = await alzeApiRequest.call(this, 'POST', '/items', body);
 						responseData = responseData.data;
 					} else if (operation === 'update') {
@@ -547,12 +561,16 @@ export class Alze implements INodeType {
 						const type = this.getNodeParameter('typeUpdate', i) as string;
 						const fields = this.getNodeParameter('fieldsToSet', i) as IDataObject;
 						const body: IDataObject = { name, type, ...fields };
+						// category_id 0 is the field's default, not a real category (FK error)
+						if (body.category_id === 0) delete body.category_id;
 						responseData = await alzeApiRequest.call(this, 'PUT', `/items/${productId}`, body);
 						responseData = responseData.data;
 					} else if (operation === 'patch') {
 						const productId = this.getNodeParameter('productId', i) as string;
 						const fields = this.getNodeParameter('fieldsToSet', i) as IDataObject;
 						const body: IDataObject = { ...fields };
+						// category_id 0 is the field's default, not a real category (FK error)
+						if (body.category_id === 0) delete body.category_id;
 						if (fields.namePatch) {
 							body.name = fields.namePatch;
 							delete body.namePatch;
@@ -573,7 +591,7 @@ export class Alze implements INodeType {
 						const qs: IDataObject = { ...additionalFields };
 						if (q) qs.q = q;
 						applyOrderParams(this, i, qs);
-						responseData = await alzeApiRequestAllItems.call(this, 'GET', '/items', {}, qs);
+						responseData = await alzeApiRequestAllItems.call(this, 'GET', '/items', {}, qs, i);
 					}
 				}
 
@@ -588,7 +606,7 @@ export class Alze implements INodeType {
 					} else if (operation === 'delete') {
 						const pipelineId = this.getNodeParameter('pipelineId', i) as string;
 						responseData = await alzeApiRequest.call(this, 'DELETE', `/pipelines/${pipelineId}`);
-						responseData = responseData.data;
+						responseData = deleteResult(responseData, pipelineId);
 					} else if (operation === 'create') {
 						const name = this.getNodeParameter('name', i) as string;
 						const fields = this.getNodeParameter('fieldsToSet', i) as IDataObject;
@@ -621,7 +639,7 @@ export class Alze implements INodeType {
 						const qs: IDataObject = { ...additionalFields };
 						if (q) qs.q = q;
 						applyOrderParams(this, i, qs);
-						responseData = await alzeApiRequestAllItems.call(this, 'GET', '/pipelines', {}, qs);
+						responseData = await alzeApiRequestAllItems.call(this, 'GET', '/pipelines', {}, qs, i);
 					}
 				}
 
@@ -636,7 +654,7 @@ export class Alze implements INodeType {
 					} else if (operation === 'delete') {
 						const stageId = this.getNodeParameter('stageId', i) as string;
 						responseData = await alzeApiRequest.call(this, 'DELETE', `/stages/${stageId}`);
-						responseData = responseData.data;
+						responseData = deleteResult(responseData, stageId);
 					} else if (operation === 'create') {
 						const pipelineId = this.getNodeParameter('pipelineId', i) as string;
 						const name = this.getNodeParameter('name', i) as string;
@@ -668,7 +686,7 @@ export class Alze implements INodeType {
 						const qs: IDataObject = { pipeline_id: pipelineId, ...additionalFields };
 						if (q) qs.q = q;
 						applyOrderParams(this, i, qs);
-						responseData = await alzeApiRequestAllItems.call(this, 'GET', '/stages', {}, qs);
+						responseData = await alzeApiRequestAllItems.call(this, 'GET', '/stages', {}, qs, i);
 					}
 				}
 
@@ -683,7 +701,7 @@ export class Alze implements INodeType {
 					} else if (operation === 'delete') {
 						const lostReasonId = this.getNodeParameter('lostReasonId', i) as string;
 						responseData = await alzeApiRequest.call(this, 'DELETE', `/loss-reasons/${lostReasonId}`);
-						responseData = responseData.data;
+						responseData = deleteResult(responseData, lostReasonId);
 					} else if (operation === 'create') {
 						const name = this.getNodeParameter('name', i) as string;
 						const fields = this.getNodeParameter('fieldsToSet', i) as IDataObject;
@@ -713,52 +731,7 @@ export class Alze implements INodeType {
 						const qs: IDataObject = { ...additionalFields };
 						if (q) qs.q = q;
 						applyOrderParams(this, i, qs);
-						responseData = await alzeApiRequestAllItems.call(this, 'GET', '/loss-reasons', {}, qs);
-					}
-				}
-
-				// ==========================================
-				//                WON REASON
-				// ==========================================
-				else if (resource === 'wonReason') {
-					if (operation === 'get') {
-						const wonReasonId = this.getNodeParameter('wonReasonId', i) as string;
-						responseData = await alzeApiRequest.call(this, 'GET', `/win-reasons/${wonReasonId}`);
-						responseData = responseData.data;
-					} else if (operation === 'delete') {
-						const wonReasonId = this.getNodeParameter('wonReasonId', i) as string;
-						responseData = await alzeApiRequest.call(this, 'DELETE', `/win-reasons/${wonReasonId}`);
-						responseData = responseData.data;
-					} else if (operation === 'create') {
-						const name = this.getNodeParameter('name', i) as string;
-						const fields = this.getNodeParameter('fieldsToSet', i) as IDataObject;
-						const body: IDataObject = { name, ...fields };
-						responseData = await alzeApiRequest.call(this, 'POST', '/win-reasons', body);
-						responseData = responseData.data;
-					} else if (operation === 'update') {
-						const wonReasonId = this.getNodeParameter('wonReasonId', i) as string;
-						const name = this.getNodeParameter('nameUpdate', i) as string;
-						const fields = this.getNodeParameter('fieldsToSet', i) as IDataObject;
-						const body: IDataObject = { name, ...fields };
-						responseData = await alzeApiRequest.call(this, 'PUT', `/win-reasons/${wonReasonId}`, body);
-						responseData = responseData.data;
-					} else if (operation === 'patch') {
-						const wonReasonId = this.getNodeParameter('wonReasonId', i) as string;
-						const fields = this.getNodeParameter('fieldsToSet', i) as IDataObject;
-						const body: IDataObject = { ...fields };
-						if (fields.namePatch) {
-							body.name = fields.namePatch;
-							delete body.namePatch;
-						}
-						responseData = await alzeApiRequest.call(this, 'PATCH', `/win-reasons/${wonReasonId}`, body);
-						responseData = responseData.data;
-					} else if (operation === 'list') {
-						const q = this.getNodeParameter('q', i) as string;
-						const additionalFields = this.getNodeParameter('additionalFields', i) as IDataObject;
-						const qs: IDataObject = { ...additionalFields };
-						if (q) qs.q = q;
-						applyOrderParams(this, i, qs);
-						responseData = await alzeApiRequestAllItems.call(this, 'GET', '/win-reasons', {}, qs);
+						responseData = await alzeApiRequestAllItems.call(this, 'GET', '/loss-reasons', {}, qs, i);
 					}
 				}
 
@@ -766,11 +739,7 @@ export class Alze implements INodeType {
 				//                  USER
 				// ==========================================
 				else if (resource === 'user') {
-					if (operation === 'get') {
-						const userId = this.getNodeParameter('userId', i) as string;
-						responseData = await alzeApiRequest.call(this, 'GET', `/users/${userId}`);
-						responseData = responseData.data;
-					} else if (operation === 'getMe') {
+					if (operation === 'getMe') {
 						responseData = await alzeApiRequest.call(this, 'GET', '/users/me');
 						responseData = responseData.data;
 					} else if (operation === 'list') {
@@ -779,7 +748,7 @@ export class Alze implements INodeType {
 						const qs: IDataObject = { ...additionalFields };
 						if (q) qs.q = q;
 						applyOrderParams(this, i, qs);
-						responseData = await alzeApiRequestAllItems.call(this, 'GET', '/users', {}, qs);
+						responseData = await alzeApiRequestAllItems.call(this, 'GET', '/users', {}, qs, i);
 					}
 				}
 
@@ -792,8 +761,8 @@ export class Alze implements INodeType {
 						responseData = await alzeApiRequest.call(this, 'GET', '/me');
 						responseData = responseData.data;
 					} else if (operation === 'ping') {
+						// `/ping` answers `{ ok, workspace_id, environment, timestamp }`, without `data`
 						responseData = await alzeApiRequest.call(this, 'GET', '/ping');
-						responseData = responseData.data;
 					}
 				}
 
@@ -808,7 +777,7 @@ export class Alze implements INodeType {
 					} else if (operation === 'delete') {
 						const id = this.getNodeParameter('customFieldId', i) as string;
 						responseData = await alzeApiRequest.call(this, 'DELETE', `/custom-fields/${id}`);
-						responseData = responseData.data;
+						responseData = deleteResult(responseData, id);
 					} else if (operation === 'create') {
 						const name = this.getNodeParameter('name', i) as string;
 						const entity = this.getNodeParameter('entity', i) as string;
@@ -826,10 +795,10 @@ export class Alze implements INodeType {
 					} else if (operation === 'update') {
 						const id = this.getNodeParameter('customFieldId', i) as string;
 						const name = this.getNodeParameter('nameUpdate', i) as string;
-						const entity = this.getNodeParameter('entity', i) as string;
 						const type = this.getNodeParameter('type', i) as string;
 						const fields = this.getNodeParameter('fieldsToSet', i) as IDataObject;
-						const body: IDataObject = { name, entity, type, ...fields };
+						// `entity` is fixed at creation: the API does not accept it on update
+						const body: IDataObject = { name, type, ...fields };
 						if (body.options && typeof body.options === 'string') {
 							body.options = (body.options as string).split(',').map(s => s.trim()).filter(Boolean);
 						}
@@ -845,10 +814,6 @@ export class Alze implements INodeType {
 						if (fields.namePatch) {
 							body.name = fields.namePatch;
 							delete body.namePatch;
-						}
-						if (fields.entityPatch) {
-							body.entity = fields.entityPatch;
-							delete body.entityPatch;
 						}
 						if (fields.typePatch) {
 							body.type = fields.typePatch;
@@ -868,7 +833,7 @@ export class Alze implements INodeType {
 						const qs: IDataObject = { ...additionalFields };
 						if (q) qs.q = q;
 						applyOrderParams(this, i, qs);
-						responseData = await alzeApiRequestAllItems.call(this, 'GET', '/custom-fields', {}, qs);
+						responseData = await alzeApiRequestAllItems.call(this, 'GET', '/custom-fields', {}, qs, i);
 					}
 				}
 
@@ -883,7 +848,7 @@ export class Alze implements INodeType {
 					} else if (operation === 'delete') {
 						const id = this.getNodeParameter('sourceId', i) as string;
 						responseData = await alzeApiRequest.call(this, 'DELETE', `/fontes/${id}`);
-						responseData = responseData.data;
+						responseData = deleteResult(responseData, id);
 					} else if (operation === 'create') {
 						const name = this.getNodeParameter('name', i) as string;
 						const fields = this.getNodeParameter('fieldsToSet', i) as IDataObject;
@@ -913,7 +878,7 @@ export class Alze implements INodeType {
 						const qs: IDataObject = { ...additionalFields };
 						if (q) qs.q = q;
 						applyOrderParams(this, i, qs);
-						responseData = await alzeApiRequestAllItems.call(this, 'GET', '/fontes', {}, qs);
+						responseData = await alzeApiRequestAllItems.call(this, 'GET', '/fontes', {}, qs, i);
 					}
 				}
 
@@ -928,7 +893,7 @@ export class Alze implements INodeType {
 					} else if (operation === 'delete') {
 						const id = this.getNodeParameter('campaignId', i) as string;
 						responseData = await alzeApiRequest.call(this, 'DELETE', `/campanhas/${id}`);
-						responseData = responseData.data;
+						responseData = deleteResult(responseData, id);
 					} else if (operation === 'create') {
 						const name = this.getNodeParameter('name', i) as string;
 						const fields = this.getNodeParameter('fieldsToSet', i) as IDataObject;
@@ -958,7 +923,7 @@ export class Alze implements INodeType {
 						const qs: IDataObject = { ...additionalFields };
 						if (q) qs.q = q;
 						applyOrderParams(this, i, qs);
-						responseData = await alzeApiRequestAllItems.call(this, 'GET', '/campanhas', {}, qs);
+						responseData = await alzeApiRequestAllItems.call(this, 'GET', '/campanhas', {}, qs, i);
 					}
 				}
 
@@ -973,7 +938,7 @@ export class Alze implements INodeType {
 					} else if (operation === 'delete') {
 						const id = this.getNodeParameter('channelId', i) as string;
 						responseData = await alzeApiRequest.call(this, 'DELETE', `/canais/${id}`);
-						responseData = responseData.data;
+						responseData = deleteResult(responseData, id);
 					} else if (operation === 'create') {
 						const name = this.getNodeParameter('name', i) as string;
 						const fields = this.getNodeParameter('fieldsToSet', i) as IDataObject;
@@ -1003,7 +968,7 @@ export class Alze implements INodeType {
 						const qs: IDataObject = { ...additionalFields };
 						if (q) qs.q = q;
 						applyOrderParams(this, i, qs);
-						responseData = await alzeApiRequestAllItems.call(this, 'GET', '/canais', {}, qs);
+						responseData = await alzeApiRequestAllItems.call(this, 'GET', '/canais', {}, qs, i);
 					}
 				}
 
@@ -1018,7 +983,7 @@ export class Alze implements INodeType {
 					} else if (operation === 'delete') {
 						const id = this.getNodeParameter('itemCategoryId', i) as string;
 						responseData = await alzeApiRequest.call(this, 'DELETE', `/item-categories/${id}`);
-						responseData = responseData.data;
+						responseData = deleteResult(responseData, id);
 					} else if (operation === 'create') {
 						const name = this.getNodeParameter('name', i) as string;
 						const fields = this.getNodeParameter('fieldsToSet', i) as IDataObject;
@@ -1048,7 +1013,7 @@ export class Alze implements INodeType {
 						const qs: IDataObject = { ...additionalFields };
 						if (q) qs.q = q;
 						applyOrderParams(this, i, qs);
-						responseData = await alzeApiRequestAllItems.call(this, 'GET', '/item-categories', {}, qs);
+						responseData = await alzeApiRequestAllItems.call(this, 'GET', '/item-categories', {}, qs, i);
 					}
 				}
 
@@ -1063,7 +1028,7 @@ export class Alze implements INodeType {
 					} else if (operation === 'delete') {
 						const id = this.getNodeParameter('activityTypeId', i) as string;
 						responseData = await alzeApiRequest.call(this, 'DELETE', `/activity-types/${id}`);
-						responseData = responseData.data;
+						responseData = deleteResult(responseData, id);
 					} else if (operation === 'create') {
 						const name = this.getNodeParameter('name', i) as string;
 						const fields = this.getNodeParameter('fieldsToSet', i) as IDataObject;
@@ -1093,7 +1058,7 @@ export class Alze implements INodeType {
 						const qs: IDataObject = { ...additionalFields };
 						if (q) qs.q = q;
 						applyOrderParams(this, i, qs);
-						responseData = await alzeApiRequestAllItems.call(this, 'GET', '/activity-types', {}, qs);
+						responseData = await alzeApiRequestAllItems.call(this, 'GET', '/activity-types', {}, qs, i);
 					}
 				}
 
@@ -1108,7 +1073,7 @@ export class Alze implements INodeType {
 					} else if (operation === 'delete') {
 						const id = this.getNodeParameter('tagId', i) as string;
 						responseData = await alzeApiRequest.call(this, 'DELETE', `/tags/${id}`);
-						responseData = responseData.data;
+						responseData = deleteResult(responseData, id);
 					} else if (operation === 'create') {
 						const name = this.getNodeParameter('name', i) as string;
 						const fields = this.getNodeParameter('fieldsToSet', i) as IDataObject;
@@ -1138,7 +1103,7 @@ export class Alze implements INodeType {
 						const qs: IDataObject = { ...additionalFields };
 						if (q) qs.q = q;
 						applyOrderParams(this, i, qs);
-						responseData = await alzeApiRequestAllItems.call(this, 'GET', '/tags', {}, qs);
+						responseData = await alzeApiRequestAllItems.call(this, 'GET', '/tags', {}, qs, i);
 					}
 				}
 
@@ -1153,7 +1118,7 @@ export class Alze implements INodeType {
 					} else if (operation === 'delete') {
 						const id = this.getNodeParameter('distributionRuleId', i) as string;
 						responseData = await alzeApiRequest.call(this, 'DELETE', `/distribution-rules/${id}`);
-						responseData = responseData.data;
+						responseData = deleteResult(responseData, id);
 					} else if (operation === 'create') {
 						const name = this.getNodeParameter('name', i) as string;
 						const mode = this.getNodeParameter('mode', i) as string;
@@ -1213,7 +1178,7 @@ export class Alze implements INodeType {
 						const qs: IDataObject = { ...additionalFields };
 						if (q) qs.q = q;
 						applyOrderParams(this, i, qs);
-						responseData = await alzeApiRequestAllItems.call(this, 'GET', '/distribution-rules', {}, qs);
+						responseData = await alzeApiRequestAllItems.call(this, 'GET', '/distribution-rules', {}, qs, i);
 					}
 				}
 
@@ -1228,7 +1193,7 @@ export class Alze implements INodeType {
 					} else if (operation === 'delete') {
 						const id = this.getNodeParameter('webhookId', i) as string;
 						responseData = await alzeApiRequest.call(this, 'DELETE', `/webhooks/${id}`);
-						responseData = responseData.data;
+						responseData = deleteResult(responseData, id);
 					} else if (operation === 'create') {
 						const name = this.getNodeParameter('name', i) as string;
 						const target_url = this.getNodeParameter('targetUrl', i) as string;
@@ -1246,32 +1211,22 @@ export class Alze implements INodeType {
 						const body: IDataObject = { name, target_url, events, ...fields };
 						responseData = await alzeApiRequest.call(this, 'PUT', `/webhooks/${id}`, body);
 						responseData = responseData.data;
-					} else if (operation === 'patch') {
-						const id = this.getNodeParameter('webhookId', i) as string;
-						const fields = this.getNodeParameter('fieldsToSet', i) as IDataObject;
-						const body: IDataObject = { ...fields };
-						if (fields.namePatch) {
-							body.name = fields.namePatch;
-							delete body.namePatch;
-						}
-						if (fields.targetUrlPatch) {
-							body.target_url = fields.targetUrlPatch;
-							delete body.targetUrlPatch;
-						}
-						if (fields.eventsPatch) {
-							body.events = fields.eventsPatch;
-							delete body.eventsPatch;
-						}
-						responseData = await alzeApiRequest.call(this, 'PATCH', `/webhooks/${id}`, body);
-						responseData = responseData.data;
 					} else if (operation === 'list') {
 						const q = this.getNodeParameter('q', i) as string;
 						const additionalFields = this.getNodeParameter('additionalFields', i) as IDataObject;
 						const qs: IDataObject = { ...additionalFields };
 						if (q) qs.q = q;
 						applyOrderParams(this, i, qs);
-						responseData = await alzeApiRequestAllItems.call(this, 'GET', '/webhooks', {}, qs);
+						responseData = await alzeApiRequestAllItems.call(this, 'GET', '/webhooks', {}, qs, i);
 					}
+				}
+
+				if (responseData === UNHANDLED) {
+					throw new NodeOperationError(
+						this.getNode(),
+						`The operation "${operation}" of "${resource}" is no longer supported by the Alze API`,
+						{ itemIndex: i },
+					);
 				}
 
 				const executionData = this.helpers.returnJsonArray(responseData);

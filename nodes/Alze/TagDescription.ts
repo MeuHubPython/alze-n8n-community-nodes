@@ -39,7 +39,7 @@ export const tagOperations: INodeProperties[] = [
 			{
 				name: 'Update',
 				value: 'update',
-				description: 'Update a tag (clears omitted fields)',
+				description: 'Update a tag. Only the fields sent are changed.',
 				action: 'Update a tag',
 			},
 			{
