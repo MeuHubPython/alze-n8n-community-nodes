@@ -56,11 +56,6 @@ import {
 } from './LostReasonDescription';
 
 import {
-	wonReasonOperations,
-	wonReasonFields,
-} from './WonReasonDescription';
-
-import {
 	userOperations,
 	userFields,
 } from './UserDescription';
@@ -159,7 +154,6 @@ export class Alze implements INodeType {
 					{ name: 'Tag', value: 'tag' },
 					{ name: 'User', value: 'user' },
 					{ name: 'Webhook', value: 'webhook' },
-					{ name: 'Won Reason', value: 'wonReason' },
 				],
 				default: 'contact',
 			},
@@ -179,8 +173,6 @@ export class Alze implements INodeType {
 			...stageFields,
 			...lostReasonOperations,
 			...lostReasonFields,
-			...wonReasonOperations,
-			...wonReasonFields,
 			...userOperations,
 			...userFields,
 			...metaOperations,
@@ -714,51 +706,6 @@ export class Alze implements INodeType {
 						if (q) qs.q = q;
 						applyOrderParams(this, i, qs);
 						responseData = await alzeApiRequestAllItems.call(this, 'GET', '/loss-reasons', {}, qs);
-					}
-				}
-
-				// ==========================================
-				//                WON REASON
-				// ==========================================
-				else if (resource === 'wonReason') {
-					if (operation === 'get') {
-						const wonReasonId = this.getNodeParameter('wonReasonId', i) as string;
-						responseData = await alzeApiRequest.call(this, 'GET', `/win-reasons/${wonReasonId}`);
-						responseData = responseData.data;
-					} else if (operation === 'delete') {
-						const wonReasonId = this.getNodeParameter('wonReasonId', i) as string;
-						responseData = await alzeApiRequest.call(this, 'DELETE', `/win-reasons/${wonReasonId}`);
-						responseData = responseData.data;
-					} else if (operation === 'create') {
-						const name = this.getNodeParameter('name', i) as string;
-						const fields = this.getNodeParameter('fieldsToSet', i) as IDataObject;
-						const body: IDataObject = { name, ...fields };
-						responseData = await alzeApiRequest.call(this, 'POST', '/win-reasons', body);
-						responseData = responseData.data;
-					} else if (operation === 'update') {
-						const wonReasonId = this.getNodeParameter('wonReasonId', i) as string;
-						const name = this.getNodeParameter('nameUpdate', i) as string;
-						const fields = this.getNodeParameter('fieldsToSet', i) as IDataObject;
-						const body: IDataObject = { name, ...fields };
-						responseData = await alzeApiRequest.call(this, 'PUT', `/win-reasons/${wonReasonId}`, body);
-						responseData = responseData.data;
-					} else if (operation === 'patch') {
-						const wonReasonId = this.getNodeParameter('wonReasonId', i) as string;
-						const fields = this.getNodeParameter('fieldsToSet', i) as IDataObject;
-						const body: IDataObject = { ...fields };
-						if (fields.namePatch) {
-							body.name = fields.namePatch;
-							delete body.namePatch;
-						}
-						responseData = await alzeApiRequest.call(this, 'PATCH', `/win-reasons/${wonReasonId}`, body);
-						responseData = responseData.data;
-					} else if (operation === 'list') {
-						const q = this.getNodeParameter('q', i) as string;
-						const additionalFields = this.getNodeParameter('additionalFields', i) as IDataObject;
-						const qs: IDataObject = { ...additionalFields };
-						if (q) qs.q = q;
-						applyOrderParams(this, i, qs);
-						responseData = await alzeApiRequestAllItems.call(this, 'GET', '/win-reasons', {}, qs);
 					}
 				}
 

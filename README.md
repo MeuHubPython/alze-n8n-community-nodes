@@ -29,7 +29,6 @@ This is an n8n community node package that integrates seamlessly with the **Alze
 | **🛣️ Pipelines** | Sales pipeline structures / funnels. | `Create`, `Get`, `Get Many (List)`, `Update`, `Update Partial (Patch)`, `Delete`, `Get Stages` |
 | **📊 Stages** | Dynamic pipeline stages with success probability. | `Create`, `Get`, `Get Many (List)`, `Update`, `Update Partial (Patch)`, `Delete` |
 | **❌ Lost Reasons** | Standardized catalog for rejected deals. | `Create`, `Get`, `Get Many (List)`, `Update`, `Update Partial (Patch)`, `Delete` |
-| **🏆 Won Reasons** | Standardized catalog for successful deal closings. | `Create`, `Get`, `Get Many (List)`, `Update`, `Update Partial (Patch)`, `Delete` |
 | **👥 Users** | Workspace administrators, SDRs, and sellers. | `Get`, `Get Authenticated User (Me)`, `Get Many (List)` |
 
 ---
