@@ -108,7 +108,7 @@ Pessoas físicas no CRM. Podem ser vinculadas a uma empresa e a múltiplas negoc
 
 `GET` `/contacts`
 
-Retorna a lista paginada de contatos do workspace autenticado, com suporte a busca, filtros e ordenação.
+Retorna a lista paginada de contatos do workspace autenticado, com suporte a busca, filtros e ordenação. Os telefones vêm só em `phones[]`; as colunas `phone`/`mobile` não aparecem na resposta.
 
 **Query Parameters**
 
@@ -118,11 +118,11 @@ Retorna a lista paginada de contatos do workspace autenticado, com suporte a bus
 | page_size | integer | Não | Registros por página (default: 25, máx: 100). |
 | order_by | string | Não | Campo de ordenação. Ex.: `created_at`. |
 | order_direction | string | Não | Direção da ordenação: `asc` ou `desc`. Sem ele, vale a ordem padrão do recurso (`created_at` desc). |
-| q | string | Não | Busca textual no campo principal do recurso (geralmente `name` ou `title`). |
+| q | string | Não | Busca parcial (case-insensitive) no nome do contato. Não busca em e-mail nem telefone. |
 | status | string | Não | Filtra por status (active|inactive). |
-| email | string | Não | Filtra por e-mail exato (case-insensitive). |
-| phone | string | Não | Filtra por telefone (ignora formatação). |
-| mobile | string | Não | Filtra por celular (ignora formatação). |
+| email | string | Não | Filtra por e-mail exato. |
+| phone | string | Não | Filtra pela coluna de telefone fixo: compara só os dígitos, na ordem, tolerando qualquer formatação entre eles (busca parcial, não exata). |
+| mobile | string | Não | Filtra pela coluna de celular: compara só os dígitos, na ordem, tolerando qualquer formatação entre eles (busca parcial, não exata). |
 | phone_match | string | Não | Telefone em qualquer formato. Casa os 8 últimos dígitos (tolera máscara, +55 e a falta ou sobra do nono dígito) e, quando os dois números têm DDD, exige o mesmo DDD. Olha celular, telefone e a lista de telefones do contato. Vazio devolve nenhum contato. |
 | organization_id | uuid | Não | Filtra contatos de uma empresa específica. |
 | external_sync_code | string | Não | Filtra pelo código externo de sincronização. É o identificador único do registro no sistema de origem (ex.: ID no RD Station, código no ERP), usado por integrações para evitar duplicidade. Único por workspace. |
@@ -136,8 +136,9 @@ Retorna a lista paginada de contatos do workspace autenticado, com suporte a bus
       "id": "c1a2b3d4-e5f6-7890-abcd-ef1234567890",
       "name": "Mariana Souza",
       "email": "mariana@exemplo.com",
-      "phone": "+55 11 3333-3333",
-      "mobile": "+55 11 99999-9999",
+      "phones": [
+        { "id": "f0e1d2c3-b4a5-6789-0123-456789abcdef", "value": "+55 11 99999-9999", "type": "mobile", "label": null, "is_primary": true, "position": 0 }
+      ],
       "cpf": "123.456.789-00",
       "job_title": "Diretora de Marketing",
       "organization_id": "9f8e7d6c-5b4a-3210-fedc-ba9876543210",
@@ -175,8 +176,9 @@ Retorna o registro de um(a) contato pelo ID.
     "id": "c1a2b3d4-e5f6-7890-abcd-ef1234567890",
     "name": "Mariana Souza",
     "email": "mariana@exemplo.com",
-    "phone": "+55 11 3333-3333",
-    "mobile": "+55 11 99999-9999",
+    "phones": [
+      { "id": "f0e1d2c3-b4a5-6789-0123-456789abcdef", "value": "+55 11 99999-9999", "type": "mobile", "label": null, "is_primary": true, "position": 0 }
+    ],
     "cpf": "123.456.789-00",
     "job_title": "Diretora de Marketing",
     "organization_id": "9f8e7d6c-5b4a-3210-fedc-ba9876543210",
@@ -230,6 +232,7 @@ Cria um(a) novo(a) contato no workspace autenticado.
 | status | string (active|inactive) | Não | Status do contato. |
 | observation | string | Não | Observações livres em texto. |
 | custom_fields | object | Não | Pares chave/valor para campos customizados do workspace. |
+| creation_source_meta | object | Não | De onde o lead veio, só na criação. Mesmas chaves de `creation_source_meta` em negociações. O conteúdo é gravado em `custom_fields`. |
 | external_sync_code | string | Não | Código externo de sincronização. Use o identificador do registro no sistema de origem (ex.: ID no RD Station, código no ERP) para evitar duplicidade em integrações. **Único por workspace**: tentativas de criar ou atualizar um registro com um `external_sync_code` já existente retornam erro `409 conflict`. |
 
 **Exemplo de Request Body:**
@@ -248,8 +251,11 @@ Cria um(a) novo(a) contato no workspace autenticado.
     "id": "c1a2b3d4-e5f6-7890-abcd-ef1234567890",
     "name": "Mariana Souza",
     "email": "mariana@exemplo.com",
-    "phone": "+55 11 3333-3333",
+    "phone": null,
     "mobile": "+55 11 99999-9999",
+    "phones": [
+      { "id": "f0e1d2c3-b4a5-6789-0123-456789abcdef", "value": "+55 11 99999-9999", "type": "mobile", "label": null, "is_primary": true, "position": 0 }
+    ],
     "cpf": "123.456.789-00",
     "job_title": "Diretora de Marketing",
     "organization_id": "9f8e7d6c-5b4a-3210-fedc-ba9876543210",
@@ -305,8 +311,11 @@ Atualiza todos os campos editáveis de um(a) contato. Campos omitidos serão lim
     "id": "c1a2b3d4-e5f6-7890-abcd-ef1234567890",
     "name": "Mariana Souza",
     "email": "mariana@exemplo.com",
-    "phone": "+55 11 3333-3333",
+    "phone": null,
     "mobile": "+55 11 99999-9999",
+    "phones": [
+      { "id": "f0e1d2c3-b4a5-6789-0123-456789abcdef", "value": "+55 11 99999-9999", "type": "mobile", "label": null, "is_primary": true, "position": 0 }
+    ],
     "cpf": "123.456.789-00",
     "job_title": "Diretora de Marketing",
     "organization_id": "9f8e7d6c-5b4a-3210-fedc-ba9876543210",
@@ -362,8 +371,11 @@ Atualiza apenas os campos enviados no body. Use para edições incrementais.
     "id": "c1a2b3d4-e5f6-7890-abcd-ef1234567890",
     "name": "Mariana Souza",
     "email": "mariana@exemplo.com",
-    "phone": "+55 11 3333-3333",
+    "phone": null,
     "mobile": "+55 11 99999-9999",
+    "phones": [
+      { "id": "f0e1d2c3-b4a5-6789-0123-456789abcdef", "value": "+55 11 99999-9999", "type": "mobile", "label": null, "is_primary": true, "position": 0 }
+    ],
     "cpf": "123.456.789-00",
     "job_title": "Diretora de Marketing",
     "organization_id": "9f8e7d6c-5b4a-3210-fedc-ba9876543210",

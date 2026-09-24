@@ -246,6 +246,7 @@ export class Alze implements INodeType {
 						const body: IDataObject = { name, ...fields };
 						handleCustomFields(this.getNode(), body, fields);
 						handleContactPhones(this.getNode(), body, fields);
+						parseJsonObjectField(this.getNode(), body, 'creation_source_meta', 'Creation Source Meta (JSON)');
 						responseData = await alzeApiRequest.call(this, 'POST', '/contacts', body);
 						responseData = responseData.data;
 					} else if (operation === 'update') {
