@@ -246,6 +246,15 @@ export const contactFields: INodeProperties[] = [
 				description: 'Filter by exact telephone',
 			},
 			{
+				displayName: 'Phone Match',
+				name: 'phone_match',
+				type: 'string',
+				default: '',
+				placeholder: '5511999999999',
+				description:
+					'Find contacts by any phone format: matches the last 8 digits (tolerates mask, +55 and the ninth digit) and requires the same area code when both numbers have one. Searches mobile, phone and the phone list.',
+			},
+			{
 				displayName: 'Status',
 				name: 'status',
 				type: 'options',
