@@ -183,26 +183,44 @@ export function handleCustomFields(node: INode, body: IDataObject, properties: I
 	delete body.customFieldsJson;
 }
 
+// Phone types the node offered before the API settled on
+// mobile|fixed|whatsapp|work|other. Workflows saved with them keep working.
+const LEGACY_PHONE_TYPES: Record<string, string> = {
+	home: 'fixed',
+	phone: 'fixed',
+};
+
+function normalizePhoneType(phone: unknown): unknown {
+	if (!phone || typeof phone !== 'object' || Array.isArray(phone)) return phone;
+	const p = phone as IDataObject;
+	if (typeof p.type === 'string' && LEGACY_PHONE_TYPES[p.type]) {
+		return { ...p, type: LEGACY_PHONE_TYPES[p.type] };
+	}
+	return phone;
+}
+
 /**
  * Helper to process phones input into Alze body format
  */
 export function handleContactPhones(node: INode, body: IDataObject, properties: IDataObject) {
 	if (properties.phonesUi) {
 		const phones = (properties.phonesUi as IDataObject).phonesValues as IDataObject[] || [];
-		body.phones = phones.map((phone) => ({
+		body.phones = phones.map((phone) => normalizePhoneType({
 			value: phone.value,
 			type: phone.type,
-		}));
+		})) as IDataObject[];
 	} else if (properties.phonesJson) {
+		let phones: unknown;
 		try {
 			if (typeof properties.phonesJson === 'string') {
-				body.phones = JSON.parse(properties.phonesJson);
+				phones = JSON.parse(properties.phonesJson);
 			} else {
-				body.phones = properties.phonesJson;
+				phones = properties.phonesJson;
 			}
 		} catch {
 			throw new NodeOperationError(node, 'Phones JSON is invalid. Please provide a valid JSON array.');
 		}
+		body.phones = (Array.isArray(phones) ? phones.map(normalizePhoneType) : phones) as IDataObject[];
 	}
 	delete body.phonesUi;
 	delete body.phonesJson;

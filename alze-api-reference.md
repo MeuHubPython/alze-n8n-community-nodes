@@ -222,6 +222,7 @@ Cria um(a) novo(a) contato no workspace autenticado.
 | email | string | Não | E-mail principal. |
 | phone | string | Não | Telefone fixo. |
 | mobile | string | Não | Telefone celular. |
+| phones | array | Não | Lista de telefones `{ value, type, label?, is_primary? }`. `type` deve ser `mobile`, `fixed`, `whatsapp`, `work` ou `other`. Quando enviada, substitui a lista inteira. |
 | cpf | string | Não | CPF do contato. |
 | job_title | string | Não | Cargo / função. |
 | organization_id | uuid | Não | ID da empresa associada. |
@@ -278,6 +279,7 @@ Atualiza todos os campos editáveis de um(a) contato. Campos omitidos serão lim
 | email | string | Não | E-mail principal. |
 | phone | string | Não | Telefone fixo. |
 | mobile | string | Não | Telefone celular. |
+| phones | array | Não | Lista de telefones `{ value, type, label?, is_primary? }`. `type` deve ser `mobile`, `fixed`, `whatsapp`, `work` ou `other`. Quando enviada, substitui a lista inteira. |
 | cpf | string | Não | CPF do contato. |
 | job_title | string | Não | Cargo / função. |
 | organization_id | uuid | Não | ID da empresa associada. |
@@ -334,6 +336,7 @@ Atualiza apenas os campos enviados no body. Use para edições incrementais.
 | email | string | Não | E-mail principal. |
 | phone | string | Não | Telefone fixo. |
 | mobile | string | Não | Telefone celular. |
+| phones | array | Não | Lista de telefones `{ value, type, label?, is_primary? }`. `type` deve ser `mobile`, `fixed`, `whatsapp`, `work` ou `other`. Quando enviada, substitui a lista inteira. |
 | cpf | string | Não | CPF do contato. |
 | job_title | string | Não | Cargo / função. |
 | organization_id | uuid | Não | ID da empresa associada. |

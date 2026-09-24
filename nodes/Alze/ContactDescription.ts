@@ -391,7 +391,7 @@ export const contactFields: INodeProperties[] = [
 				name: 'phonesJson',
 				type: 'json',
 				default: '',
-				description: 'Phones array as a JSON, e.g. [{"value": "+5511999999999", "type": "mobile"}]',
+				description: 'Phones array as a JSON, e.g. [{"value": "+5511999999999", "type": "mobile"}]. Type must be one of mobile, fixed, whatsapp, work, other.',
 			},
 			{
 				displayName: 'Phones (UI)',
@@ -420,10 +420,10 @@ export const contactFields: INodeProperties[] = [
 								name: 'type',
 								type: 'options',
 								options: [
-									{ name: 'Home', value: 'home' },
+									{ name: 'Fixed', value: 'fixed' },
 									{ name: 'Mobile', value: 'mobile' },
 									{ name: 'Other', value: 'other' },
-									{ name: 'Phone', value: 'phone' },
+									{ name: 'WhatsApp', value: 'whatsapp' },
 									{ name: 'Work', value: 'work' },
 								],
 								default: 'mobile',
