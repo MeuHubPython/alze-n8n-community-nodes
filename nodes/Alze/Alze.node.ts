@@ -747,8 +747,8 @@ export class Alze implements INodeType {
 						responseData = await alzeApiRequest.call(this, 'GET', '/me');
 						responseData = responseData.data;
 					} else if (operation === 'ping') {
+						// `/ping` answers `{ ok, workspace_id, environment, timestamp }`, without `data`
 						responseData = await alzeApiRequest.call(this, 'GET', '/ping');
-						responseData = responseData.data;
 					}
 				}
 
