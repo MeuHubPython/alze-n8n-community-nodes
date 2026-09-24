@@ -281,6 +281,16 @@ export const productFields: INodeProperties[] = [
 		},
 		options: [
 			{
+				displayName: 'Category ID',
+				name: 'category_id',
+				type: 'number',
+				typeOptions: {
+					numberPrecision: 0,
+				},
+				default: 0,
+				description: 'ID of the item category',
+			},
+			{
 				displayName: 'Currency',
 				name: 'currency',
 				type: 'string',
