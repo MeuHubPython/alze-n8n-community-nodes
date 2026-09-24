@@ -24,7 +24,7 @@ export async function alzeApiRequest(
 	const credentials = await this.getCredentials('alzeApi');
 	const apiKey = credentials.apiKey as string;
 
-	// Clean empty string values from body and query parameters
+	// Empty strings are dropped from the body: the API ignores them anyway.
 	const cleanedBody: IDataObject = {};
 	for (const key of Object.keys(body)) {
 		if (body[key] !== '') {
@@ -32,9 +32,15 @@ export async function alzeApiRequest(
 		}
 	}
 
+	// Empty strings are KEPT in the query string. A filter only reaches `qs`
+	// when the user added it, and an empty value there usually comes from an
+	// expression that resolved to nothing. Dropping it turned the filter into
+	// "no filter" and returned the whole workspace; the API decides what an
+	// empty filter means (`phone_match=` matches nobody). Only unset values
+	// are dropped.
 	const cleanedQs: IDataObject = {};
 	for (const key of Object.keys(qs)) {
-		if (qs[key] !== '') {
+		if (qs[key] !== undefined && qs[key] !== null) {
 			cleanedQs[key] = qs[key];
 		}
 	}
