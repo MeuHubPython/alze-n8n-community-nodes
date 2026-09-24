@@ -1546,7 +1546,7 @@ Lista paginada de atividades de CRM do workspace, com filtros por negociação, 
 | deal_id | uuid | Não | Filtra atividades de uma negociação. |
 | person_id | uuid | Não | Filtra por contato vinculado. |
 | organization_id | uuid | Não | Filtra por empresa vinculada. |
-| status | string | Não | Filtra por status (open|done|canceled). |
+| status | string | Não | Filtra por status (todo|in_progress|done|closed). Os apelidos legados `open` (= todo) e `canceled` (= closed) também são aceitos. |
 | external_sync_code | string | Não | Filtra pelo código externo de sincronização. É o identificador único do registro no sistema de origem (ex.: ID no RD Station, código no ERP), usado por integrações para evitar duplicidade. Único por workspace. |
 
 **Exemplo de Resposta:**
@@ -1558,7 +1558,7 @@ Lista paginada de atividades de CRM do workspace, com filtros por negociação, 
       "id": "a1111111-2222-3333-4444-555555555555",
       "title": "Ligar para Mariana — apresentar proposta",
       "description": "Confirmar escopo do plano Enterprise.",
-      "status": "open",
+      "status": "todo",
       "due_date": "2026-05-20",
       "due_time": "14:00:00",
       "activity_type_id": "at000000-0000-0000-0000-000000000001",
@@ -1594,7 +1594,7 @@ Retorna uma atividade pelo ID.
     "id": "a1111111-2222-3333-4444-555555555555",
     "title": "Ligar para Mariana — apresentar proposta",
     "description": "Confirmar escopo do plano Enterprise.",
-    "status": "open",
+    "status": "todo",
     "due_date": "2026-05-20",
     "due_time": "14:00:00",
     "activity_type_id": "at000000-0000-0000-0000-000000000001",
@@ -1637,7 +1637,7 @@ Cria uma nova atividade de CRM. O tipo de tarefa (`task_type_id`) padrão do wor
 | activity_type_id | uuid | Não | Tipo da atividade (ver `/activity-types`). |
 | person_id | uuid | Não | Contato vinculado. |
 | organization_id | uuid | Não | Empresa vinculada. |
-| status | string (open|done|canceled) | Não | Status atual (default: open). |
+| status | string (todo|in_progress|done|closed) | Não | Status atual (default: todo). Os apelidos legados `open` e `canceled` são aceitos e gravados como `todo` e `closed`. |
 | external_sync_code | string | Não | Código externo de sincronização. Use o identificador do registro no sistema de origem (ex.: ID no RD Station, código no ERP) para evitar duplicidade em integrações. **Único por workspace**: tentativas de criar ou atualizar um registro com um `external_sync_code` já existente retornam erro `409 conflict`. |
 
 **Exemplo de Request Body:**
@@ -1658,7 +1658,7 @@ Cria uma nova atividade de CRM. O tipo de tarefa (`task_type_id`) padrão do wor
     "id": "a1111111-2222-3333-4444-555555555555",
     "title": "Ligar para Mariana — apresentar proposta",
     "description": "Confirmar escopo do plano Enterprise.",
-    "status": "open",
+    "status": "todo",
     "due_date": "2026-05-20",
     "due_time": "14:00:00",
     "activity_type_id": "at000000-0000-0000-0000-000000000001",
@@ -1690,7 +1690,7 @@ Atualiza os campos editáveis de uma atividade.
 | activity_type_id | uuid | Não | Tipo da atividade (ver `/activity-types`). |
 | person_id | uuid | Não | Contato vinculado. |
 | organization_id | uuid | Não | Empresa vinculada. |
-| status | string (open|done|canceled) | Não | Status atual (default: open). |
+| status | string (todo|in_progress|done|closed) | Não | Status atual (default: todo). Os apelidos legados `open` e `canceled` são aceitos e gravados como `todo` e `closed`. |
 | external_sync_code | string | Não | Código externo de sincronização. Use o identificador do registro no sistema de origem (ex.: ID no RD Station, código no ERP) para evitar duplicidade em integrações. **Único por workspace**: tentativas de criar ou atualizar um registro com um `external_sync_code` já existente retornam erro `409 conflict`. |
 
 **Exemplo de Request Body:**
