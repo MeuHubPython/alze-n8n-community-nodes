@@ -5294,7 +5294,7 @@ Endpoints externos que recebem eventos do CRM em tempo real.
 
 `GET` `/webhooks`
 
-Retorna a lista paginada de webhooks do workspace autenticado, com suporte a busca, filtros e ordenação.
+Retorna a lista paginada de webhooks do workspace autenticado, filtrável por `is_active`. Ordem fixa: mais recentes primeiro.
 
 **Query Parameters**
 
@@ -5302,7 +5302,6 @@ Retorna a lista paginada de webhooks do workspace autenticado, com suporte a bus
 |------|------|-------------|-----------|
 | page | integer | Não | Número da página (default: 1). |
 | page_size | integer | Não | Registros por página (default: 25, máx: 100). |
-| q | string | Não | Busca textual no campo principal do recurso (geralmente `name` ou `title`). |
 | is_active | boolean | Não | Filtra por ativos/inativos. |
 
 **Exemplo de Resposta:**
@@ -5393,7 +5392,7 @@ Cria um(a) novo(a) webhook no workspace autenticado.
 | name | string | Sim | Nome do webhook. |
 | description | string | Não | Descrição livre. |
 | target_url | string (URL HTTPS) | Sim | URL que receberá os eventos. |
-| events | string[] | Sim | Lista de eventos. Ex.: deal.created, deal.won, deal.lost, activity.completed. |
+| events | string[] | Sim | Lista de eventos. Os que o CRM emite: `contact.created`, `contact.updated`, `contact.deleted`, `organization.created`, `organization.updated`, `organization.deleted`, `deal.created`, `deal.updated`, `deal.deleted`, `deal.stage_changed`, `deal.won`, `deal.lost`, `activity.created`, `activity.updated`, `activity.completed`, `activity.deleted`, `deal_item.created`, `deal_item.updated`, `deal_item.deleted`, `note.created`, `note.updated`, `note.deleted`, `tag.added`, `tag.removed`. A API não valida os nomes. |
 | is_active | boolean | Não | Se o webhook está ativo. |
 | secret | string | Não | Segredo opcional para assinar o payload (HMAC). Retornado apenas no POST de criação. |
 
@@ -5446,7 +5445,7 @@ Atualiza todos os campos editáveis de um(a) webhook. Campos omitidos serão lim
 | name | string | Sim | Nome do webhook. |
 | description | string | Não | Descrição livre. |
 | target_url | string (URL HTTPS) | Sim | URL que receberá os eventos. |
-| events | string[] | Sim | Lista de eventos. Ex.: deal.created, deal.won, deal.lost, activity.completed. |
+| events | string[] | Sim | Lista de eventos. Os que o CRM emite: `contact.created`, `contact.updated`, `contact.deleted`, `organization.created`, `organization.updated`, `organization.deleted`, `deal.created`, `deal.updated`, `deal.deleted`, `deal.stage_changed`, `deal.won`, `deal.lost`, `activity.created`, `activity.updated`, `activity.completed`, `activity.deleted`, `deal_item.created`, `deal_item.updated`, `deal_item.deleted`, `note.created`, `note.updated`, `note.deleted`, `tag.added`, `tag.removed`. A API não valida os nomes. |
 | is_active | boolean | Não | Se o webhook está ativo. |
 | secret | string | Não | Segredo opcional para assinar o payload (HMAC). Retornado apenas no POST de criação. |
 
