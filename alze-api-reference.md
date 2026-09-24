@@ -123,6 +123,7 @@ Retorna a lista paginada de contatos do workspace autenticado, com suporte a bus
 | email | string | Não | Filtra por e-mail exato (case-insensitive). |
 | phone | string | Não | Filtra por telefone (ignora formatação). |
 | mobile | string | Não | Filtra por celular (ignora formatação). |
+| phone_match | string | Não | Telefone em qualquer formato. Casa os 8 últimos dígitos (tolera máscara, +55 e a falta ou sobra do nono dígito) e, quando os dois números têm DDD, exige o mesmo DDD. Olha celular, telefone e a lista de telefones do contato. Vazio devolve nenhum contato. |
 | organization_id | uuid | Não | Filtra contatos de uma empresa específica. |
 | external_sync_code | string | Não | Filtra pelo código externo de sincronização. É o identificador único do registro no sistema de origem (ex.: ID no RD Station, código no ERP), usado por integrações para evitar duplicidade. Único por workspace. |
 
