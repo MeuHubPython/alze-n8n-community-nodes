@@ -208,11 +208,25 @@ export const activityTypeFields: INodeProperties[] = [
 		},
 		options: [
 			{
+				displayName: 'Color',
+				name: 'color',
+				type: 'color',
+				default: '',
+				description: 'Color of the activity type (e.g. #2563eb)',
+			},
+			{
 				displayName: 'External Sync Code',
 				name: 'external_sync_code',
 				type: 'string',
 				default: '',
 				description: 'External synchronization code for integration',
+			},
+			{
+				displayName: 'Icon',
+				name: 'icon',
+				type: 'string',
+				default: '',
+				description: 'Icon name of the activity type',
 			},
 			{
 				displayName: 'Is Default',
@@ -232,6 +246,17 @@ export const activityTypeFields: INodeProperties[] = [
 					},
 				},
 				description: 'Name of the activity type',
+			},
+			{
+				displayName: 'Position',
+				name: 'position',
+				type: 'number',
+				typeOptions: {
+					minValue: 0,
+					numberPrecision: 0,
+				},
+				default: 0,
+				description: 'Display order of the activity type',
 			},
 		],
 	},
