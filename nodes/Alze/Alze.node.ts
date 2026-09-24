@@ -13,6 +13,7 @@ import {
 	handleCustomFields,
 	handlePipelineStages,
 	handleContactPhones,
+	toDateOnly,
 } from './GenericFunctions';
 
 import {
@@ -70,6 +71,9 @@ import { activityTypeOperations, activityTypeFields } from './ActivityTypeDescri
 import { tagOperations, tagFields } from './TagDescription';
 import { distributionRuleOperations, distributionRuleFields } from './DistributionRuleDescription';
 import { webhookOperations, webhookFields } from './WebhookDescription';
+
+// Deal fields the API validates as `YYYY-MM-DD`
+const DEAL_DATE_FIELDS = ['expected_close_date', 'on_hold_until'];
 
 function applyOrderParams(execFuncs: IExecuteFunctions, i: number, qs: IDataObject) {
 	let sort: string | undefined;
@@ -365,6 +369,7 @@ export class Alze implements INodeType {
 						const fields = this.getNodeParameter('fieldsToSet', i) as IDataObject;
 						const body: IDataObject = { title, pipeline_id: pipelineId, stage_id: stageId, ...fields };
 						handleCustomFields(this.getNode(), body, fields);
+						toDateOnly(body, DEAL_DATE_FIELDS);
 						responseData = await alzeApiRequest.call(this, 'POST', '/deals', body);
 						responseData = responseData.data;
 					} else if (operation === 'update') {
@@ -375,6 +380,7 @@ export class Alze implements INodeType {
 						const fields = this.getNodeParameter('fieldsToSet', i) as IDataObject;
 						const body: IDataObject = { title, pipeline_id: pipelineId, stage_id: stageId, ...fields };
 						handleCustomFields(this.getNode(), body, fields);
+						toDateOnly(body, DEAL_DATE_FIELDS);
 						responseData = await alzeApiRequest.call(this, 'PUT', `/deals/${dealId}`, body);
 						responseData = responseData.data;
 					} else if (operation === 'patch') {
@@ -394,6 +400,7 @@ export class Alze implements INodeType {
 							delete body.stageIdPatch;
 						}
 						handleCustomFields(this.getNode(), body, fields);
+						toDateOnly(body, DEAL_DATE_FIELDS);
 						responseData = await alzeApiRequest.call(this, 'PATCH', `/deals/${dealId}`, body);
 						responseData = responseData.data;
 					} else if (operation === 'list') {

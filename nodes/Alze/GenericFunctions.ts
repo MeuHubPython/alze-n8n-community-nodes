@@ -145,6 +145,19 @@ export async function alzeApiRequestAllItems(
 }
 
 /**
+ * The API validates date fields as `YYYY-MM-DD`, while n8n dateTime fields
+ * produce ISO strings with time. Keep only the date part of the given keys.
+ */
+export function toDateOnly(body: IDataObject, keys: string[]) {
+	for (const key of keys) {
+		const value = body[key];
+		if (typeof value === 'string' && value.length > 10) {
+			body[key] = value.slice(0, 10);
+		}
+	}
+}
+
+/**
  * Helper to process custom fields input into Alze body format
  */
 export function handleCustomFields(node: INode, body: IDataObject, properties: IDataObject) {

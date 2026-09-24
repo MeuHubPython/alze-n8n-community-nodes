@@ -563,7 +563,7 @@ export const dealFields: INodeProperties[] = [
 				name: 'expected_close_date',
 				type: 'dateTime',
 				default: '',
-				description: 'Planned or expected close date of the deal',
+				description: 'Planned or expected close date of the deal. Only the date part (YYYY-MM-DD) is sent.',
 			},
 			{
 				displayName: 'External Sync Code',
