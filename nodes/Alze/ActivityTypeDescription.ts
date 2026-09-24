@@ -39,7 +39,7 @@ export const activityTypeOperations: INodeProperties[] = [
 			{
 				name: 'Update',
 				value: 'update',
-				description: 'Update a activity type (clears omitted fields)',
+				description: 'Update an activity type. Only the fields sent are changed.',
 				action: 'Update a activity type',
 			},
 			{

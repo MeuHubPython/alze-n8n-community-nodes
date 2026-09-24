@@ -39,7 +39,7 @@ export const webhookOperations: INodeProperties[] = [
 			{
 				name: 'Update',
 				value: 'update',
-				description: 'Update a webhook (clears omitted fields)',
+				description: 'Update a webhook. Only the fields sent are changed.',
 				action: 'Update a webhook',
 			},
 		],

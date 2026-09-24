@@ -39,7 +39,7 @@ export const lostReasonOperations: INodeProperties[] = [
 			{
 				name: 'Update',
 				value: 'update',
-				description: 'Update a lost reason (clears omitted fields)',
+				description: 'Update a lost reason. Only the fields sent are changed.',
 				action: 'Update a lost reason',
 			},
 			{

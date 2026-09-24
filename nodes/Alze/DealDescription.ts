@@ -99,7 +99,7 @@ export const dealOperations: INodeProperties[] = [
 			{
 				name: 'Update',
 				value: 'update',
-				description: 'Update a deal (clears omitted fields)',
+				description: 'Update a deal. Only the fields sent are changed.',
 				action: 'Update a deal',
 			},
 			{

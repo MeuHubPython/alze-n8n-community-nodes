@@ -39,7 +39,7 @@ export const productOperations: INodeProperties[] = [
 			{
 				name: 'Update',
 				value: 'update',
-				description: 'Update a product (clears omitted fields)',
+				description: 'Update a product. Only the fields sent are changed.',
 				action: 'Update a product',
 			},
 			{

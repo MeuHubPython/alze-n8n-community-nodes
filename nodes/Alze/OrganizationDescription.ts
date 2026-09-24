@@ -57,7 +57,7 @@ export const organizationOperations: INodeProperties[] = [
 			{
 				name: 'Update',
 				value: 'update',
-				description: 'Update an organization (clears omitted fields)',
+				description: 'Update an organization. Only the fields sent are changed.',
 				action: 'Update an organization',
 			},
 			{

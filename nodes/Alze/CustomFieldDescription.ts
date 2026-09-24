@@ -39,7 +39,7 @@ export const customFieldOperations: INodeProperties[] = [
 			{
 				name: 'Update',
 				value: 'update',
-				description: 'Update a custom field (clears omitted fields)',
+				description: 'Update a custom field. Only the fields sent are changed.',
 				action: 'Update a custom field',
 			},
 			{

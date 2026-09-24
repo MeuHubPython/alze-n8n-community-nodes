@@ -39,7 +39,7 @@ export const itemCategoryOperations: INodeProperties[] = [
 			{
 				name: 'Update',
 				value: 'update',
-				description: 'Update a item category (clears omitted fields)',
+				description: 'Update an item category. Only the fields sent are changed.',
 				action: 'Update a item category',
 			},
 			{

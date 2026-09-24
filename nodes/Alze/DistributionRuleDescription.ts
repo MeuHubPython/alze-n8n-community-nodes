@@ -39,7 +39,7 @@ export const distributionRuleOperations: INodeProperties[] = [
 			{
 				name: 'Update',
 				value: 'update',
-				description: 'Update a distribution rule (clears omitted fields)',
+				description: 'Update a distribution rule. Only the fields sent are changed.',
 				action: 'Update a distribution rule',
 			},
 			{

@@ -275,7 +275,7 @@ Cria um(a) novo(a) contato no workspace autenticado.
 
 `PUT` `/contacts/{id}`
 
-Atualiza todos os campos editáveis de um(a) contato. Campos omitidos serão limpos.
+Atualiza um(a) contato. Como no PATCH, só os campos enviados mudam; os omitidos são mantidos.
 
 **Body**
 
@@ -597,7 +597,7 @@ Cria um(a) novo(a) empresa no workspace autenticado.
 
 `PUT` `/organizations/{id}`
 
-Atualiza todos os campos editáveis de um(a) empresa. Campos omitidos serão limpos.
+Atualiza um(a) empresa. Como no PATCH, só os campos enviados mudam; os omitidos são mantidos.
 
 **Body**
 
@@ -957,7 +957,7 @@ Cria um(a) novo(a) negociação no workspace autenticado.
 
 `PUT` `/deals/{id}`
 
-Atualiza todos os campos editáveis de um(a) negociação. Campos omitidos serão limpos.
+Atualiza um(a) negociação. Como no PATCH, só os campos enviados mudam; os omitidos são mantidos.
 
 **Body**
 
@@ -1676,7 +1676,7 @@ Cria uma nova atividade de CRM. O tipo de tarefa (`task_type_id`) padrão do wor
 
 `PUT` `/activities/{id}`
 
-Atualiza os campos editáveis de uma atividade.
+Atualiza uma atividade. Só os campos enviados mudam; os omitidos são mantidos (não há PATCH para atividades além de `/complete`).
 
 **Body**
 
@@ -1903,7 +1903,7 @@ Cria um(a) novo(a) produto no workspace autenticado.
 
 `PUT` `/items/{id}`
 
-Atualiza todos os campos editáveis de um(a) produto. Campos omitidos serão limpos.
+Atualiza um(a) produto. Como no PATCH, só os campos enviados mudam; os omitidos são mantidos.
 
 **Body**
 
@@ -2113,7 +2113,7 @@ Cria um(a) novo(a) categoria de produto no workspace autenticado.
 
 `PUT` `/item-categories/{id}`
 
-Atualiza todos os campos editáveis de um(a) categoria de produto. Campos omitidos serão limpos.
+Atualiza um(a) categoria de produto. Como no PATCH, só os campos enviados mudam; os omitidos são mantidos.
 
 **Body**
 
@@ -2438,7 +2438,7 @@ Cria um(a) novo(a) funil no workspace autenticado.
 
 `PUT` `/pipelines/{id}`
 
-Atualiza todos os campos editáveis de um(a) funil. Campos omitidos serão limpos.
+Atualiza um(a) funil. Como no PATCH, só os campos enviados mudam; os omitidos são mantidos.
 
 **Body**
 
@@ -2672,7 +2672,7 @@ Cria uma nova etapa em um funil existente. Valida que `pipeline_id` pertence ao 
 
 `PUT` `/stages/{id}`
 
-Atualiza todos os campos editáveis. Reordene etapas alterando `position` — as demais não são deslocadas automaticamente, então gerencie posições no cliente se precisar de ordem contígua.
+Atualiza a etapa (`name` é obrigatório no PUT; os demais campos omitidos são mantidos). Reordene etapas alterando `position` — as demais não são deslocadas automaticamente, então gerencie posições no cliente se precisar de ordem contígua.
 
 **Body**
 
@@ -2909,7 +2909,7 @@ Cria um(a) novo(a) motivo de perda no workspace autenticado.
 
 `PUT` `/loss-reasons/{id}`
 
-Atualiza todos os campos editáveis de um(a) motivo de perda. Campos omitidos serão limpos.
+Atualiza um(a) motivo de perda. Como no PATCH, só os campos enviados mudam; os omitidos são mantidos.
 
 **Body**
 
@@ -3108,7 +3108,7 @@ Cria um(a) novo(a) tag no workspace autenticado.
 
 `PUT` `/tags/{id}`
 
-Atualiza todos os campos editáveis de um(a) tag. Campos omitidos serão limpos.
+Atualiza um(a) tag. Como no PATCH, só os campos enviados mudam; os omitidos são mantidos.
 
 **Body**
 
@@ -3305,7 +3305,7 @@ Cria um(a) novo(a) fonte no workspace autenticado.
 
 `PUT` `/fontes/{id}`
 
-Atualiza todos os campos editáveis de um(a) fonte. Campos omitidos serão limpos.
+Atualiza um(a) fonte. Como no PATCH, só os campos enviados mudam; os omitidos são mantidos.
 
 **Body**
 
@@ -3505,7 +3505,7 @@ Cria um(a) novo(a) campanha no workspace autenticado.
 
 `PUT` `/campanhas/{id}`
 
-Atualiza todos os campos editáveis de um(a) campanha. Campos omitidos serão limpos.
+Atualiza um(a) campanha. Como no PATCH, só os campos enviados mudam; os omitidos são mantidos.
 
 **Body**
 
@@ -3714,7 +3714,7 @@ Cria um(a) novo(a) canal no workspace autenticado.
 
 `PUT` `/canais/{id}`
 
-Atualiza todos os campos editáveis de um(a) canal. Campos omitidos serão limpos.
+Atualiza um(a) canal. Como no PATCH, só os campos enviados mudam; os omitidos são mantidos.
 
 **Body**
 
@@ -3933,7 +3933,7 @@ Cria um(a) novo(a) tipo de atividade no workspace autenticado.
 
 `PUT` `/activity-types/{id}`
 
-Atualiza todos os campos editáveis de um(a) tipo de atividade. Campos omitidos serão limpos.
+Atualiza um(a) tipo de atividade. Como no PATCH, só os campos enviados mudam; os omitidos são mantidos.
 
 **Body**
 
@@ -4435,7 +4435,7 @@ Cria um(a) novo(a) template de e-mail no workspace autenticado.
 
 `PUT` `/email-templates/{id}`
 
-Atualiza todos os campos editáveis de um(a) template de e-mail. Campos omitidos serão limpos.
+Atualiza um(a) template de e-mail. Como no PATCH, só os campos enviados mudam; os omitidos são mantidos.
 
 **Body**
 
@@ -4689,7 +4689,7 @@ Cria um(a) novo(a) automação no workspace autenticado.
 
 `PUT` `/automations/{id}`
 
-Atualiza todos os campos editáveis de um(a) automação. Campos omitidos serão limpos.
+Atualiza um(a) automação. Como no PATCH, só os campos enviados mudam; os omitidos são mantidos.
 
 **Body**
 
@@ -4952,7 +4952,7 @@ Cria um(a) novo(a) regra de lead scoring no workspace autenticado.
 
 `PUT` `/lead-scoring-rules/{id}`
 
-Atualiza todos os campos editáveis de um(a) regra de lead scoring. Campos omitidos serão limpos.
+Atualiza um(a) regra de lead scoring. Como no PATCH, só os campos enviados mudam; os omitidos são mantidos.
 
 **Body**
 
@@ -5189,7 +5189,7 @@ Cria um(a) novo(a) regra de distribuição no workspace autenticado.
 
 `PUT` `/distribution-rules/{id}`
 
-Atualiza todos os campos editáveis de um(a) regra de distribuição. Campos omitidos serão limpos.
+Atualiza um(a) regra de distribuição. Como no PATCH, só os campos enviados mudam; os omitidos são mantidos.
 
 **Body**
 
@@ -5436,7 +5436,7 @@ Cria um(a) novo(a) webhook no workspace autenticado.
 
 `PUT` `/webhooks/{id}`
 
-Atualiza todos os campos editáveis de um(a) webhook. Campos omitidos serão limpos.
+Atualiza um webhook. Só os campos enviados mudam; os omitidos são mantidos (não há PATCH para webhooks).
 
 **Body**
 
