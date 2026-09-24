@@ -336,7 +336,7 @@ export const pipelineFields: INodeProperties[] = [
 									minValue: 0,
 								},
 								default: 0,
-								description: 'Display position/order of this stage (0 = first)',
+								description: 'Display position/order of this stage (0 = first). Leave 0 on every stage to use the order of the list.',
 							},
 							{
 								displayName: 'SLA Days',

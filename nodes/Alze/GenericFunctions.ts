@@ -241,7 +241,14 @@ export function handleContactPhones(node: INode, body: IDataObject, properties: 
  */
 export function handlePipelineStages(node: INode, body: IDataObject, properties: IDataObject) {
 	if (properties.stagesUi) {
-		const stages = (properties.stagesUi as any).stagesValues || []; // eslint-disable-line @typescript-eslint/no-explicit-any
+		const stages = ((properties.stagesUi as IDataObject).stagesValues as IDataObject[] || [])
+			.map((stage) => ({ ...stage }));
+		// The UI always carries `position` (default 0). When no stage was given a
+		// position, omit it so the API uses the order of the list; otherwise every
+		// stage would be created at position 0.
+		if (stages.every((stage) => !stage.position)) {
+			for (const stage of stages) delete stage.position;
+		}
 		body.stages = stages;
 	} else if (properties.stagesJson) {
 		try {
