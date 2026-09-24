@@ -83,9 +83,15 @@ export async function alzeApiRequest(
 			if (typeof responseBody === 'string') {
 				apiMessage = responseBody;
 			} else if (typeof responseBody === 'object') {
+				// Most routes answer `{ error: string, message, code }`, but some
+				// (unknown route, invalid phones) answer `{ error: { code, message } }`.
+				const nestedError = responseBody.error && typeof responseBody.error === 'object'
+					? responseBody.error.message
+					: undefined;
 				apiMessage =
 					responseBody.message ??
-					responseBody.error ??
+					nestedError ??
+					(typeof responseBody.error === 'string' ? responseBody.error : undefined) ??
 					responseBody.detail ??
 					JSON.stringify(responseBody);
 			}
