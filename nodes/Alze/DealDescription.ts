@@ -163,33 +163,29 @@ export const dealFields: INodeProperties[] = [
 	//         deal: win
 	// ----------------------------------
 	{
-		displayName: 'Won Reason ID',
-		name: 'wonReasonId',
-		type: 'number',
-		default: 0,
+		displayName: 'Additional Fields',
+		name: 'additionalFields',
+		type: 'collection',
+		placeholder: 'Add Field',
+		default: {},
 		displayOptions: {
 			show: {
 				resource: ['deal'],
 				operation: ['win'],
 			},
 		},
-		description: 'ID of the won reason from the won reasons catalogue',
-	},
-	{
-		displayName: 'Value',
-		name: 'value',
-		type: 'number',
-		typeOptions: {
-			numberPrecision: 2,
-		},
-		default: 0,
-		displayOptions: {
-			show: {
-				resource: ['deal'],
-				operation: ['win'],
+		options: [
+			{
+				displayName: 'Value',
+				name: 'value',
+				type: 'number',
+				typeOptions: {
+					numberPrecision: 2,
+				},
+				default: 0,
+				description: 'Final value of the won deal. Leave unset to keep the current deal value.',
 			},
-		},
-		description: 'The final value of the won deal',
+		],
 	},
 
 	// ----------------------------------
@@ -726,6 +722,10 @@ export const dealFields: INodeProperties[] = [
 		displayName: 'Quantity',
 		name: 'quantity',
 		type: 'number',
+		typeOptions: {
+			minValue: 1,
+			numberPrecision: 0,
+		},
 		default: 1,
 		displayOptions: {
 			show: {
@@ -733,23 +733,32 @@ export const dealFields: INodeProperties[] = [
 				operation: ['addItem'],
 			},
 		},
-		description: 'The quantity of the item',
+		description: 'The quantity of the item (whole number)',
 	},
 	{
-		displayName: 'Price',
-		name: 'price',
-		type: 'number',
-		typeOptions: {
-			numberPrecision: 2,
-		},
-		default: 0,
+		displayName: 'Additional Fields',
+		name: 'additionalFields',
+		type: 'collection',
+		placeholder: 'Add Field',
+		default: {},
 		displayOptions: {
 			show: {
 				resource: ['deal'],
 				operation: ['addItem'],
 			},
 		},
-		description: 'The price of the item (leave 0 to use the catalog price)',
+		options: [
+			{
+				displayName: 'Price',
+				name: 'price',
+				type: 'number',
+				typeOptions: {
+					numberPrecision: 2,
+				},
+				default: 0,
+				description: 'Unit price of the item. Leave unset to use the catalog price.',
+			},
+		],
 	},
 	{
 		displayName: 'Note ID',

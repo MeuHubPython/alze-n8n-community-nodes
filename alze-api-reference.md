@@ -1094,20 +1094,18 @@ Move o(a) negociação para a lixeira (soft delete). Registros podem ser restaur
 
 `PATCH` `/deals/{id}/win`
 
-Move a negociação para status `won` e registra `won_at`/`closed_at`. O `won_reason_id` é opcional.
+Move a negociação para status `won` e registra `won_at`/`closed_at`. O único campo aceito é `value`; sem ele, o valor atual da negociação é mantido.
 
 **Body**
 
 | Nome | Tipo | Obrigatório | Descrição |
 |------|------|-------------|-----------|
-| won_reason_id | integer | Não | ID do motivo de ganho. |
 | value | decimal | Não | Sobrescreve o valor final da negociação. |
 
 **Exemplo de Request Body:**
 
 ```json
 {
-  "won_reason_id": 3,
   "value": 48500
 }
 ```

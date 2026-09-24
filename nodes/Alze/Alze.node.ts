@@ -337,11 +337,12 @@ export class Alze implements INodeType {
 						responseData = responseData.data;
 					} else if (operation === 'win') {
 						const dealId = this.getNodeParameter('dealId', i) as string;
-						const wonReasonId = this.getNodeParameter('wonReasonId', i) as number;
-						const value = this.getNodeParameter('value', i) as number;
+						const additionalFields = this.getNodeParameter('additionalFields', i, {}) as IDataObject;
 						const body: IDataObject = {};
-						if (wonReasonId) body.won_reason_id = wonReasonId;
-						if (value !== undefined) body.value = value;
+						// Only send `value` when the user set it: the API overwrites the deal value
+						if (typeof additionalFields.value === 'number' && Number.isFinite(additionalFields.value)) {
+							body.value = additionalFields.value;
+						}
 						responseData = await alzeApiRequest.call(this, 'PATCH', `/deals/${dealId}/win`, body);
 						responseData = responseData.data;
 					} else if (operation === 'lose') {
@@ -422,8 +423,13 @@ export class Alze implements INodeType {
 						const dealId = this.getNodeParameter('dealId', i) as string;
 						const itemId = this.getNodeParameter('itemIdAdd', i) as number;
 						const quantity = this.getNodeParameter('quantity', i) as number;
-						const price = this.getNodeParameter('price', i) as number;
-						responseData = await alzeApiRequest.call(this, 'POST', `/deals/${dealId}/items`, { item_id: itemId, quantity, price });
+						const additionalFields = this.getNodeParameter('additionalFields', i, {}) as IDataObject;
+						const body: IDataObject = { item_id: itemId, quantity };
+						// Without `price` the API uses the catalog price of the item
+						if (typeof additionalFields.price === 'number' && Number.isFinite(additionalFields.price)) {
+							body.price = additionalFields.price;
+						}
+						responseData = await alzeApiRequest.call(this, 'POST', `/deals/${dealId}/items`, body);
 						responseData = responseData.data;
 					} else if (operation === 'listNotes') {
 						const dealId = this.getNodeParameter('dealId', i) as string;
